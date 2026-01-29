@@ -1123,46 +1123,46 @@ document.addEventListener('DOMContentLoaded', function () {
     const qtyInput   = document.querySelector('.qty-input');
 
     if (addToCartBtn && cartMessage) {
-        addToCartBtn.addEventListener('click', function() {
-            let productId    = this.dataset.productId;
-            const storedCookie = localStorage.getItem('bagisto_cart_cookie');
-            const authToken    = localStorage.getItem('bagisto_auth_token');
+        		addToCartBtn.addEventListener('click', function() {
+			let productId    = this.dataset.productId;
+			const storedCookie = localStorage.getItem('bagisto_cart_cookie');
+			const authToken    = localStorage.getItem('bagisto_auth_token');
+			const guestCartToken = localStorage.getItem('bagisto_guest_cart_token');
 
-            // Handle configurable products: resolve selected variant ID
-            if (this.dataset.configurable === '1') {
+            			let selectedConfigurableOption = '';
+			let superAttributePayload = '';
+
+			// Handle configurable products: resolve selected variant ID
+			if (this.dataset.configurable === '1') {
                 var selects = document.querySelectorAll('.nailedit-variant-select');
                 var color = '';
                 var size  = '';
                 var hasColorSelect = false;
                 var hasSizeSelect = false;
-                
-                selects.forEach(function(sel) {
-                    var code = sel.getAttribute('data-attr-code') || '';
-                    if (code === 'color') {
+                var allSelected = true;
+
+                selects.forEach(function(select) {
+                    const attrCode = select.dataset.attrCode || select.getAttribute('data-attr-code');
+                    if (attrCode === 'color') {
                         hasColorSelect = true;
-                    } else if (code === 'size') {
+                        if (select.value) {
+                            color = select.value;
+                        } else {
+                            allSelected = false;
+                        }
+                    } else if (attrCode === 'size') {
                         hasSizeSelect = true;
-                    }
-                    var val = sel.value || '';
-                    if (val) {
-                        if (code === 'color') {
-                            color = val;
-                        } else if (code === 'size') {
-                            size = val;
+                        if (select.value) {
+                            size = select.value;
+                        } else {
+                            allSelected = false;
                         }
                     }
                 });
 
-                var missingAttrs = [];
-                if (hasColorSelect && !color) {
-                    missingAttrs.push('<?php echo esc_js(__('värv', 'nailedit')); ?>');
-                }
-                if (hasSizeSelect && !size) {
-                    missingAttrs.push('<?php echo esc_js(__('suurus', 'nailedit')); ?>');
-                }
-                
-                if (missingAttrs.length > 0) {
-                    var msgSel = '<?php echo esc_js(__('Palun vali', 'nailedit')); ?> ' + missingAttrs.join(' <?php echo esc_js(__('ja', 'nailedit')); ?> ') + ' <?php echo esc_js(__('enne korvi lisamist.', 'nailedit')); ?>';
+                // If not all required variants are selected, show message
+                if (!allSelected) {
+                    var msgSel = '<?php echo esc_js(__('Palun vali esmalt variatsioonid (värv, suurus jne)', 'nailedit')); ?>';
                     if (typeof window.naileditShowToast === 'function') {
                         window.naileditShowToast(msgSel, 'error');
                     } else {
@@ -1172,70 +1172,74 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                var mapRaw = this.dataset.variantMap || '';
-                var map = {};
-                try {
-                    map = mapRaw ? JSON.parse(mapRaw) : {};
-                } catch (e) {
-                    map = {};
-                }
-
-                var key = '';
-                if (color && size) {
-                    key = String(color) + '-' + String(size);
-                } else if (color) {
-                    key = String(color);
-                }
-                var variantId = map[key] || null;
-                if (!variantId) {
-                    var msgComb = '<?php echo esc_js(__('Sellise värvi ja suuruse kombinatsiooniga toodet pole laos.', 'nailedit')); ?>';
-                    if (typeof window.naileditShowToast === 'function') {
-                        window.naileditShowToast(msgComb, 'error');
-                    } else {
-                        cartMessage.textContent = msgComb;
-                        cartMessage.style.color = 'red';
+                // Resolve variant ID using variant map
+                if (this.dataset && this.dataset.variantMap) {
+                    try {
+                        var variantIdMap = JSON.parse(this.dataset.variantMap || '{}') || {};
+                        var variantKey = '';
+                        
+                        if (hasColorSelect && hasSizeSelect && color && size) {
+                            variantKey = color + '-' + size;
+                        } else if (hasColorSelect && color) {
+                            variantKey = color;
+                        } else if (hasSizeSelect && size) {
+                            variantKey = size;
+                        }
+                        
+                        if (variantKey && variantIdMap[variantKey]) {
+                            productId = variantIdMap[variantKey];
+                        }
+                    } catch (e) {
+                        console.error('Error parsing variant map:', e);
                     }
-                    return;
                 }
-
-                productId = String(variantId);
             }
-
-            let quantity = 1;
+            
+			let quantity = 1;
             if (qtyInput) {
                 const parsed = parseInt(qtyInput.value || '1', 10);
                 quantity = isNaN(parsed) || parsed <= 0 ? 1 : parsed;
             }
 
-            const formData = new FormData();
-            formData.append('action', 'nailedit_add_to_cart');
-            formData.append('product_id', productId);
-            formData.append('quantity', quantity);
+            			const formData = new FormData();
+			formData.append('action', 'nailedit_add_to_cart');
+			formData.append('product_id', productId);
+			formData.append('quantity', quantity);
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
-            if (authToken) {
-                formData.append('auth_token', authToken);
-            }
+            			if (authToken) {
+				formData.append('auth_token', authToken);
+			} else if (guestCartToken) {
+				formData.append('cart_token', guestCartToken);
+			}
+			if (selectedConfigurableOption) {
+				formData.append('selected_configurable_option', selectedConfigurableOption);
+			}
+			if (superAttributePayload) {
+				formData.append('super_attribute', superAttributePayload);
+			}
 
-            addToCartBtn.disabled = true;
-            addToCartBtn.textContent = 'Lisan...';
-            cartMessage.textContent = '';
+			addToCartBtn.disabled = true;
+			addToCartBtn.textContent = 'Lisan...';
+			cartMessage.textContent = '';
 
-            fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', {
-                method: 'POST',
-                body: formData
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(result) {
-                if (result && result.cookies) {
+			fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', {
+				method: 'POST',
+				body: formData
+			})
+			.then(function(response) { return response.json(); })
+			.then(function(result) {
+						if (result && result.cart_token) {
+							localStorage.setItem('bagisto_guest_cart_token', result.cart_token);
+						}
+						if (result && result.cookies) {
                     const cookieStr = Array.isArray(result.cookies) ? result.cookies.join('; ') : result.cookies;
                     if (cookieStr) {
                         localStorage.setItem('bagisto_cart_cookie', cookieStr);
                     }
                 }
-
-                if (result && result.success) {
+						if (result && result.success) {
                     cartMessage.textContent = '';
                     cartMessage.style.color = '';
                     if (typeof window.naileditShowToast === 'function') {
@@ -1246,16 +1250,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     throw new Error(msg);
                 }
             })
-            .catch(function(error) {
-                console.error('Cart API error:', error);
-                cartMessage.textContent = '<?php echo esc_js(__('Viga: ', 'nailedit')); ?>' + error.message;
-                cartMessage.style.color = 'red';
-            })
-            .finally(function() {
-                addToCartBtn.disabled = false;
-                addToCartBtn.textContent = '<?php echo esc_js(__('Lisa korvi', 'nailedit')); ?>';
-            });
-        });
+			.catch(function(error) {
+				console.error('Cart API error:', error);
+				cartMessage.textContent = '<?php echo esc_js(__('Viga: ', 'nailedit')); ?>' + error.message;
+				cartMessage.style.color = 'red';
+			})
+			.finally(function() {
+				addToCartBtn.disabled = false;
+				addToCartBtn.textContent = '<?php echo esc_js(__('Lisa korvi', 'nailedit')); ?>';
+			});
+		});
     }
 
     const wishlistBtn = document.getElementById('toggle-wishlist-btn');

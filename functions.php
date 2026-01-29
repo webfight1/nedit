@@ -184,12 +184,99 @@ function nailedit_template_redirect() {
 add_action( 'template_redirect', 'nailedit_template_redirect' );
 
 // AJAX handler for cart operations (proxy to avoid CORS)
+function nailedit_extract_guest_cart_token( $data ) {
+    if ( is_array( $data ) ) {
+        if ( isset( $data['cart_token'] ) && is_string( $data['cart_token'] ) ) {
+            return $data['cart_token'];
+        }
+
+        if ( isset( $data['token'] ) && is_string( $data['token'] ) ) {
+            return $data['token'];
+        }
+
+        if ( isset( $data['data'] ) && is_array( $data['data'] ) ) {
+            if ( isset( $data['data']['cart_token'] ) && is_string( $data['data']['cart_token'] ) ) {
+                return $data['data']['cart_token'];
+            }
+
+            if ( isset( $data['data']['token'] ) && is_string( $data['data']['token'] ) ) {
+                return $data['data']['token'];
+            }
+        }
+    }
+
+    return '';
+}
+
+function nailedit_guest_cart_create( $base ) {
+    // Ensure API base points to Bagisto API on VPS
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $url = rtrim( $base, '/' ) . '/v1/guest/cart';
+
+    $headers = array(
+        'Accept' => 'application/json',
+    );
+
+    // Bagisto channel hostname may be configured without port; force Host header.
+    if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+        $headers['Host'] = '45.93.139.96';
+        $headers['X-Forwarded-Host'] = '45.93.139.96';
+    }
+
+    $response = wp_remote_post(
+        $url,
+        array(
+            'timeout' => 20,
+            'headers' => $headers,
+        )
+    );
+
+    if ( is_wp_error( $response ) ) {
+        return $response;
+    }
+
+    $status_code = wp_remote_retrieve_response_code( $response );
+    $body_raw    = wp_remote_retrieve_body( $response );
+    error_log( 'NAILEDIT Guest cart create - URL: ' . $url );
+    error_log( 'NAILEDIT Guest cart create - Status: ' . $status_code );
+    error_log( 'NAILEDIT Guest cart create - Body: ' . $body_raw );
+
+    if ( $status_code < 200 || $status_code >= 300 ) {
+        $data = json_decode( $body_raw, true );
+        if ( is_array( $data ) && isset( $data['message'] ) && is_string( $data['message'] ) ) {
+            $msg = (string) $data['message'];
+        } else {
+            $snippet = is_string( $body_raw ) ? trim( preg_replace( '/\s+/', ' ', substr( $body_raw, 0, 220 ) ) ) : '';
+            $msg = 'Guest cart create failed (HTTP ' . $status_code . ')' . ( $snippet ? (': ' . $snippet) : '' );
+        }
+        return new WP_Error( 'nailedit_guest_cart_create_failed', $msg );
+    }
+
+    $data  = json_decode( $body_raw, true );
+    $token    = nailedit_extract_guest_cart_token( $data );
+
+    if ( ! $token ) {
+        return new WP_Error( 'nailedit_guest_cart_token_missing', 'Guest cart token missing' );
+    }
+
+    return $token;
+}
+
 function nailedit_add_to_cart() {
     // Get API base URL (re-use the same helper/fallback as templates)
     if (function_exists('nailedit_get_local_api_base')) {
         $base = nailedit_get_local_api_base();
     } else {
         $base = trailingslashit(get_option('las_api_base_url', 'http://localhost:8083/api/'));
+    }
+
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
     }
     
     // Get request data
@@ -203,34 +290,81 @@ function nailedit_add_to_cart() {
     // Get stored cookie from client
     $stored_cookie = isset($_POST['stored_cookie']) ? sanitize_text_field($_POST['stored_cookie']) : '';
     $auth_token   = isset($_POST['auth_token']) ? sanitize_text_field($_POST['auth_token']) : '';
+    $cart_token   = isset($_POST['cart_token']) ? sanitize_text_field($_POST['cart_token']) : '';
+    $selected_configurable_option = isset($_POST['selected_configurable_option']) ? absint($_POST['selected_configurable_option']) : 0;
+    $super_attribute_raw = isset($_POST['super_attribute']) ? wp_unslash($_POST['super_attribute']) : '';
+    $super_attribute = array();
+    if ( is_string( $super_attribute_raw ) && $super_attribute_raw !== '' ) {
+        $decoded = json_decode( $super_attribute_raw, true );
+        if ( is_array( $decoded ) ) {
+            $super_attribute = $decoded;
+        }
+    }
     
-    // Prepare request (Bagisto v1 API - new cart add endpoint)
-    $url = rtrim($base, '/') . '/v1/customer/cart/add/' . $product_id;
-    $args = [
-        'method' => 'POST',
-        'timeout' => 15,
-        'headers' => [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ],
-        'body' => json_encode([
+    if ( $auth_token ) {
+        // Prepare request (Bagisto v1 API - new cart add endpoint)
+        $url = rtrim($base, '/') . '/v1/customer/cart/add/' . $product_id;
+        $args = [
+            'method' => 'POST',
+            'timeout' => 15,
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'body' => json_encode([
+                'product_id' => $product_id,
+                'quantity'   => $quantity,
+                'is_buy_now' => 0,
+            ])
+        ];
+
+        // Add cookie if provided
+        if ($stored_cookie) {
+            $args['headers']['Cookie'] = $stored_cookie;
+        }
+
+        $args['headers']['Authorization'] = 'Bearer ' . $auth_token;
+
+        // Make request
+        $response = wp_remote_post($url, $args);
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart/items';
+        $payload = array(
             'product_id' => $product_id,
             'quantity'   => $quantity,
-            'is_buy_now' => 0,
-        ])
-    ];
-    
-    // Add cookie if provided
-    if ($stored_cookie) {
-        $args['headers']['Cookie'] = $stored_cookie;
-    }
+        );
+        if ( $selected_configurable_option ) {
+            $payload['selected_configurable_option'] = $selected_configurable_option;
+        }
+        if ( ! empty( $super_attribute ) ) {
+            $payload['super_attribute'] = $super_attribute;
+        }
 
-    if ($auth_token) {
-        $args['headers']['Authorization'] = 'Bearer ' . $auth_token;
+        $args = array(
+            'method'  => 'POST',
+            'timeout' => 20,
+            'headers' => array(
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/json',
+                'X-Cart-Token' => $cart_token,
+            ),
+            'body' => wp_json_encode( $payload ),
+        );
+
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $args['headers']['Host'] = '45.93.139.96';
+            $args['headers']['X-Forwarded-Host'] = '45.93.139.96';
+        }
+
+        $response = wp_remote_post( $url, $args );
     }
-    
-    // Make request
-    $response = wp_remote_post($url, $args);
     
     if (is_wp_error($response)) {
         wp_send_json_error(['message' => $response->get_error_message()], 500);
@@ -244,12 +378,18 @@ function nailedit_add_to_cart() {
     $cookies = wp_remote_retrieve_header($response, 'set-cookie');
     
     // Send response with cookies
-    wp_send_json([
+    $payload = [
         'success' => $status_code >= 200 && $status_code < 300,
         'data' => $data,
         'cookies' => $cookies,
         'status' => $status_code
-    ], $status_code);
+    ];
+
+    if ( ! $auth_token && is_string( $cart_token ) && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
+    wp_send_json( $payload, $status_code );
 }
 add_action('wp_ajax_nailedit_add_to_cart', 'nailedit_add_to_cart');
 add_action('wp_ajax_nopriv_nailedit_add_to_cart', 'nailedit_add_to_cart');
@@ -261,20 +401,43 @@ function nailedit_get_cart() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/cart';
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/cart';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart';
+    }
 
     $headers = array(
         'Accept' => 'application/json',
     );
 
     $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
+    if ( $stored_cookie && $auth_token ) {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     $response = wp_remote_get(
@@ -298,6 +461,10 @@ function nailedit_get_cart() {
         'status' => $status_code,
     );
 
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
     $payload['success'] = $status_code >= 200 && $status_code < 300;
 
     wp_send_json( $payload, $status_code );
@@ -313,10 +480,17 @@ function nailedit_apply_coupon() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
     $coupon = isset( $_POST['coupon'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon'] ) ) : '';
 
     if ( '' === $coupon ) {
         wp_send_json_error( array( 'message' => __( 'Coupon code is required.', 'nailedit' ) ), 400 );
+    }
+
+    if ( ! $auth_token ) {
+        wp_send_json_error( array( 'message' => __( 'Kupongi rakendamiseks palun logi sisse.', 'nailedit' ) ), 401 );
     }
 
     $url = rtrim( $base, '/' ) . '/v1/customer/cart/coupon';
@@ -331,9 +505,14 @@ function nailedit_apply_coupon() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     $args = array(
@@ -395,10 +574,7 @@ function nailedit_remove_coupon() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    }
+    $headers['Authorization'] = 'Bearer ' . $auth_token;
 
     $args = array(
         'method'  => 'DELETE',
@@ -461,7 +637,20 @@ function nailedit_update_cart() {
         $qty[ $item_id ] = $amount;
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/cart/update';
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/cart/update';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart/items';
+    }
 
     $headers = array(
         'Accept'       => 'application/json',
@@ -473,16 +662,21 @@ function nailedit_update_cart() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     $args = array(
-        'method'  => 'PUT', // Bagisto cart/update expects PUT
+        'method'  => 'PUT',
         'timeout' => 20,
         'headers' => $headers,
-        'body'    => wp_json_encode( array( 'qty' => $qty ) ),
+        'body'    => wp_json_encode( $auth_token ? array( 'qty' => $qty ) : array( 'qty' => $qty ) ),
     );
 
     $response = wp_remote_request( $url, $args );
@@ -499,6 +693,10 @@ function nailedit_update_cart() {
         'data'   => $data,
         'status' => $status_code,
     );
+
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
 
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
@@ -527,7 +725,20 @@ function nailedit_remove_cart_item() {
         wp_send_json_error( array( 'message' => 'Cart item ID is required.' ), 400 );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/cart/remove/' . $cart_item_id;
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/cart/remove/' . $cart_item_id;
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart/items/' . $cart_item_id;
+    }
 
     $headers = array(
         'Accept' => 'application/json',
@@ -541,6 +752,12 @@ function nailedit_remove_cart_item() {
     $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     $args = array(
@@ -564,6 +781,10 @@ function nailedit_remove_cart_item() {
         'status' => $status_code,
     );
 
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
         wp_send_json( $payload, $status_code );
@@ -586,7 +807,25 @@ function nailedit_checkout_save_address() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-address';
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-address';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/addresses';
+    }
 
     $headers = array(
         'Accept'       => 'application/json',
@@ -598,9 +837,14 @@ function nailedit_checkout_save_address() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     // Expect billing_* and shipping_* fields and map them into Bagisto structure
@@ -662,6 +906,10 @@ function nailedit_checkout_save_address() {
         'status' => $status_code,
     );
 
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
         wp_send_json( $payload, $status_code );
@@ -685,7 +933,25 @@ function nailedit_checkout_save_order() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-order';
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-order';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/place-order';
+    }
 
     $headers = array(
         'Accept' => 'application/json',
@@ -696,9 +962,14 @@ function nailedit_checkout_save_order() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     $args = array(
@@ -721,6 +992,10 @@ function nailedit_checkout_save_order() {
         'data'   => $data,
         'status' => $status_code,
     );
+
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
 
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
@@ -745,7 +1020,25 @@ function nailedit_checkout_save_shipping() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-shipping';
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-shipping';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/shipping-method';
+    }
 
     $headers = array(
         'Accept'       => 'application/json',
@@ -760,6 +1053,12 @@ function nailedit_checkout_save_shipping() {
     $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     // Shipping method can be overridden via POST; default to flatrate_flatrate
@@ -791,6 +1090,10 @@ function nailedit_checkout_save_shipping() {
         'status' => $status_code,
     );
 
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
         wp_send_json( $payload, $status_code );
@@ -814,7 +1117,25 @@ function nailedit_checkout_save_payment() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-payment';
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-payment';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/payment-method';
+    }
 
     $headers = array(
         'Accept'       => 'application/json',
@@ -829,6 +1150,12 @@ function nailedit_checkout_save_payment() {
     $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     if ( $auth_token ) {
         $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
+            $headers['Host'] = '45.93.139.96';
+            $headers['X-Forwarded-Host'] = '45.93.139.96';
+        }
     }
 
     // Payment method can be overridden via POST; default to cashondelivery
@@ -861,6 +1188,10 @@ function nailedit_checkout_save_payment() {
         'data'   => $data,
         'status' => $status_code,
     );
+
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
 
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
@@ -1074,7 +1405,7 @@ function nailedit_get_product_reviews() {
 	);
 
 	$stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-	if ( $stored_cookie ) {
+	if ( $stored_cookie && $auth_token ) {
 		$headers['Cookie'] = $stored_cookie;
 	}
 

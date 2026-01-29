@@ -35,7 +35,8 @@ get_header();
                 return;
             }
 
-            const cart = data.data.data || data.data;
+            const payload = data.data;
+            const cart = (payload && payload.data && payload.data.cart) ? payload.data.cart : (payload.data || payload);
             const items = Array.isArray(cart.items) ? cart.items : (cart.items ? [cart.items] : []);
 
             if (!items.length) {
@@ -207,12 +208,15 @@ get_header();
 
             const storedCookie = localStorage.getItem('bagisto_cart_cookie');
             const authToken    = localStorage.getItem('bagisto_auth_token');
+            const cartToken    = localStorage.getItem('bagisto_guest_cart_token');
 
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
             if (authToken) {
                 formData.append('auth_token', authToken);
+            } else if (cartToken) {
+                formData.append('cart_token', cartToken);
             }
 
             fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
@@ -222,6 +226,9 @@ get_header();
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
+                if (data && data.cart_token) {
+                    localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
+                }
                 if (data && data.success) {
                     loadCart();
                 } else {
@@ -242,12 +249,15 @@ get_header();
 
             const storedCookie = localStorage.getItem('bagisto_cart_cookie');
             const authToken    = localStorage.getItem('bagisto_auth_token');
+            const cartToken    = localStorage.getItem('bagisto_guest_cart_token');
 
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
             if (authToken) {
                 formData.append('auth_token', authToken);
+            } else if (cartToken) {
+                formData.append('cart_token', cartToken);
             }
 
             if (buttonEl) {
@@ -265,6 +275,9 @@ get_header();
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
+                if (data && data.cart_token) {
+                    localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
+                }
                 if (data && data.success) {
                     if (messageEl) {
                         const msg = (data.message) ? data.message : '<?php echo esc_js( __( 'Coupon applied successfully.', 'nailedit' ) ); ?>';
@@ -300,12 +313,15 @@ get_header();
 
             const storedCookie = localStorage.getItem('bagisto_cart_cookie');
             const authToken    = localStorage.getItem('bagisto_auth_token');
+            const cartToken    = localStorage.getItem('bagisto_guest_cart_token');
 
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
             if (authToken) {
                 formData.append('auth_token', authToken);
+            } else if (cartToken) {
+                formData.append('cart_token', cartToken);
             }
 
             if (buttonEl) {
@@ -323,6 +339,9 @@ get_header();
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
+                if (data && data.cart_token) {
+                    localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
+                }
                 if (data && data.success) {
                     if (messageEl) {
                         const msg = (data.message) ? data.message : '<?php echo esc_js( __( 'Coupon removed successfully.', 'nailedit' ) ); ?>';
@@ -359,12 +378,15 @@ get_header();
 
             const storedCookie = localStorage.getItem('bagisto_cart_cookie');
             const authToken = localStorage.getItem('bagisto_auth_token');
+            const cartToken = localStorage.getItem('bagisto_guest_cart_token');
 
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
             if (authToken) {
                 formData.append('auth_token', authToken);
+            } else if (cartToken) {
+                formData.append('cart_token', cartToken);
             }
 
             // Disable all remove buttons during request
@@ -378,6 +400,9 @@ get_header();
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
+                if (data && data.cart_token) {
+                    localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
+                }
                 if (data && data.success) {
                     // Reload cart to show updated state
                     loadCart();
@@ -402,12 +427,15 @@ get_header();
 
             const storedCookie = localStorage.getItem('bagisto_cart_cookie');
             const authToken    = localStorage.getItem('bagisto_auth_token');
+            const cartToken    = localStorage.getItem('bagisto_guest_cart_token');
 
             if (storedCookie) {
                 formData.append('stored_cookie', storedCookie);
             }
             if (authToken) {
                 formData.append('auth_token', authToken);
+            } else if (cartToken) {
+                formData.append('cart_token', cartToken);
             }
 
             fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
@@ -417,6 +445,9 @@ get_header();
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
+                if (data && data.cart_token) {
+                    localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
+                }
                 if (!data || !data.success) {
                     const msg = (data && data.message) ? data.message : '<?php echo esc_js( __( 'Could not load cart.', 'nailedit' ) ); ?>';
                     root.innerHTML = '<p>' + msg + '</p>';

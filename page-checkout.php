@@ -190,6 +190,22 @@ get_header();
       }
     }
 
+    function getStoredCartToken() {
+      try {
+        return localStorage.getItem('bagisto_guest_cart_token') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function persistCartToken(result) {
+      try {
+        if (result && result.cart_token) {
+          localStorage.setItem('bagisto_guest_cart_token', result.cart_token);
+        }
+      } catch (e) {}
+    }
+
     function renderSummaryFromCartPayload(payload) {
       const root = summaryBody;
       if (window && window.console) {
@@ -299,8 +315,13 @@ get_header();
 
       const storedCookie = getStoredAuthCookie();
       const storedToken = getStoredAuthToken();
+      const cartToken   = getStoredCartToken();
       if (storedCookie) fd.append('stored_cookie', storedCookie);
-      if (storedToken) fd.append('auth_token', storedToken);
+      if (storedToken) {
+        fd.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fd.append('cart_token', cartToken);
+      }
 
       fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
         method: 'POST',
@@ -309,6 +330,7 @@ get_header();
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
+          persistCartToken(data);
           if (!data || !data.success) {
             if (requireCartEl) {
               requireCartEl.classList.remove('hidden');
@@ -446,6 +468,7 @@ get_header();
 
       const storedCookie = getStoredAuthCookie();
       const storedToken = getStoredAuthToken();
+      const cartToken   = getStoredCartToken();
 
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -455,7 +478,11 @@ get_header();
       const fdAddress = new FormData(form);
       fdAddress.append('action', 'nailedit_checkout_save_address');
       if (storedCookie) fdAddress.append('stored_cookie', storedCookie);
-      if (storedToken) fdAddress.append('auth_token', storedToken);
+      if (storedToken) {
+        fdAddress.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fdAddress.append('cart_token', cartToken);
+      }
 
       fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
         method: 'POST',
@@ -464,6 +491,7 @@ get_header();
       })
         .then(function (r) { return r.json(); })
         .then(function (addressResult) {
+          persistCartToken(addressResult);
           var okAddr = addressResult && addressResult.success;
           var addrData = addressResult && addressResult.data ? addressResult.data : {};
 
@@ -491,7 +519,14 @@ get_header();
           fdShipping.append('action', 'nailedit_checkout_save_shipping');
           fdShipping.append('shipping_method', selectedMethod);
           if (storedCookie) fdShipping.append('stored_cookie', storedCookie);
-          if (storedToken) fdShipping.append('auth_token', storedToken);
+          if (storedToken) {
+            fdShipping.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdShipping.append('cart_token', latestCartToken);
+            }
+          }
 
           return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
             method: 'POST',
@@ -500,6 +535,7 @@ get_header();
           }).then(function (r) { return r.json(); });
         })
         .then(function (shippingResult) {
+          persistCartToken(shippingResult);
           if (!shippingResult) return;
 
           if (window && window.console) {
@@ -531,7 +567,14 @@ get_header();
           fdPayment.append('action', 'nailedit_checkout_save_payment');
           fdPayment.append('payment_method', selectedPayment);
           if (storedCookie) fdPayment.append('stored_cookie', storedCookie);
-          if (storedToken) fdPayment.append('auth_token', storedToken);
+          if (storedToken) {
+            fdPayment.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdPayment.append('cart_token', latestCartToken);
+            }
+          }
 
           return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
             method: 'POST',
@@ -540,6 +583,7 @@ get_header();
           }).then(function (r) { return r.json(); });
         })
         .then(function (paymentResult) {
+          persistCartToken(paymentResult);
           if (!paymentResult) return;
 
           var okPay = paymentResult && paymentResult.success;
@@ -561,7 +605,14 @@ get_header();
           const fdOrder = new FormData();
           fdOrder.append('action', 'nailedit_checkout_save_order');
           if (storedCookie) fdOrder.append('stored_cookie', storedCookie);
-          if (storedToken) fdOrder.append('auth_token', storedToken);
+          if (storedToken) {
+            fdOrder.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdOrder.append('cart_token', latestCartToken);
+            }
+          }
 
           return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
             method: 'POST',
@@ -570,6 +621,7 @@ get_header();
           }).then(function (r) { return r.json(); });
         })
         .then(function (orderResult) {
+          persistCartToken(orderResult);
           if (!orderResult) return;
 
           var ok = orderResult && orderResult.success;
