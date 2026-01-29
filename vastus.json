@@ -1,0 +1,324 @@
+{
+  "data": [
+    {
+      "id": 56,
+      "name": "Base",
+      "slug": "base",
+      "display_mode": "products_and_description",
+      "description": "Base",
+      "meta_title": "Base",
+      "meta_description": "Base",
+      "meta_keywords": "base",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 56,
+          "category_id": 56,
+          "name": "Base",
+          "slug": "base",
+          "url_path": "",
+          "description": "Base",
+          "meta_title": "Base",
+          "meta_description": "Base",
+          "meta_keywords": "base",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 57,
+      "name": "Brush ",
+      "slug": "brush",
+      "display_mode": "products_and_description",
+      "description": "Brush ",
+      "meta_title": "Brush ",
+      "meta_description": "Brush ",
+      "meta_keywords": "brush",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 57,
+          "category_id": 57,
+          "name": "Brush ",
+          "slug": "brush",
+          "url_path": "",
+          "description": "Brush ",
+          "meta_title": "Brush ",
+          "meta_description": "Brush ",
+          "meta_keywords": "brush",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 58,
+      "name": "Builder Gel ",
+      "slug": "builder-gel",
+      "display_mode": "products_and_description",
+      "description": "Builder Gel ",
+      "meta_title": "Builder Gel ",
+      "meta_description": "Builder Gel ",
+      "meta_keywords": "builder-gel",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 58,
+          "category_id": 58,
+          "name": "Builder Gel ",
+          "slug": "builder-gel",
+          "url_path": "",
+          "description": "Builder Gel ",
+          "meta_title": "Builder Gel ",
+          "meta_description": "Builder Gel ",
+          "meta_keywords": "builder-gel",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 59,
+      "name": "Dual Form",
+      "slug": "dual-form",
+      "display_mode": "products_and_description",
+      "description": "Dual Form",
+      "meta_title": "Dual Form",
+      "meta_description": "Dual Form",
+      "meta_keywords": "dual-form",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 59,
+          "category_id": 59,
+          "name": "Dual Form",
+          "slug": "dual-form",
+          "url_path": "",
+          "description": "Dual Form",
+          "meta_title": "Dual Form",
+          "meta_description": "Dual Form",
+          "meta_keywords": "dual-form",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 60,
+      "name": "Gel polish ",
+      "slug": "gel-polish",
+      "display_mode": "products_and_description",
+      "description": "Gel polish ",
+      "meta_title": "Gel polish ",
+      "meta_description": "Gel polish ",
+      "meta_keywords": "gel-polish",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 60,
+          "category_id": 60,
+          "name": "Gel polish ",
+          "slug": "gel-polish",
+          "url_path": "",
+          "description": "Gel polish ",
+          "meta_title": "Gel polish ",
+          "meta_description": "Gel polish ",
+          "meta_keywords": "gel-polish",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 61,
+      "name": "Nail Design ",
+      "slug": "nail-design",
+      "display_mode": "products_and_description",
+      "description": "Nail Design ",
+      "meta_title": "Nail Design ",
+      "meta_description": "Nail Design ",
+      "meta_keywords": "nail-design",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 61,
+          "category_id": 61,
+          "name": "Nail Design ",
+          "slug": "nail-design",
+          "url_path": "",
+          "description": "Nail Design ",
+          "meta_title": "Nail Design ",
+          "meta_description": "Nail Design ",
+          "meta_keywords": "nail-design",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 62,
+      "name": "Nail Drill",
+      "slug": "nail-drill",
+      "display_mode": "products_and_description",
+      "description": "Nail Drill",
+      "meta_title": "Nail Drill",
+      "meta_description": "Nail Drill",
+      "meta_keywords": "nail-drill",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 62,
+          "category_id": 62,
+          "name": "Nail Drill",
+          "slug": "nail-drill",
+          "url_path": "",
+          "description": "Nail Drill",
+          "meta_title": "Nail Drill",
+          "meta_description": "Nail Drill",
+          "meta_keywords": "nail-drill",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 63,
+      "name": "Nails Liquids ",
+      "slug": "nails-liquids",
+      "display_mode": "products_and_description",
+      "description": "Nails Liquids ",
+      "meta_title": "Nails Liquids ",
+      "meta_description": "Nails Liquids ",
+      "meta_keywords": "nails-liquids",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 63,
+          "category_id": 63,
+          "name": "Nails Liquids ",
+          "slug": "nails-liquids",
+          "url_path": "",
+          "description": "Nails Liquids ",
+          "meta_title": "Nails Liquids ",
+          "meta_description": "Nails Liquids ",
+          "meta_keywords": "nails-liquids",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 64,
+      "name": "Stamping ",
+      "slug": "stamping",
+      "display_mode": "products_and_description",
+      "description": "Stamping ",
+      "meta_title": "Stamping ",
+      "meta_description": "Stamping ",
+      "meta_keywords": "stamping",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 64,
+          "category_id": 64,
+          "name": "Stamping ",
+          "slug": "stamping",
+          "url_path": "",
+          "description": "Stamping ",
+          "meta_title": "Stamping ",
+          "meta_description": "Stamping ",
+          "meta_keywords": "stamping",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    },
+    {
+      "id": 65,
+      "name": "Top",
+      "slug": "top",
+      "display_mode": "products_and_description",
+      "description": "Top",
+      "meta_title": "Top",
+      "meta_description": "Top",
+      "meta_keywords": "top",
+      "status": 1,
+      "banner_url": null,
+      "logo_url": null,
+      "translations": [
+        {
+          "id": 65,
+          "category_id": 65,
+          "name": "Top",
+          "slug": "top",
+          "url_path": "",
+          "description": "Top",
+          "meta_title": "Top",
+          "meta_description": "Top",
+          "meta_keywords": "top",
+          "locale_id": null,
+          "locale": "en"
+        }
+      ],
+      "position": 1,
+      "additional": [],
+      "created_at": "2025-12-19T17:59:19.000000Z",
+      "updated_at": "2025-12-19T17:59:19.000000Z"
+    }
+  ]
+}

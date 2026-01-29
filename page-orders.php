@@ -1,0 +1,149 @@
+<?php
+/**
+ * Template Name: Customer Orders
+ * Description: Customer orders list using Bagisto API
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+get_header();
+?>
+
+<?php get_template_part( 'template-parts/page-header' ); ?>
+
+<main class="site-main nailedit-orders-page py-10">
+    <div class="max-w-[1200px] mx-auto px-4">
+     
+
+        <div id="nailedit-orders-require-login" class="mb-6 hidden text-center text-sm text-red-600">
+            <p><?php esc_html_e( 'Palun logi sisse, et näha oma tellimusi.', 'nailedit' ); ?></p>
+        </div>
+
+        <section class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
+            <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Sinu tellimused', 'nailedit' ); ?></h2>
+            <div id="nailedit-orders-container" class="space-y-4"></div>
+            <div id="nailedit-orders-error" class="mt-3 text-sm text-red-600"></div>
+        </section>
+    </div>
+</main>
+
+<script>
+(document.addEventListener('DOMContentLoaded', function() {
+    const requireLogin = document.getElementById('nailedit-orders-require-login');
+    const container = document.getElementById('nailedit-orders-container');
+    const errorEl = document.getElementById('nailedit-orders-error');
+
+    function getStoredCustomer() {
+        try {
+            const stored = localStorage.getItem('nailedit_customer');
+            return stored ? JSON.parse(stored) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function getStoredAuthCookie() {
+        try {
+            return localStorage.getItem('bagisto_auth_cookie') || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function getStoredAuthToken() {
+        try {
+            return localStorage.getItem('bagisto_auth_token') || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    const customer = getStoredCustomer();
+    if (!customer) {
+        if (requireLogin) requireLogin.style.display = 'block';
+        return;
+    }
+
+    function renderOrders(data) {
+        const items = data.data || data || [];
+        if (!items || !items.length) {
+            container.innerHTML = '<p class="text-sm text-slate-600"><?php echo esc_js( __( 'Sul ei ole veel ühtegi tellimust.', 'nailedit' ) ); ?></p>';
+            return;
+        }
+
+        container.innerHTML = items.map(function(order) {
+            const id = order.id || '';
+            const number = order.increment_id || ('#' + id);
+            const status = order.status || '';
+            const total = order.formatted_grand_total || order.grand_total || '';
+            const method = order.payment_title || '';
+            const createdAt = order.created_at || '';
+
+            let itemSummary = '';
+            if (order.items) {
+                const it = Array.isArray(order.items) ? order.items : [order.items];
+                if (it.length) {
+                    const first = it[0];
+                    itemSummary = (first.qty_ordered || '') + ' × ' + (first.name || '');
+                    if (it.length > 1) {
+                        itemSummary += ' + ' + (it.length - 1) + ' <?php echo esc_js( __( 'toodet', 'nailedit' ) ); ?>';
+                    }
+                }
+            }
+
+            return '<div class="nailedit-order-item" style="border:1px solid #ddd;padding:10px;margin-bottom:8px;">'
+                + '<strong><?php echo esc_js( __( 'Tellimus ', 'nailedit' ) ); ?>' + number + '</strong><br>'
+                + (createdAt ? '<?php echo esc_js( __( 'Kuupäev: ', 'nailedit' ) ); ?>' + createdAt + '<br>' : '')
+                + (status ? '<?php echo esc_js( __( 'Staatus: ', 'nailedit' ) ); ?>' + status + '<br>' : '')
+                + (total ? '<?php echo esc_js( __( 'Kokku: ', 'nailedit' ) ); ?>' + total + '<br>' : '')
+                + (method ? '<?php echo esc_js( __( 'Maksetüüp: ', 'nailedit' ) ); ?>' + method + '<br>' : '')
+                + (itemSummary ? '<?php echo esc_js( __( 'Tooted: ', 'nailedit' ) ); ?>' + itemSummary + '<br>' : '')
+                + '</div>';
+        }).join('');
+    }
+
+    function loadOrders(page) {
+        if (errorEl) errorEl.textContent = '';
+        if (!page) page = 1;
+
+        const fd = new FormData();
+        fd.append('action', 'nailedit_customer_orders');
+        fd.append('page', page);
+        fd.append('limit', 10);
+
+        const storedCookie = getStoredAuthCookie();
+        if (storedCookie) fd.append('stored_cookie', storedCookie);
+        const storedToken = getStoredAuthToken();
+        if (storedToken) fd.append('auth_token', storedToken);
+
+        fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+            method: 'POST',
+            body: fd
+        })
+        .then(r => r.json())
+        .then(result => {
+            const ok = result && result.success;
+            const data = result && result.data ? result.data : {};
+
+            if (!ok) {
+                let msg = data.message || result.message || 'Midagi läks valesti tellimuste laadimisel.';
+                if (errorEl) errorEl.textContent = msg;
+                return;
+            }
+
+            renderOrders(data);
+        })
+        .catch(err => {
+            console.error('Orders load error:', err);
+            if (errorEl) errorEl.textContent = 'Midagi läks valesti: ' + err.message;
+        });
+    }
+
+    loadOrders(1);
+}));
+</script>
+
+<?php
+get_footer();

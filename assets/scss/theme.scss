@@ -1,0 +1,153 @@
+@import "../font/stylesheet.css";
+
+// Custom SCSS for nailedit theme
+// Example:
+// body {
+//   @apply bg-gray-100 text-gray-900;
+// }
+
+body {
+   font-family: 'Montserrat', sans-serif;
+
+}
+
+article {
+   font-family: 'Montserrat', sans-serif;
+}
+.nailedit-categories-swiper .swiper-slide, .nailedit-products-swiper .swiper-slide {
+   opacity: 0.3; 
+
+
+}
+.nailedit-categories-swiper .swiper-slide.now-visible {
+   opacity: 1; 
+
+}
+
+.nailedit-products-swiper .swiper-slide.now-visible {
+   opacity: 1; 
+
+}   
+
+.site-main {
+.swiper-button-prev,
+ .swiper-button-next {
+    color: var(--secondary);
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.swiper-button-prev:after,
+ .swiper-button-next:after {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+ .swiper-pagination-bullet {
+    background: var(--secondary);
+    opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+}
+
+@media (max-width: 1023px) {
+    .nailedit-products-swiper {
+        padding: 0 40px;
+    }
+}
+
+@media (max-width: 639px) {
+    .nailedit-products-swiper {
+        padding: 0 30px;
+    }
+    
+    .swiper-button-prev,
+     .swiper-button-next {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+        font-size: 16px;
+    }
+}
+
+}
+
+/* Dual-thumb range slider */
+.nailedit-dual-range {
+  pointer-events: all;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #671768;
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 100;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(103, 23, 104, 0.3);
+    margin-top: -9px;
+  }
+
+  &::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #671768;
+    cursor: pointer;
+    pointer-events: all;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(103, 23, 104, 0.3);
+    z-index: 100;
+    margin-top: -9px;
+  }
+}
+
+/* First slider shows the track */
+#nailedit-range-min {
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: #f1ca71;
+    border-radius: 3px;
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: #f1ca71;
+    border-radius: 3px;
+  }
+}
+
+/* Second slider has transparent track so thumbs appear above single track */
+#nailedit-range-max {
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+  }
+}

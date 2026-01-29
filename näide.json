@@ -1,0 +1,3433 @@
+{
+  "data": {
+    "id": 275,
+    "sku": "LOVERED",
+    "type": "configurable",
+    "name": "Love Red",
+    "url_key": "love-red-product-1",
+    "price": "15.0000",
+    "formatted_price": "€15.00",
+    "short_description": "Love Red",
+    "description": "Love Red",
+    "images": [],
+    "videos": [],
+    "base_image": {
+      "small_image_url": "http://localhost/nailedit_laravel/bagisto/src/public/themes/shop/default/build/assets/small-product-placeholder-CMT26fOX.webp",
+      "medium_image_url": "http://localhost/nailedit_laravel/bagisto/src/public/themes/shop/default/build/assets/medium-product-placeholder-INODB-G2.webp",
+      "large_image_url": "http://localhost/nailedit_laravel/bagisto/src/public/themes/shop/default/build/assets/large-product-placeholder-B9xoAuKQ.webp",
+      "original_image_url": "http://localhost/nailedit_laravel/bagisto/src/public/themes/shop/default/build/assets/large-product-placeholder-B9xoAuKQ.webp"
+    },
+    "created_at": "2025-12-18T16:02:20.000000Z",
+    "updated_at": "2025-12-18T16:02:20.000000Z",
+    "reviews": {
+      "total": 0,
+      "total_rating": 0,
+      "average_rating": 0,
+      "percentage": []
+    },
+    "in_stock": true,
+    "is_saved": false,
+    "is_item_in_cart": null,
+    "show_quantity_changer": true,
+    "variants": [
+      {
+        "id": 276,
+        "sku": "LOVERED1",
+        "type": "simple",
+        "parent_id": 275,
+        "attribute_family_id": 1,
+        "additional": null,
+        "created_at": "2025-12-18T16:02:20.000000Z",
+        "updated_at": "2025-12-18T16:02:20.000000Z",
+        "manage_stock": 1,
+        "short_description": "Love Red - 1",
+        "description": "Love Red - 1",
+        "name": "Love Red - 1",
+        "url_key": "love-red-1",
+        "tax_category_id": null,
+        "color": 250,
+        "size": null,
+        "brand": null,
+        "product_number": null,
+        "meta_title": null,
+        "meta_keywords": null,
+        "meta_description": null,
+        "price": "15.0000",
+        "cost": null,
+        "special_price": null,
+        "special_price_from": null,
+        "special_price_to": null,
+        "new": 1,
+        "featured": 0,
+        "visible_individually": 0,
+        "status": 1,
+        "guest_checkout": 1,
+        "length": null,
+        "width": null,
+        "height": null,
+        "weight": "0.1",
+        "attribute_family": {
+          "id": 1,
+          "code": "default",
+          "name": "Default",
+          "status": 0,
+          "is_user_defined": 1
+        },
+        "attribute_values": [
+          {
+            "id": 17980,
+            "locale": null,
+            "channel": null,
+            "text_value": "LOVERED1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 1,
+            "unique_id": "276|1"
+          },
+          {
+            "id": 17981,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 2,
+            "unique_id": "en|276|2"
+          },
+          {
+            "id": 17982,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 9,
+            "unique_id": "en|276|9"
+          },
+          {
+            "id": 17983,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 10,
+            "unique_id": "en|276|10"
+          },
+          {
+            "id": 17984,
+            "locale": "en",
+            "channel": null,
+            "text_value": "love-red-1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 3,
+            "unique_id": "en|276|3"
+          },
+          {
+            "id": 17985,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": "15.0000",
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 11,
+            "unique_id": "276|11"
+          },
+          {
+            "id": 17986,
+            "locale": null,
+            "channel": null,
+            "text_value": "0.1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 22,
+            "unique_id": "276|22"
+          },
+          {
+            "id": 17987,
+            "locale": null,
+            "channel": "default",
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 8,
+            "unique_id": "default|276|8"
+          },
+          {
+            "id": 17988,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 7,
+            "unique_id": "276|7"
+          },
+          {
+            "id": 17989,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 5,
+            "unique_id": "276|5"
+          },
+          {
+            "id": 17990,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 6,
+            "unique_id": "276|6"
+          },
+          {
+            "id": 17991,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": 250,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 276,
+            "attribute_id": 23,
+            "unique_id": "276|23"
+          }
+        ],
+        "inventory_indices": [
+          {
+            "id": 1550,
+            "qty": 100,
+            "product_id": 276,
+            "channel_id": 1,
+            "created_at": "2025-12-18T16:02:20.000000Z",
+            "updated_at": "2025-12-18T16:02:20.000000Z"
+          }
+        ]
+      },
+      {
+        "id": 277,
+        "sku": "LOVERED2",
+        "type": "simple",
+        "parent_id": 275,
+        "attribute_family_id": 1,
+        "additional": null,
+        "created_at": "2025-12-18T16:02:20.000000Z",
+        "updated_at": "2025-12-18T16:02:20.000000Z",
+        "short_description": "Love Red - 2",
+        "description": "Love Red - 2",
+        "name": "Love Red - 2",
+        "url_key": "love-red-2",
+        "tax_category_id": null,
+        "color": 251,
+        "size": null,
+        "brand": null,
+        "product_number": null,
+        "manage_stock": 1,
+        "meta_title": null,
+        "meta_keywords": null,
+        "meta_description": null,
+        "price": "15.0000",
+        "cost": null,
+        "special_price": null,
+        "special_price_from": null,
+        "special_price_to": null,
+        "new": 1,
+        "featured": 0,
+        "visible_individually": 0,
+        "status": 1,
+        "guest_checkout": 1,
+        "length": null,
+        "width": null,
+        "height": null,
+        "weight": "0.1",
+        "attribute_family": {
+          "id": 1,
+          "code": "default",
+          "name": "Default",
+          "status": 0,
+          "is_user_defined": 1
+        },
+        "attribute_values": [
+          {
+            "id": 17992,
+            "locale": null,
+            "channel": null,
+            "text_value": "LOVERED2",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 1,
+            "unique_id": "277|1"
+          },
+          {
+            "id": 17993,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 2",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 2,
+            "unique_id": "en|277|2"
+          },
+          {
+            "id": 17994,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 2",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 9,
+            "unique_id": "en|277|9"
+          },
+          {
+            "id": 17995,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 2",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 10,
+            "unique_id": "en|277|10"
+          },
+          {
+            "id": 17996,
+            "locale": "en",
+            "channel": null,
+            "text_value": "love-red-2",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 3,
+            "unique_id": "en|277|3"
+          },
+          {
+            "id": 17997,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": "15.0000",
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 11,
+            "unique_id": "277|11"
+          },
+          {
+            "id": 17998,
+            "locale": null,
+            "channel": null,
+            "text_value": "0.1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 22,
+            "unique_id": "277|22"
+          },
+          {
+            "id": 17999,
+            "locale": null,
+            "channel": "default",
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 8,
+            "unique_id": "default|277|8"
+          },
+          {
+            "id": 18000,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 7,
+            "unique_id": "277|7"
+          },
+          {
+            "id": 18001,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 5,
+            "unique_id": "277|5"
+          },
+          {
+            "id": 18002,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 6,
+            "unique_id": "277|6"
+          },
+          {
+            "id": 18003,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": 251,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 277,
+            "attribute_id": 23,
+            "unique_id": "277|23"
+          }
+        ]
+      },
+      {
+        "id": 278,
+        "sku": "LOVERED3",
+        "type": "simple",
+        "parent_id": 275,
+        "attribute_family_id": 1,
+        "additional": null,
+        "created_at": "2025-12-18T16:02:20.000000Z",
+        "updated_at": "2025-12-18T16:02:20.000000Z",
+        "short_description": "Love Red - 3",
+        "description": "Love Red - 3",
+        "name": "Love Red - 3",
+        "url_key": "love-red-3",
+        "tax_category_id": null,
+        "color": 252,
+        "size": null,
+        "brand": null,
+        "product_number": null,
+        "manage_stock": 1,
+        "meta_title": null,
+        "meta_keywords": null,
+        "meta_description": null,
+        "price": "15.0000",
+        "cost": null,
+        "special_price": null,
+        "special_price_from": null,
+        "special_price_to": null,
+        "new": 1,
+        "featured": 0,
+        "visible_individually": 0,
+        "status": 1,
+        "guest_checkout": 1,
+        "length": null,
+        "width": null,
+        "height": null,
+        "weight": "0.1",
+        "attribute_family": {
+          "id": 1,
+          "code": "default",
+          "name": "Default",
+          "status": 0,
+          "is_user_defined": 1
+        },
+        "attribute_values": [
+          {
+            "id": 18004,
+            "locale": null,
+            "channel": null,
+            "text_value": "LOVERED3",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 1,
+            "unique_id": "278|1"
+          },
+          {
+            "id": 18005,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 3",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 2,
+            "unique_id": "en|278|2"
+          },
+          {
+            "id": 18006,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 3",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 9,
+            "unique_id": "en|278|9"
+          },
+          {
+            "id": 18007,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 3",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 10,
+            "unique_id": "en|278|10"
+          },
+          {
+            "id": 18008,
+            "locale": "en",
+            "channel": null,
+            "text_value": "love-red-3",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 3,
+            "unique_id": "en|278|3"
+          },
+          {
+            "id": 18009,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": "15.0000",
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 11,
+            "unique_id": "278|11"
+          },
+          {
+            "id": 18010,
+            "locale": null,
+            "channel": null,
+            "text_value": "0.1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 22,
+            "unique_id": "278|22"
+          },
+          {
+            "id": 18011,
+            "locale": null,
+            "channel": "default",
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 8,
+            "unique_id": "default|278|8"
+          },
+          {
+            "id": 18012,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 7,
+            "unique_id": "278|7"
+          },
+          {
+            "id": 18013,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 5,
+            "unique_id": "278|5"
+          },
+          {
+            "id": 18014,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 6,
+            "unique_id": "278|6"
+          },
+          {
+            "id": 18015,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": 252,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 278,
+            "attribute_id": 23,
+            "unique_id": "278|23"
+          }
+        ]
+      },
+      {
+        "id": 279,
+        "sku": "LOVERED4",
+        "type": "simple",
+        "parent_id": 275,
+        "attribute_family_id": 1,
+        "additional": null,
+        "created_at": "2025-12-18T16:02:20.000000Z",
+        "updated_at": "2025-12-18T16:02:20.000000Z",
+        "short_description": "Love Red - 4",
+        "description": "Love Red - 4",
+        "name": "Love Red - 4",
+        "url_key": "love-red-4",
+        "tax_category_id": null,
+        "color": 253,
+        "size": null,
+        "brand": null,
+        "product_number": null,
+        "manage_stock": 1,
+        "meta_title": null,
+        "meta_keywords": null,
+        "meta_description": null,
+        "price": "15.0000",
+        "cost": null,
+        "special_price": null,
+        "special_price_from": null,
+        "special_price_to": null,
+        "new": 1,
+        "featured": 0,
+        "visible_individually": 0,
+        "status": 1,
+        "guest_checkout": 1,
+        "length": null,
+        "width": null,
+        "height": null,
+        "weight": "0.1",
+        "attribute_family": {
+          "id": 1,
+          "code": "default",
+          "name": "Default",
+          "status": 0,
+          "is_user_defined": 1
+        },
+        "attribute_values": [
+          {
+            "id": 18016,
+            "locale": null,
+            "channel": null,
+            "text_value": "LOVERED4",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 1,
+            "unique_id": "279|1"
+          },
+          {
+            "id": 18017,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 4",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 2,
+            "unique_id": "en|279|2"
+          },
+          {
+            "id": 18018,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 4",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 9,
+            "unique_id": "en|279|9"
+          },
+          {
+            "id": 18019,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 4",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 10,
+            "unique_id": "en|279|10"
+          },
+          {
+            "id": 18020,
+            "locale": "en",
+            "channel": null,
+            "text_value": "love-red-4",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 3,
+            "unique_id": "en|279|3"
+          },
+          {
+            "id": 18021,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": "15.0000",
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 11,
+            "unique_id": "279|11"
+          },
+          {
+            "id": 18022,
+            "locale": null,
+            "channel": null,
+            "text_value": "0.1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 22,
+            "unique_id": "279|22"
+          },
+          {
+            "id": 18023,
+            "locale": null,
+            "channel": "default",
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 8,
+            "unique_id": "default|279|8"
+          },
+          {
+            "id": 18024,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 7,
+            "unique_id": "279|7"
+          },
+          {
+            "id": 18025,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 5,
+            "unique_id": "279|5"
+          },
+          {
+            "id": 18026,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 6,
+            "unique_id": "279|6"
+          },
+          {
+            "id": 18027,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": 253,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 279,
+            "attribute_id": 23,
+            "unique_id": "279|23"
+          }
+        ]
+      },
+      {
+        "id": 280,
+        "sku": "LOVERED5",
+        "type": "simple",
+        "parent_id": 275,
+        "attribute_family_id": 1,
+        "additional": null,
+        "created_at": "2025-12-18T16:02:20.000000Z",
+        "updated_at": "2025-12-18T16:02:20.000000Z",
+        "short_description": "Love Red - 5",
+        "description": "Love Red - 5",
+        "name": "Love Red - 5",
+        "url_key": "love-red-5",
+        "tax_category_id": null,
+        "color": 254,
+        "size": null,
+        "brand": null,
+        "product_number": null,
+        "manage_stock": 1,
+        "meta_title": null,
+        "meta_keywords": null,
+        "meta_description": null,
+        "price": "15.0000",
+        "cost": null,
+        "special_price": null,
+        "special_price_from": null,
+        "special_price_to": null,
+        "new": 1,
+        "featured": 0,
+        "visible_individually": 0,
+        "status": 1,
+        "guest_checkout": 1,
+        "length": null,
+        "width": null,
+        "height": null,
+        "weight": "0.1",
+        "attribute_family": {
+          "id": 1,
+          "code": "default",
+          "name": "Default",
+          "status": 0,
+          "is_user_defined": 1
+        },
+        "attribute_values": [
+          {
+            "id": 18028,
+            "locale": null,
+            "channel": null,
+            "text_value": "LOVERED5",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 1,
+            "unique_id": "280|1"
+          },
+          {
+            "id": 18029,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 5",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 2,
+            "unique_id": "en|280|2"
+          },
+          {
+            "id": 18030,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 5",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 9,
+            "unique_id": "en|280|9"
+          },
+          {
+            "id": 18031,
+            "locale": "en",
+            "channel": null,
+            "text_value": "Love Red - 5",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 10,
+            "unique_id": "en|280|10"
+          },
+          {
+            "id": 18032,
+            "locale": "en",
+            "channel": null,
+            "text_value": "love-red-5",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 3,
+            "unique_id": "en|280|3"
+          },
+          {
+            "id": 18033,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": "15.0000",
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 11,
+            "unique_id": "280|11"
+          },
+          {
+            "id": 18034,
+            "locale": null,
+            "channel": null,
+            "text_value": "0.1",
+            "boolean_value": null,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 22,
+            "unique_id": "280|22"
+          },
+          {
+            "id": 18035,
+            "locale": null,
+            "channel": "default",
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 8,
+            "unique_id": "default|280|8"
+          },
+          {
+            "id": 18036,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 7,
+            "unique_id": "280|7"
+          },
+          {
+            "id": 18037,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 1,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 5,
+            "unique_id": "280|5"
+          },
+          {
+            "id": 18038,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": 0,
+            "integer_value": null,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 6,
+            "unique_id": "280|6"
+          },
+          {
+            "id": 18039,
+            "locale": null,
+            "channel": null,
+            "text_value": null,
+            "boolean_value": null,
+            "integer_value": 254,
+            "float_value": null,
+            "datetime_value": null,
+            "date_value": null,
+            "json_value": null,
+            "product_id": 280,
+            "attribute_id": 23,
+            "unique_id": "280|23"
+          }
+        ]
+      }
+    ],
+    "super_attributes": [
+      {
+        "id": 23,
+        "name": "Color",
+        "admin_name": "Color",
+        "code": "color",
+        "type": "select",
+        "swatch_type": null,
+        "options": [
+          {
+            "id": 1,
+            "admin_name": "Red",
+            "label": "Red",
+            "swatch_value": null
+          },
+          {
+            "id": 2,
+            "admin_name": "Green",
+            "label": "Green",
+            "swatch_value": null
+          },
+          {
+            "id": 3,
+            "admin_name": "Yellow",
+            "label": "Yellow",
+            "swatch_value": null
+          },
+          {
+            "id": 4,
+            "admin_name": "Black",
+            "label": "Black",
+            "swatch_value": null
+          },
+          {
+            "id": 5,
+            "admin_name": "White",
+            "label": "White",
+            "swatch_value": null
+          },
+          {
+            "id": 10,
+            "admin_name": "Color Base 1",
+            "label": "Color Base 1",
+            "swatch_value": null
+          },
+          {
+            "id": 11,
+            "admin_name": "Color Base 10",
+            "label": "Color Base 10",
+            "swatch_value": null
+          },
+          {
+            "id": 12,
+            "admin_name": "Color Base 11",
+            "label": "Color Base 11",
+            "swatch_value": null
+          },
+          {
+            "id": 13,
+            "admin_name": "Color Base 12",
+            "label": "Color Base 12",
+            "swatch_value": null
+          },
+          {
+            "id": 14,
+            "admin_name": "Color Base 2",
+            "label": "Color Base 2",
+            "swatch_value": null
+          },
+          {
+            "id": 15,
+            "admin_name": "Color Base 3",
+            "label": "Color Base 3",
+            "swatch_value": null
+          },
+          {
+            "id": 16,
+            "admin_name": "Color Base 4",
+            "label": "Color Base 4",
+            "swatch_value": null
+          },
+          {
+            "id": 17,
+            "admin_name": "Color Base 5",
+            "label": "Color Base 5",
+            "swatch_value": null
+          },
+          {
+            "id": 18,
+            "admin_name": "Color Base 6",
+            "label": "Color Base 6",
+            "swatch_value": null
+          },
+          {
+            "id": 19,
+            "admin_name": "Color Base 7",
+            "label": "Color Base 7",
+            "swatch_value": null
+          },
+          {
+            "id": 20,
+            "admin_name": "Color Base 8",
+            "label": "Color Base 8",
+            "swatch_value": null
+          },
+          {
+            "id": 21,
+            "admin_name": "Color Base 9",
+            "label": "Color Base 9",
+            "swatch_value": null
+          },
+          {
+            "id": 22,
+            "admin_name": "Elastic Base 1",
+            "label": "Elastic Base 1",
+            "swatch_value": null
+          },
+          {
+            "id": 23,
+            "admin_name": "Elastic Base 2",
+            "label": "Elastic Base 2",
+            "swatch_value": null
+          },
+          {
+            "id": 24,
+            "admin_name": "Elastic Base 3",
+            "label": "Elastic Base 3",
+            "swatch_value": null
+          },
+          {
+            "id": 25,
+            "admin_name": "Elastic Base 4",
+            "label": "Elastic Base 4",
+            "swatch_value": null
+          },
+          {
+            "id": 26,
+            "admin_name": "Elastic Base 5",
+            "label": "Elastic Base 5",
+            "swatch_value": null
+          },
+          {
+            "id": 27,
+            "admin_name": "Elastic Base 6",
+            "label": "Elastic Base 6",
+            "swatch_value": null
+          },
+          {
+            "id": 28,
+            "admin_name": "Leaf Base 1",
+            "label": "Leaf Base 1",
+            "swatch_value": null
+          },
+          {
+            "id": 29,
+            "admin_name": "Leaf Base 10",
+            "label": "Leaf Base 10",
+            "swatch_value": null
+          },
+          {
+            "id": 30,
+            "admin_name": "Leaf Base 11",
+            "label": "Leaf Base 11",
+            "swatch_value": null
+          },
+          {
+            "id": 31,
+            "admin_name": "Leaf Base 12",
+            "label": "Leaf Base 12",
+            "swatch_value": null
+          },
+          {
+            "id": 32,
+            "admin_name": "Leaf Base 13",
+            "label": "Leaf Base 13",
+            "swatch_value": null
+          },
+          {
+            "id": 33,
+            "admin_name": "Leaf Base 14",
+            "label": "Leaf Base 14",
+            "swatch_value": null
+          },
+          {
+            "id": 34,
+            "admin_name": "Leaf Base 2",
+            "label": "Leaf Base 2",
+            "swatch_value": null
+          },
+          {
+            "id": 35,
+            "admin_name": "Leaf Base 3",
+            "label": "Leaf Base 3",
+            "swatch_value": null
+          },
+          {
+            "id": 36,
+            "admin_name": "Leaf Base 4",
+            "label": "Leaf Base 4",
+            "swatch_value": null
+          },
+          {
+            "id": 37,
+            "admin_name": "Leaf Base 5",
+            "label": "Leaf Base 5",
+            "swatch_value": null
+          },
+          {
+            "id": 38,
+            "admin_name": "Leaf Base 6",
+            "label": "Leaf Base 6",
+            "swatch_value": null
+          },
+          {
+            "id": 39,
+            "admin_name": "Leaf Base 7",
+            "label": "Leaf Base 7",
+            "swatch_value": null
+          },
+          {
+            "id": 40,
+            "admin_name": "Leaf Base 8",
+            "label": "Leaf Base 8",
+            "swatch_value": null
+          },
+          {
+            "id": 41,
+            "admin_name": "Leaf Base 9",
+            "label": "Leaf Base 9",
+            "swatch_value": null
+          },
+          {
+            "id": 42,
+            "admin_name": "Shimmer Base 1",
+            "label": "Shimmer Base 1",
+            "swatch_value": null
+          },
+          {
+            "id": 43,
+            "admin_name": "Shimmer Base 10",
+            "label": "Shimmer Base 10",
+            "swatch_value": null
+          },
+          {
+            "id": 44,
+            "admin_name": "Shimmer Base 11",
+            "label": "Shimmer Base 11",
+            "swatch_value": null
+          },
+          {
+            "id": 45,
+            "admin_name": "Shimmer Base 12",
+            "label": "Shimmer Base 12",
+            "swatch_value": null
+          },
+          {
+            "id": 46,
+            "admin_name": "Shimmer Base 13",
+            "label": "Shimmer Base 13",
+            "swatch_value": null
+          },
+          {
+            "id": 47,
+            "admin_name": "Shimmer Base 14",
+            "label": "Shimmer Base 14",
+            "swatch_value": null
+          },
+          {
+            "id": 48,
+            "admin_name": "Shimmer Base 15",
+            "label": "Shimmer Base 15",
+            "swatch_value": null
+          },
+          {
+            "id": 49,
+            "admin_name": "Shimmer Base 16",
+            "label": "Shimmer Base 16",
+            "swatch_value": null
+          },
+          {
+            "id": 50,
+            "admin_name": "Shimmer Base 2",
+            "label": "Shimmer Base 2",
+            "swatch_value": null
+          },
+          {
+            "id": 51,
+            "admin_name": "Shimmer Base 3",
+            "label": "Shimmer Base 3",
+            "swatch_value": null
+          },
+          {
+            "id": 52,
+            "admin_name": "Shimmer Base 4",
+            "label": "Shimmer Base 4",
+            "swatch_value": null
+          },
+          {
+            "id": 53,
+            "admin_name": "Shimmer Base 5",
+            "label": "Shimmer Base 5",
+            "swatch_value": null
+          },
+          {
+            "id": 54,
+            "admin_name": "Shimmer Base 6",
+            "label": "Shimmer Base 6",
+            "swatch_value": null
+          },
+          {
+            "id": 55,
+            "admin_name": "Shimmer Base 7",
+            "label": "Shimmer Base 7",
+            "swatch_value": null
+          },
+          {
+            "id": 56,
+            "admin_name": "Shimmer Base 8",
+            "label": "Shimmer Base 8",
+            "swatch_value": null
+          },
+          {
+            "id": 57,
+            "admin_name": "Shimmer Base 9",
+            "label": "Shimmer Base 9",
+            "swatch_value": null
+          },
+          {
+            "id": 58,
+            "admin_name": "Sugar Base 1",
+            "label": "Sugar Base 1",
+            "swatch_value": null
+          },
+          {
+            "id": 59,
+            "admin_name": "Sugar Base 2",
+            "label": "Sugar Base 2",
+            "swatch_value": null
+          },
+          {
+            "id": 60,
+            "admin_name": "Sugar Base 3",
+            "label": "Sugar Base 3",
+            "swatch_value": null
+          },
+          {
+            "id": 61,
+            "admin_name": "Sugar Base 4",
+            "label": "Sugar Base 4",
+            "swatch_value": null
+          },
+          {
+            "id": 62,
+            "admin_name": "Sugar Base 5",
+            "label": "Sugar Base 5",
+            "swatch_value": null
+          },
+          {
+            "id": 63,
+            "admin_name": "Sugar Base 6",
+            "label": "Sugar Base 6",
+            "swatch_value": null
+          },
+          {
+            "id": 64,
+            "admin_name": "Sugar Base 7",
+            "label": "Sugar Base 7",
+            "swatch_value": null
+          },
+          {
+            "id": 65,
+            "admin_name": "Builder Gel Magic 1",
+            "label": "Builder Gel Magic 1",
+            "swatch_value": null
+          },
+          {
+            "id": 66,
+            "admin_name": "Builder Gel Magic 10",
+            "label": "Builder Gel Magic 10",
+            "swatch_value": null
+          },
+          {
+            "id": 67,
+            "admin_name": "Builder Gel Magic 11",
+            "label": "Builder Gel Magic 11",
+            "swatch_value": null
+          },
+          {
+            "id": 68,
+            "admin_name": "Builder Gel Magic 12",
+            "label": "Builder Gel Magic 12",
+            "swatch_value": null
+          },
+          {
+            "id": 69,
+            "admin_name": "Builder Gel Magic 2",
+            "label": "Builder Gel Magic 2",
+            "swatch_value": null
+          },
+          {
+            "id": 70,
+            "admin_name": "Builder Gel Magic 3",
+            "label": "Builder Gel Magic 3",
+            "swatch_value": null
+          },
+          {
+            "id": 71,
+            "admin_name": "Builder Gel Magic 4",
+            "label": "Builder Gel Magic 4",
+            "swatch_value": null
+          },
+          {
+            "id": 72,
+            "admin_name": "Builder Gel Magic 5",
+            "label": "Builder Gel Magic 5",
+            "swatch_value": null
+          },
+          {
+            "id": 73,
+            "admin_name": "Builder Gel Magic 6",
+            "label": "Builder Gel Magic 6",
+            "swatch_value": null
+          },
+          {
+            "id": 74,
+            "admin_name": "Builder Gel Magic 7",
+            "label": "Builder Gel Magic 7",
+            "swatch_value": null
+          },
+          {
+            "id": 75,
+            "admin_name": "Builder Gel Magic 8",
+            "label": "Builder Gel Magic 8",
+            "swatch_value": null
+          },
+          {
+            "id": 76,
+            "admin_name": "Builder Gel Magic 9",
+            "label": "Builder Gel Magic 9",
+            "swatch_value": null
+          },
+          {
+            "id": 77,
+            "admin_name": "Builder Gel Night 5",
+            "label": "Builder Gel Night 5",
+            "swatch_value": null
+          },
+          {
+            "id": 78,
+            "admin_name": "Builder Gel Night 6",
+            "label": "Builder Gel Night 6",
+            "swatch_value": null
+          },
+          {
+            "id": 79,
+            "admin_name": "Builder Gel Pastel 1",
+            "label": "Builder Gel Pastel 1",
+            "swatch_value": null
+          },
+          {
+            "id": 80,
+            "admin_name": "Builder Gel Pastel 10",
+            "label": "Builder Gel Pastel 10",
+            "swatch_value": null
+          },
+          {
+            "id": 81,
+            "admin_name": "Builder Gel Pastel 11",
+            "label": "Builder Gel Pastel 11",
+            "swatch_value": null
+          },
+          {
+            "id": 82,
+            "admin_name": "Builder Gel Pastel 12",
+            "label": "Builder Gel Pastel 12",
+            "swatch_value": null
+          },
+          {
+            "id": 83,
+            "admin_name": "Builder Gel Pastel 13",
+            "label": "Builder Gel Pastel 13",
+            "swatch_value": null
+          },
+          {
+            "id": 84,
+            "admin_name": "Builder Gel Pastel 2",
+            "label": "Builder Gel Pastel 2",
+            "swatch_value": null
+          },
+          {
+            "id": 85,
+            "admin_name": "Builder Gel Pastel 3",
+            "label": "Builder Gel Pastel 3",
+            "swatch_value": null
+          },
+          {
+            "id": 86,
+            "admin_name": "Builder Gel Pastel 4",
+            "label": "Builder Gel Pastel 4",
+            "swatch_value": null
+          },
+          {
+            "id": 87,
+            "admin_name": "Builder Gel Pastel 5",
+            "label": "Builder Gel Pastel 5",
+            "swatch_value": null
+          },
+          {
+            "id": 88,
+            "admin_name": "Builder Gel Pastel 7",
+            "label": "Builder Gel Pastel 7",
+            "swatch_value": null
+          },
+          {
+            "id": 89,
+            "admin_name": "Builder Gel Pastel 8",
+            "label": "Builder Gel Pastel 8",
+            "swatch_value": null
+          },
+          {
+            "id": 90,
+            "admin_name": "Builder Gel Pastel 9",
+            "label": "Builder Gel Pastel 9",
+            "swatch_value": null
+          },
+          {
+            "id": 91,
+            "admin_name": "Builder Gel Veil 1",
+            "label": "Builder Gel Veil 1",
+            "swatch_value": null
+          },
+          {
+            "id": 92,
+            "admin_name": "Builder Gel Veil 10",
+            "label": "Builder Gel Veil 10",
+            "swatch_value": null
+          },
+          {
+            "id": 93,
+            "admin_name": "Builder Gel Veil 11",
+            "label": "Builder Gel Veil 11",
+            "swatch_value": null
+          },
+          {
+            "id": 94,
+            "admin_name": "Builder Gel Veil 12",
+            "label": "Builder Gel Veil 12",
+            "swatch_value": null
+          },
+          {
+            "id": 95,
+            "admin_name": "Builder Gel Veil 13",
+            "label": "Builder Gel Veil 13",
+            "swatch_value": null
+          },
+          {
+            "id": 96,
+            "admin_name": "Builder Gel Veil 14",
+            "label": "Builder Gel Veil 14",
+            "swatch_value": null
+          },
+          {
+            "id": 97,
+            "admin_name": "Builder Gel Veil 15",
+            "label": "Builder Gel Veil 15",
+            "swatch_value": null
+          },
+          {
+            "id": 98,
+            "admin_name": "Builder Gel Veil 16",
+            "label": "Builder Gel Veil 16",
+            "swatch_value": null
+          },
+          {
+            "id": 99,
+            "admin_name": "Builder Gel Veil 17",
+            "label": "Builder Gel Veil 17",
+            "swatch_value": null
+          },
+          {
+            "id": 100,
+            "admin_name": "Builder Gel Veil 18",
+            "label": "Builder Gel Veil 18",
+            "swatch_value": null
+          },
+          {
+            "id": 101,
+            "admin_name": "Builder Gel Veil 19",
+            "label": "Builder Gel Veil 19",
+            "swatch_value": null
+          },
+          {
+            "id": 102,
+            "admin_name": "Builder Gel Veil 2",
+            "label": "Builder Gel Veil 2",
+            "swatch_value": null
+          },
+          {
+            "id": 103,
+            "admin_name": "Builder Gel Veil 20",
+            "label": "Builder Gel Veil 20",
+            "swatch_value": null
+          },
+          {
+            "id": 104,
+            "admin_name": "Builder Gel Veil 21",
+            "label": "Builder Gel Veil 21",
+            "swatch_value": null
+          },
+          {
+            "id": 105,
+            "admin_name": "Builder Gel Veil 3",
+            "label": "Builder Gel Veil 3",
+            "swatch_value": null
+          },
+          {
+            "id": 106,
+            "admin_name": "Builder Gel Veil 4",
+            "label": "Builder Gel Veil 4",
+            "swatch_value": null
+          },
+          {
+            "id": 107,
+            "admin_name": "Builder Gel Veil 5",
+            "label": "Builder Gel Veil 5",
+            "swatch_value": null
+          },
+          {
+            "id": 108,
+            "admin_name": "Builder Gel Veil 6",
+            "label": "Builder Gel Veil 6",
+            "swatch_value": null
+          },
+          {
+            "id": 109,
+            "admin_name": "Builder Gel Veil 7",
+            "label": "Builder Gel Veil 7",
+            "swatch_value": null
+          },
+          {
+            "id": 110,
+            "admin_name": "Builder Gel Veil 8",
+            "label": "Builder Gel Veil 8",
+            "swatch_value": null
+          },
+          {
+            "id": 111,
+            "admin_name": "Builder Gel Veil 9",
+            "label": "Builder Gel Veil 9",
+            "swatch_value": null
+          },
+          {
+            "id": 112,
+            "admin_name": "Liquid Gel 23",
+            "label": "Liquid Gel 23",
+            "swatch_value": null
+          },
+          {
+            "id": 113,
+            "admin_name": "Liquid Gel 24",
+            "label": "Liquid Gel 24",
+            "swatch_value": null
+          },
+          {
+            "id": 114,
+            "admin_name": "Liquid Gel 25",
+            "label": "Liquid Gel 25",
+            "swatch_value": null
+          },
+          {
+            "id": 115,
+            "admin_name": "Liquid Gel 26",
+            "label": "Liquid Gel 26",
+            "swatch_value": null
+          },
+          {
+            "id": 116,
+            "admin_name": "Liquid Gel 27",
+            "label": "Liquid Gel 27",
+            "swatch_value": null
+          },
+          {
+            "id": 117,
+            "admin_name": "Liquid Gel 28",
+            "label": "Liquid Gel 28",
+            "swatch_value": null
+          },
+          {
+            "id": 118,
+            "admin_name": "Liquid Gel 29",
+            "label": "Liquid Gel 29",
+            "swatch_value": null
+          },
+          {
+            "id": 119,
+            "admin_name": "Liquid Gel 30",
+            "label": "Liquid Gel 30",
+            "swatch_value": null
+          },
+          {
+            "id": 120,
+            "admin_name": "Liquid Gel 31",
+            "label": "Liquid Gel 31",
+            "swatch_value": null
+          },
+          {
+            "id": 121,
+            "admin_name": "Liquid Gel 32",
+            "label": "Liquid Gel 32",
+            "swatch_value": null
+          },
+          {
+            "id": 122,
+            "admin_name": "Liquid Gel 33",
+            "label": "Liquid Gel 33",
+            "swatch_value": null
+          },
+          {
+            "id": 123,
+            "admin_name": "Liquid Gel 34",
+            "label": "Liquid Gel 34",
+            "swatch_value": null
+          },
+          {
+            "id": 124,
+            "admin_name": "Liquid Gel 35",
+            "label": "Liquid Gel 35",
+            "swatch_value": null
+          },
+          {
+            "id": 125,
+            "admin_name": "Liquid Gel 36",
+            "label": "Liquid Gel 36",
+            "swatch_value": null
+          },
+          {
+            "id": 126,
+            "admin_name": "Liquid Gel 37",
+            "label": "Liquid Gel 37",
+            "swatch_value": null
+          },
+          {
+            "id": 127,
+            "admin_name": "Liquid Gel 38",
+            "label": "Liquid Gel 38",
+            "swatch_value": null
+          },
+          {
+            "id": 128,
+            "admin_name": "Liquid Gel 39",
+            "label": "Liquid Gel 39",
+            "swatch_value": null
+          },
+          {
+            "id": 129,
+            "admin_name": "Liquid Gel 40",
+            "label": "Liquid Gel 40",
+            "swatch_value": null
+          },
+          {
+            "id": 130,
+            "admin_name": "Liquid Gel 41",
+            "label": "Liquid Gel 41",
+            "swatch_value": null
+          },
+          {
+            "id": 131,
+            "admin_name": "Liquid Gel 42",
+            "label": "Liquid Gel 42",
+            "swatch_value": null
+          },
+          {
+            "id": 132,
+            "admin_name": "Liquid Gel 43",
+            "label": "Liquid Gel 43",
+            "swatch_value": null
+          },
+          {
+            "id": 133,
+            "admin_name": "Liquid Gel 44",
+            "label": "Liquid Gel 44",
+            "swatch_value": null
+          },
+          {
+            "id": 134,
+            "admin_name": "Liquid Gel 45",
+            "label": "Liquid Gel 45",
+            "swatch_value": null
+          },
+          {
+            "id": 135,
+            "admin_name": "Liquid Gel 46",
+            "label": "Liquid Gel 46",
+            "swatch_value": null
+          },
+          {
+            "id": 136,
+            "admin_name": "Amber Cat Amber Cat 1",
+            "label": "Amber Cat Amber Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 137,
+            "admin_name": "Amber Cat Amber Cat 2",
+            "label": "Amber Cat Amber Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 138,
+            "admin_name": "Amber Cat Amber Cat 3",
+            "label": "Amber Cat Amber Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 139,
+            "admin_name": "Amber Cat Amber Cat 5",
+            "label": "Amber Cat Amber Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 140,
+            "admin_name": "Amber Cat Amber Cat 6",
+            "label": "Amber Cat Amber Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 141,
+            "admin_name": "Amber Cat Amber Cat 8",
+            "label": "Amber Cat Amber Cat 8",
+            "swatch_value": null
+          },
+          {
+            "id": 142,
+            "admin_name": "Dream Cat Dream Cat 1",
+            "label": "Dream Cat Dream Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 143,
+            "admin_name": "Dream Cat Dream Cat 2",
+            "label": "Dream Cat Dream Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 144,
+            "admin_name": "Dream Cat Dream Cat 3",
+            "label": "Dream Cat Dream Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 145,
+            "admin_name": "Dream Cat Dream Cat 5",
+            "label": "Dream Cat Dream Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 146,
+            "admin_name": "Dream Cat Dream Cat 6",
+            "label": "Dream Cat Dream Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 147,
+            "admin_name": "Dream Cat Dream Cat 7",
+            "label": "Dream Cat Dream Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 148,
+            "admin_name": "Dream Cat Dream Cat 8",
+            "label": "Dream Cat Dream Cat 8",
+            "swatch_value": null
+          },
+          {
+            "id": 149,
+            "admin_name": "Dream Cat Dream Cat 9",
+            "label": "Dream Cat Dream Cat 9",
+            "swatch_value": null
+          },
+          {
+            "id": 150,
+            "admin_name": "Glow Cat  Glow Cat 1",
+            "label": "Glow Cat  Glow Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 151,
+            "admin_name": "Glow Cat  Glow Cat 10",
+            "label": "Glow Cat  Glow Cat 10",
+            "swatch_value": null
+          },
+          {
+            "id": 152,
+            "admin_name": "Glow Cat  Glow Cat 2",
+            "label": "Glow Cat  Glow Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 153,
+            "admin_name": "Glow Cat  Glow Cat 3",
+            "label": "Glow Cat  Glow Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 154,
+            "admin_name": "Glow Cat  Glow Cat 4",
+            "label": "Glow Cat  Glow Cat 4",
+            "swatch_value": null
+          },
+          {
+            "id": 155,
+            "admin_name": "Glow Cat  Glow Cat 6",
+            "label": "Glow Cat  Glow Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 156,
+            "admin_name": "Glow Cat  Glow Cat 7",
+            "label": "Glow Cat  Glow Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 157,
+            "admin_name": "Glow Cat  Glow Cat 8",
+            "label": "Glow Cat  Glow Cat 8",
+            "swatch_value": null
+          },
+          {
+            "id": 158,
+            "admin_name": "Glow Cat  Glow Cat 9",
+            "label": "Glow Cat  Glow Cat 9",
+            "swatch_value": null
+          },
+          {
+            "id": 159,
+            "admin_name": "Shine Cat  Shine Cat 1 (cherry)",
+            "label": "Shine Cat  Shine Cat 1 (cherry)",
+            "swatch_value": null
+          },
+          {
+            "id": 160,
+            "admin_name": "Shine Cat Shine Cat 10",
+            "label": "Shine Cat Shine Cat 10",
+            "swatch_value": null
+          },
+          {
+            "id": 161,
+            "admin_name": "Shine Cat Shine Cat 11",
+            "label": "Shine Cat Shine Cat 11",
+            "swatch_value": null
+          },
+          {
+            "id": 162,
+            "admin_name": "Shine Cat Shine Cat 2 (shine)",
+            "label": "Shine Cat Shine Cat 2 (shine)",
+            "swatch_value": null
+          },
+          {
+            "id": 163,
+            "admin_name": "Shine Cat Shine Cat 3",
+            "label": "Shine Cat Shine Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 164,
+            "admin_name": "Shine Cat Shine Cat 4",
+            "label": "Shine Cat Shine Cat 4",
+            "swatch_value": null
+          },
+          {
+            "id": 165,
+            "admin_name": "Shine Cat Shine Cat 5",
+            "label": "Shine Cat Shine Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 166,
+            "admin_name": "Shine Cat Shine Cat 6",
+            "label": "Shine Cat Shine Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 167,
+            "admin_name": "Shine Cat Shine Cat 7",
+            "label": "Shine Cat Shine Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 168,
+            "admin_name": "Shine Cat Shine Cat 8",
+            "label": "Shine Cat Shine Cat 8",
+            "swatch_value": null
+          },
+          {
+            "id": 169,
+            "admin_name": "Shine Cat Shine Cat 9",
+            "label": "Shine Cat Shine Cat 9",
+            "swatch_value": null
+          },
+          {
+            "id": 170,
+            "admin_name": "Silk Cat Silk Cat 1",
+            "label": "Silk Cat Silk Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 171,
+            "admin_name": "Silk Cat Silk Cat 2",
+            "label": "Silk Cat Silk Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 172,
+            "admin_name": "Silk Cat Silk Cat 3",
+            "label": "Silk Cat Silk Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 173,
+            "admin_name": "Silk Cat Silk Cat 4",
+            "label": "Silk Cat Silk Cat 4",
+            "swatch_value": null
+          },
+          {
+            "id": 174,
+            "admin_name": "Silk Cat Silk Cat 5",
+            "label": "Silk Cat Silk Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 175,
+            "admin_name": "Silk Cat Silk Cat 6",
+            "label": "Silk Cat Silk Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 176,
+            "admin_name": "Silk Cat Silk Cat 7",
+            "label": "Silk Cat Silk Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 177,
+            "admin_name": "Smoothie Cat Smoothie Cat 1",
+            "label": "Smoothie Cat Smoothie Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 178,
+            "admin_name": "Smoothie Cat Smoothie Cat 2",
+            "label": "Smoothie Cat Smoothie Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 179,
+            "admin_name": "Smoothie Cat Smoothie Cat 3",
+            "label": "Smoothie Cat Smoothie Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 180,
+            "admin_name": "Smoothie Cat Smoothie Cat 4",
+            "label": "Smoothie Cat Smoothie Cat 4",
+            "swatch_value": null
+          },
+          {
+            "id": 181,
+            "admin_name": "Smoothie Cat Smoothie Cat 5",
+            "label": "Smoothie Cat Smoothie Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 182,
+            "admin_name": "Smoothie Cat Smoothie Cat 7",
+            "label": "Smoothie Cat Smoothie Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 183,
+            "admin_name": "Wild Cat Wild Cat 1",
+            "label": "Wild Cat Wild Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 184,
+            "admin_name": "Wild Cat Wild Cat 2",
+            "label": "Wild Cat Wild Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 185,
+            "admin_name": "Wild Cat Wild Cat 3",
+            "label": "Wild Cat Wild Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 186,
+            "admin_name": "Wild Cat Wild Cat 5",
+            "label": "Wild Cat Wild Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 187,
+            "admin_name": "Wine Cat  Wine Cat 1",
+            "label": "Wine Cat  Wine Cat 1",
+            "swatch_value": null
+          },
+          {
+            "id": 188,
+            "admin_name": "Wine Cat  Wine Cat 10",
+            "label": "Wine Cat  Wine Cat 10",
+            "swatch_value": null
+          },
+          {
+            "id": 189,
+            "admin_name": "Wine Cat  Wine Cat 2",
+            "label": "Wine Cat  Wine Cat 2",
+            "swatch_value": null
+          },
+          {
+            "id": 190,
+            "admin_name": "Wine Cat  Wine Cat 3",
+            "label": "Wine Cat  Wine Cat 3",
+            "swatch_value": null
+          },
+          {
+            "id": 191,
+            "admin_name": "Wine Cat  Wine Cat 5",
+            "label": "Wine Cat  Wine Cat 5",
+            "swatch_value": null
+          },
+          {
+            "id": 192,
+            "admin_name": "Wine Cat  Wine Cat 6",
+            "label": "Wine Cat  Wine Cat 6",
+            "swatch_value": null
+          },
+          {
+            "id": 193,
+            "admin_name": "Wine Cat  Wine Cat 7",
+            "label": "Wine Cat  Wine Cat 7",
+            "swatch_value": null
+          },
+          {
+            "id": 194,
+            "admin_name": "Wine Cat  Wine Cat 8",
+            "label": "Wine Cat  Wine Cat 8",
+            "swatch_value": null
+          },
+          {
+            "id": 195,
+            "admin_name": "Wine Cat  Wine Cat 9",
+            "label": "Wine Cat  Wine Cat 9",
+            "swatch_value": null
+          },
+          {
+            "id": 196,
+            "admin_name": "Color Gel Polish 10",
+            "label": "Color Gel Polish 10",
+            "swatch_value": null
+          },
+          {
+            "id": 197,
+            "admin_name": "Color Gel Polish 11",
+            "label": "Color Gel Polish 11",
+            "swatch_value": null
+          },
+          {
+            "id": 198,
+            "admin_name": "Color Gel Polish 12",
+            "label": "Color Gel Polish 12",
+            "swatch_value": null
+          },
+          {
+            "id": 199,
+            "admin_name": "Color Gel Polish 13",
+            "label": "Color Gel Polish 13",
+            "swatch_value": null
+          },
+          {
+            "id": 200,
+            "admin_name": "Color Gel Polish 14",
+            "label": "Color Gel Polish 14",
+            "swatch_value": null
+          },
+          {
+            "id": 201,
+            "admin_name": "Color Gel Polish 15",
+            "label": "Color Gel Polish 15",
+            "swatch_value": null
+          },
+          {
+            "id": 202,
+            "admin_name": "Color Gel Polish 17",
+            "label": "Color Gel Polish 17",
+            "swatch_value": null
+          },
+          {
+            "id": 203,
+            "admin_name": "Color Gel Polish 18",
+            "label": "Color Gel Polish 18",
+            "swatch_value": null
+          },
+          {
+            "id": 204,
+            "admin_name": "Color Gel Polish 19",
+            "label": "Color Gel Polish 19",
+            "swatch_value": null
+          },
+          {
+            "id": 205,
+            "admin_name": "Color Gel Polish 20",
+            "label": "Color Gel Polish 20",
+            "swatch_value": null
+          },
+          {
+            "id": 206,
+            "admin_name": "Color Gel Polish 21",
+            "label": "Color Gel Polish 21",
+            "swatch_value": null
+          },
+          {
+            "id": 207,
+            "admin_name": "Color Gel Polish 22",
+            "label": "Color Gel Polish 22",
+            "swatch_value": null
+          },
+          {
+            "id": 208,
+            "admin_name": "Color Gel Polish 24",
+            "label": "Color Gel Polish 24",
+            "swatch_value": null
+          },
+          {
+            "id": 209,
+            "admin_name": "Color Gel Polish 25",
+            "label": "Color Gel Polish 25",
+            "swatch_value": null
+          },
+          {
+            "id": 210,
+            "admin_name": "Color Gel Polish 26",
+            "label": "Color Gel Polish 26",
+            "swatch_value": null
+          },
+          {
+            "id": 211,
+            "admin_name": "Color Gel Polish 27",
+            "label": "Color Gel Polish 27",
+            "swatch_value": null
+          },
+          {
+            "id": 212,
+            "admin_name": "Color Gel Polish 3",
+            "label": "Color Gel Polish 3",
+            "swatch_value": null
+          },
+          {
+            "id": 213,
+            "admin_name": "Color Gel Polish 30",
+            "label": "Color Gel Polish 30",
+            "swatch_value": null
+          },
+          {
+            "id": 214,
+            "admin_name": "Color Gel Polish 31",
+            "label": "Color Gel Polish 31",
+            "swatch_value": null
+          },
+          {
+            "id": 215,
+            "admin_name": "Color Gel Polish 33",
+            "label": "Color Gel Polish 33",
+            "swatch_value": null
+          },
+          {
+            "id": 216,
+            "admin_name": "Color Gel Polish 34",
+            "label": "Color Gel Polish 34",
+            "swatch_value": null
+          },
+          {
+            "id": 217,
+            "admin_name": "Color Gel Polish 35",
+            "label": "Color Gel Polish 35",
+            "swatch_value": null
+          },
+          {
+            "id": 218,
+            "admin_name": "Color Gel Polish 37",
+            "label": "Color Gel Polish 37",
+            "swatch_value": null
+          },
+          {
+            "id": 219,
+            "admin_name": "Color Gel Polish 38",
+            "label": "Color Gel Polish 38",
+            "swatch_value": null
+          },
+          {
+            "id": 220,
+            "admin_name": "Color Gel Polish 39",
+            "label": "Color Gel Polish 39",
+            "swatch_value": null
+          },
+          {
+            "id": 221,
+            "admin_name": "Color Gel Polish 4",
+            "label": "Color Gel Polish 4",
+            "swatch_value": null
+          },
+          {
+            "id": 222,
+            "admin_name": "Color Gel Polish 40",
+            "label": "Color Gel Polish 40",
+            "swatch_value": null
+          },
+          {
+            "id": 223,
+            "admin_name": "Color Gel Polish 41",
+            "label": "Color Gel Polish 41",
+            "swatch_value": null
+          },
+          {
+            "id": 224,
+            "admin_name": "Color Gel Polish 42",
+            "label": "Color Gel Polish 42",
+            "swatch_value": null
+          },
+          {
+            "id": 225,
+            "admin_name": "Color Gel Polish 5",
+            "label": "Color Gel Polish 5",
+            "swatch_value": null
+          },
+          {
+            "id": 226,
+            "admin_name": "Color Gel Polish 6",
+            "label": "Color Gel Polish 6",
+            "swatch_value": null
+          },
+          {
+            "id": 227,
+            "admin_name": "Color Gel Polish 7",
+            "label": "Color Gel Polish 7",
+            "swatch_value": null
+          },
+          {
+            "id": 228,
+            "admin_name": "Color Gel Polish 8",
+            "label": "Color Gel Polish 8",
+            "swatch_value": null
+          },
+          {
+            "id": 229,
+            "admin_name": "Color Gel Polish 9",
+            "label": "Color Gel Polish 9",
+            "swatch_value": null
+          },
+          {
+            "id": 230,
+            "admin_name": "Fiery Gel 1",
+            "label": "Fiery Gel 1",
+            "swatch_value": null
+          },
+          {
+            "id": 231,
+            "admin_name": "Fiery Gel 26",
+            "label": "Fiery Gel 26",
+            "swatch_value": null
+          },
+          {
+            "id": 232,
+            "admin_name": "Fiery Gel 27",
+            "label": "Fiery Gel 27",
+            "swatch_value": null
+          },
+          {
+            "id": 233,
+            "admin_name": "Fiery Gel 29",
+            "label": "Fiery Gel 29",
+            "swatch_value": null
+          },
+          {
+            "id": 234,
+            "admin_name": "Fiery Gel 30",
+            "label": "Fiery Gel 30",
+            "swatch_value": null
+          },
+          {
+            "id": 235,
+            "admin_name": "Fiery Gel 31",
+            "label": "Fiery Gel 31",
+            "swatch_value": null
+          },
+          {
+            "id": 236,
+            "admin_name": "Fiery Gel 32",
+            "label": "Fiery Gel 32",
+            "swatch_value": null
+          },
+          {
+            "id": 237,
+            "admin_name": "Fiery Gel 33",
+            "label": "Fiery Gel 33",
+            "swatch_value": null
+          },
+          {
+            "id": 238,
+            "admin_name": "Fiery Gel 34",
+            "label": "Fiery Gel 34",
+            "swatch_value": null
+          },
+          {
+            "id": 239,
+            "admin_name": "Fiery Gel 35",
+            "label": "Fiery Gel 35",
+            "swatch_value": null
+          },
+          {
+            "id": 240,
+            "admin_name": "Fiery Gel 36",
+            "label": "Fiery Gel 36",
+            "swatch_value": null
+          },
+          {
+            "id": 241,
+            "admin_name": "Fiery Gel 37",
+            "label": "Fiery Gel 37",
+            "swatch_value": null
+          },
+          {
+            "id": 242,
+            "admin_name": "Fiery Gel 38",
+            "label": "Fiery Gel 38",
+            "swatch_value": null
+          },
+          {
+            "id": 243,
+            "admin_name": "Fiery Gel 39",
+            "label": "Fiery Gel 39",
+            "swatch_value": null
+          },
+          {
+            "id": 244,
+            "admin_name": "Fiery Gel 40",
+            "label": "Fiery Gel 40",
+            "swatch_value": null
+          },
+          {
+            "id": 245,
+            "admin_name": "Fiery Gel 41",
+            "label": "Fiery Gel 41",
+            "swatch_value": null
+          },
+          {
+            "id": 246,
+            "admin_name": "Fiery Gel 42",
+            "label": "Fiery Gel 42",
+            "swatch_value": null
+          },
+          {
+            "id": 247,
+            "admin_name": "Fiery Gel 43",
+            "label": "Fiery Gel 43",
+            "swatch_value": null
+          },
+          {
+            "id": 248,
+            "admin_name": "Fiery Gel 44",
+            "label": "Fiery Gel 44",
+            "swatch_value": null
+          },
+          {
+            "id": 249,
+            "admin_name": "Fiery Gel 45",
+            "label": "Fiery Gel 45",
+            "swatch_value": null
+          },
+          {
+            "id": 250,
+            "admin_name": "Love Red 1",
+            "label": "Love Red 1",
+            "swatch_value": null
+          },
+          {
+            "id": 251,
+            "admin_name": "Love Red 2",
+            "label": "Love Red 2",
+            "swatch_value": null
+          },
+          {
+            "id": 252,
+            "admin_name": "Love Red 3",
+            "label": "Love Red 3",
+            "swatch_value": null
+          },
+          {
+            "id": 253,
+            "admin_name": "Love Red 4",
+            "label": "Love Red 4",
+            "swatch_value": null
+          },
+          {
+            "id": 254,
+            "admin_name": "Love Red 5",
+            "label": "Love Red 5",
+            "swatch_value": null
+          },
+          {
+            "id": 255,
+            "admin_name": "Flower Gel 1",
+            "label": "Flower Gel 1",
+            "swatch_value": null
+          },
+          {
+            "id": 256,
+            "admin_name": "Flower Gel 10",
+            "label": "Flower Gel 10",
+            "swatch_value": null
+          },
+          {
+            "id": 257,
+            "admin_name": "Flower Gel 11",
+            "label": "Flower Gel 11",
+            "swatch_value": null
+          },
+          {
+            "id": 258,
+            "admin_name": "Flower Gel 12",
+            "label": "Flower Gel 12",
+            "swatch_value": null
+          },
+          {
+            "id": 259,
+            "admin_name": "Flower Gel 2",
+            "label": "Flower Gel 2",
+            "swatch_value": null
+          },
+          {
+            "id": 260,
+            "admin_name": "Flower Gel 3",
+            "label": "Flower Gel 3",
+            "swatch_value": null
+          },
+          {
+            "id": 261,
+            "admin_name": "Flower Gel 4",
+            "label": "Flower Gel 4",
+            "swatch_value": null
+          },
+          {
+            "id": 262,
+            "admin_name": "Flower Gel 5",
+            "label": "Flower Gel 5",
+            "swatch_value": null
+          },
+          {
+            "id": 263,
+            "admin_name": "Flower Gel 6",
+            "label": "Flower Gel 6",
+            "swatch_value": null
+          },
+          {
+            "id": 264,
+            "admin_name": "Flower Gel 7",
+            "label": "Flower Gel 7",
+            "swatch_value": null
+          },
+          {
+            "id": 265,
+            "admin_name": "Flower Gel 8",
+            "label": "Flower Gel 8",
+            "swatch_value": null
+          },
+          {
+            "id": 266,
+            "admin_name": "Flower Gel 9",
+            "label": "Flower Gel 9",
+            "swatch_value": null
+          },
+          {
+            "id": 267,
+            "admin_name": "Galaxy Gel 1",
+            "label": "Galaxy Gel 1",
+            "swatch_value": null
+          },
+          {
+            "id": 268,
+            "admin_name": "Galaxy Gel 10",
+            "label": "Galaxy Gel 10",
+            "swatch_value": null
+          },
+          {
+            "id": 269,
+            "admin_name": "Galaxy Gel 11",
+            "label": "Galaxy Gel 11",
+            "swatch_value": null
+          },
+          {
+            "id": 270,
+            "admin_name": "Galaxy Gel 12",
+            "label": "Galaxy Gel 12",
+            "swatch_value": null
+          },
+          {
+            "id": 271,
+            "admin_name": "Galaxy Gel 13",
+            "label": "Galaxy Gel 13",
+            "swatch_value": null
+          },
+          {
+            "id": 272,
+            "admin_name": "Galaxy Gel 14",
+            "label": "Galaxy Gel 14",
+            "swatch_value": null
+          },
+          {
+            "id": 273,
+            "admin_name": "Galaxy Gel 15",
+            "label": "Galaxy Gel 15",
+            "swatch_value": null
+          },
+          {
+            "id": 274,
+            "admin_name": "Galaxy Gel 16",
+            "label": "Galaxy Gel 16",
+            "swatch_value": null
+          },
+          {
+            "id": 275,
+            "admin_name": "Galaxy Gel 2",
+            "label": "Galaxy Gel 2",
+            "swatch_value": null
+          },
+          {
+            "id": 276,
+            "admin_name": "Galaxy Gel 3",
+            "label": "Galaxy Gel 3",
+            "swatch_value": null
+          },
+          {
+            "id": 277,
+            "admin_name": "Galaxy Gel 4",
+            "label": "Galaxy Gel 4",
+            "swatch_value": null
+          },
+          {
+            "id": 278,
+            "admin_name": "Galaxy Gel 5",
+            "label": "Galaxy Gel 5",
+            "swatch_value": null
+          },
+          {
+            "id": 279,
+            "admin_name": "Galaxy Gel 6",
+            "label": "Galaxy Gel 6",
+            "swatch_value": null
+          },
+          {
+            "id": 280,
+            "admin_name": "Galaxy Gel 7",
+            "label": "Galaxy Gel 7",
+            "swatch_value": null
+          },
+          {
+            "id": 281,
+            "admin_name": "Galaxy Gel 8",
+            "label": "Galaxy Gel 8",
+            "swatch_value": null
+          },
+          {
+            "id": 282,
+            "admin_name": "Galaxy Gel 9",
+            "label": "Galaxy Gel 9",
+            "swatch_value": null
+          },
+          {
+            "id": 283,
+            "admin_name": "Platinum Paint 1",
+            "label": "Platinum Paint 1",
+            "swatch_value": null
+          },
+          {
+            "id": 284,
+            "admin_name": "Platinum Paint 2",
+            "label": "Platinum Paint 2",
+            "swatch_value": null
+          },
+          {
+            "id": 285,
+            "admin_name": "Platinum Paint 3",
+            "label": "Platinum Paint 3",
+            "swatch_value": null
+          },
+          {
+            "id": 286,
+            "admin_name": "Platinum Paint 4",
+            "label": "Platinum Paint 4",
+            "swatch_value": null
+          },
+          {
+            "id": 287,
+            "admin_name": "Platinum Paint 5",
+            "label": "Platinum Paint 5",
+            "swatch_value": null
+          },
+          {
+            "id": 288,
+            "admin_name": "Relief Paste 1",
+            "label": "Relief Paste 1",
+            "swatch_value": null
+          },
+          {
+            "id": 289,
+            "admin_name": "Relief Paste 10",
+            "label": "Relief Paste 10",
+            "swatch_value": null
+          },
+          {
+            "id": 290,
+            "admin_name": "Relief Paste 11",
+            "label": "Relief Paste 11",
+            "swatch_value": null
+          },
+          {
+            "id": 291,
+            "admin_name": "Relief Paste 12",
+            "label": "Relief Paste 12",
+            "swatch_value": null
+          },
+          {
+            "id": 292,
+            "admin_name": "Relief Paste 13",
+            "label": "Relief Paste 13",
+            "swatch_value": null
+          },
+          {
+            "id": 293,
+            "admin_name": "Relief Paste 14",
+            "label": "Relief Paste 14",
+            "swatch_value": null
+          },
+          {
+            "id": 294,
+            "admin_name": "Relief Paste 2",
+            "label": "Relief Paste 2",
+            "swatch_value": null
+          },
+          {
+            "id": 295,
+            "admin_name": "Relief Paste 3",
+            "label": "Relief Paste 3",
+            "swatch_value": null
+          },
+          {
+            "id": 296,
+            "admin_name": "Relief Paste 4",
+            "label": "Relief Paste 4",
+            "swatch_value": null
+          },
+          {
+            "id": 297,
+            "admin_name": "Relief Paste 5",
+            "label": "Relief Paste 5",
+            "swatch_value": null
+          },
+          {
+            "id": 298,
+            "admin_name": "Relief Paste 6",
+            "label": "Relief Paste 6",
+            "swatch_value": null
+          },
+          {
+            "id": 299,
+            "admin_name": "Relief Paste 7",
+            "label": "Relief Paste 7",
+            "swatch_value": null
+          },
+          {
+            "id": 300,
+            "admin_name": "Relief Paste 8",
+            "label": "Relief Paste 8",
+            "swatch_value": null
+          },
+          {
+            "id": 301,
+            "admin_name": "Relief Paste 9",
+            "label": "Relief Paste 9",
+            "swatch_value": null
+          },
+          {
+            "id": 302,
+            "admin_name": "Stamping Paint  Stamping Paint 1",
+            "label": "Stamping Paint  Stamping Paint 1",
+            "swatch_value": null
+          },
+          {
+            "id": 303,
+            "admin_name": "Stamping Paint  Stamping Paint 10",
+            "label": "Stamping Paint  Stamping Paint 10",
+            "swatch_value": null
+          },
+          {
+            "id": 304,
+            "admin_name": "Stamping Paint  Stamping Paint 12",
+            "label": "Stamping Paint  Stamping Paint 12",
+            "swatch_value": null
+          },
+          {
+            "id": 305,
+            "admin_name": "Stamping Paint  Stamping Paint 13",
+            "label": "Stamping Paint  Stamping Paint 13",
+            "swatch_value": null
+          },
+          {
+            "id": 306,
+            "admin_name": "Stamping Paint  Stamping Paint 14",
+            "label": "Stamping Paint  Stamping Paint 14",
+            "swatch_value": null
+          },
+          {
+            "id": 307,
+            "admin_name": "Stamping Paint  Stamping Paint 15",
+            "label": "Stamping Paint  Stamping Paint 15",
+            "swatch_value": null
+          },
+          {
+            "id": 308,
+            "admin_name": "Stamping Paint  Stamping Paint 16",
+            "label": "Stamping Paint  Stamping Paint 16",
+            "swatch_value": null
+          },
+          {
+            "id": 309,
+            "admin_name": "Stamping Paint  Stamping Paint 18",
+            "label": "Stamping Paint  Stamping Paint 18",
+            "swatch_value": null
+          },
+          {
+            "id": 310,
+            "admin_name": "Stamping Paint  Stamping Paint 19",
+            "label": "Stamping Paint  Stamping Paint 19",
+            "swatch_value": null
+          },
+          {
+            "id": 311,
+            "admin_name": "Stamping Paint  Stamping Paint 2",
+            "label": "Stamping Paint  Stamping Paint 2",
+            "swatch_value": null
+          },
+          {
+            "id": 312,
+            "admin_name": "Stamping Paint  Stamping Paint 20",
+            "label": "Stamping Paint  Stamping Paint 20",
+            "swatch_value": null
+          },
+          {
+            "id": 313,
+            "admin_name": "Stamping Paint  Stamping Paint 21",
+            "label": "Stamping Paint  Stamping Paint 21",
+            "swatch_value": null
+          },
+          {
+            "id": 314,
+            "admin_name": "Stamping Paint  Stamping Paint 22",
+            "label": "Stamping Paint  Stamping Paint 22",
+            "swatch_value": null
+          },
+          {
+            "id": 315,
+            "admin_name": "Stamping Paint  Stamping Paint 23",
+            "label": "Stamping Paint  Stamping Paint 23",
+            "swatch_value": null
+          },
+          {
+            "id": 316,
+            "admin_name": "Stamping Paint  Stamping Paint 24",
+            "label": "Stamping Paint  Stamping Paint 24",
+            "swatch_value": null
+          },
+          {
+            "id": 317,
+            "admin_name": "Stamping Paint  Stamping Paint 25",
+            "label": "Stamping Paint  Stamping Paint 25",
+            "swatch_value": null
+          },
+          {
+            "id": 318,
+            "admin_name": "Stamping Paint  Stamping Paint 26",
+            "label": "Stamping Paint  Stamping Paint 26",
+            "swatch_value": null
+          },
+          {
+            "id": 319,
+            "admin_name": "Stamping Paint  Stamping Paint 27",
+            "label": "Stamping Paint  Stamping Paint 27",
+            "swatch_value": null
+          },
+          {
+            "id": 320,
+            "admin_name": "Stamping Paint  Stamping Paint 28",
+            "label": "Stamping Paint  Stamping Paint 28",
+            "swatch_value": null
+          },
+          {
+            "id": 321,
+            "admin_name": "Stamping Paint  Stamping Paint 29",
+            "label": "Stamping Paint  Stamping Paint 29",
+            "swatch_value": null
+          },
+          {
+            "id": 322,
+            "admin_name": "Stamping Paint  Stamping Paint 3",
+            "label": "Stamping Paint  Stamping Paint 3",
+            "swatch_value": null
+          },
+          {
+            "id": 323,
+            "admin_name": "Stamping Paint  Stamping Paint 30",
+            "label": "Stamping Paint  Stamping Paint 30",
+            "swatch_value": null
+          },
+          {
+            "id": 324,
+            "admin_name": "Stamping Paint  Stamping Paint 4",
+            "label": "Stamping Paint  Stamping Paint 4",
+            "swatch_value": null
+          },
+          {
+            "id": 325,
+            "admin_name": "Stamping Paint  Stamping Paint 7",
+            "label": "Stamping Paint  Stamping Paint 7",
+            "swatch_value": null
+          },
+          {
+            "id": 326,
+            "admin_name": "Stamping Paint  Stamping Paint 8",
+            "label": "Stamping Paint  Stamping Paint 8",
+            "swatch_value": null
+          },
+          {
+            "id": 327,
+            "admin_name": "Stamping Paint  Stamping Paint 9",
+            "label": "Stamping Paint  Stamping Paint 9",
+            "swatch_value": null
+          },
+          {
+            "id": 328,
+            "admin_name": "Stamping Paint Chameleon  Stamping Chameleon 1",
+            "label": "Stamping Paint Chameleon  Stamping Chameleon 1",
+            "swatch_value": null
+          },
+          {
+            "id": 329,
+            "admin_name": "Stamping Paint Chameleon  Stamping Chameleon 3",
+            "label": "Stamping Paint Chameleon  Stamping Chameleon 3",
+            "swatch_value": null
+          },
+          {
+            "id": 330,
+            "admin_name": "Stamping Paint Chameleon  Stamping Chameleon 4",
+            "label": "Stamping Paint Chameleon  Stamping Chameleon 4",
+            "swatch_value": null
+          },
+          {
+            "id": 331,
+            "admin_name": "Stamping Paint Chameleon  Stamping Chameleon 5",
+            "label": "Stamping Paint Chameleon  Stamping Chameleon 5",
+            "swatch_value": null
+          },
+          {
+            "id": 332,
+            "admin_name": "Stamping Paint Chameleon  Stamping Chameleon 6",
+            "label": "Stamping Paint Chameleon  Stamping Chameleon 6",
+            "swatch_value": null
+          },
+          {
+            "id": 333,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 1",
+            "label": "Stamping Paint Neon  Stamping Neon 1",
+            "swatch_value": null
+          },
+          {
+            "id": 334,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 2",
+            "label": "Stamping Paint Neon  Stamping Neon 2",
+            "swatch_value": null
+          },
+          {
+            "id": 335,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 3",
+            "label": "Stamping Paint Neon  Stamping Neon 3",
+            "swatch_value": null
+          },
+          {
+            "id": 336,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 4",
+            "label": "Stamping Paint Neon  Stamping Neon 4",
+            "swatch_value": null
+          },
+          {
+            "id": 337,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 5",
+            "label": "Stamping Paint Neon  Stamping Neon 5",
+            "swatch_value": null
+          },
+          {
+            "id": 338,
+            "admin_name": "Stamping Paint Neon  Stamping Neon 6",
+            "label": "Stamping Paint Neon  Stamping Neon 6",
+            "swatch_value": null
+          },
+          {
+            "id": 339,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 1",
+            "label": "Stamping Paint Shine  Stamping Shine 1",
+            "swatch_value": null
+          },
+          {
+            "id": 340,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 2",
+            "label": "Stamping Paint Shine  Stamping Shine 2",
+            "swatch_value": null
+          },
+          {
+            "id": 341,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 3",
+            "label": "Stamping Paint Shine  Stamping Shine 3",
+            "swatch_value": null
+          },
+          {
+            "id": 342,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 4",
+            "label": "Stamping Paint Shine  Stamping Shine 4",
+            "swatch_value": null
+          },
+          {
+            "id": 343,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 5",
+            "label": "Stamping Paint Shine  Stamping Shine 5",
+            "swatch_value": null
+          },
+          {
+            "id": 344,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 6",
+            "label": "Stamping Paint Shine  Stamping Shine 6",
+            "swatch_value": null
+          },
+          {
+            "id": 345,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 7",
+            "label": "Stamping Paint Shine  Stamping Shine 7",
+            "swatch_value": null
+          },
+          {
+            "id": 346,
+            "admin_name": "Stamping Paint Shine  Stamping Shine 8",
+            "label": "Stamping Paint Shine  Stamping Shine 8",
+            "swatch_value": null
+          },
+          {
+            "id": 347,
+            "admin_name": "Stamping Plate 10",
+            "label": "Stamping Plate 10",
+            "swatch_value": null
+          },
+          {
+            "id": 348,
+            "admin_name": "Stamping Plate 11",
+            "label": "Stamping Plate 11",
+            "swatch_value": null
+          },
+          {
+            "id": 349,
+            "admin_name": "Stamping Plate 12",
+            "label": "Stamping Plate 12",
+            "swatch_value": null
+          },
+          {
+            "id": 350,
+            "admin_name": "Stamping Plate 7",
+            "label": "Stamping Plate 7",
+            "swatch_value": null
+          },
+          {
+            "id": 351,
+            "admin_name": "Stamping Plate 8",
+            "label": "Stamping Plate 8",
+            "swatch_value": null
+          },
+          {
+            "id": 352,
+            "admin_name": "Stamping Plate 9",
+            "label": "Stamping Plate 9",
+            "swatch_value": null
+          },
+          {
+            "id": 353,
+            "admin_name": "Top Crush 1",
+            "label": "Top Crush 1",
+            "swatch_value": null
+          },
+          {
+            "id": 354,
+            "admin_name": "Top Crush 10",
+            "label": "Top Crush 10",
+            "swatch_value": null
+          },
+          {
+            "id": 355,
+            "admin_name": "Top Crush 2",
+            "label": "Top Crush 2",
+            "swatch_value": null
+          },
+          {
+            "id": 356,
+            "admin_name": "Top Crush 3",
+            "label": "Top Crush 3",
+            "swatch_value": null
+          },
+          {
+            "id": 357,
+            "admin_name": "Top Crush 6",
+            "label": "Top Crush 6",
+            "swatch_value": null
+          },
+          {
+            "id": 358,
+            "admin_name": "Top Crush 7",
+            "label": "Top Crush 7",
+            "swatch_value": null
+          },
+          {
+            "id": 359,
+            "admin_name": "Top Crush 8",
+            "label": "Top Crush 8",
+            "swatch_value": null
+          },
+          {
+            "id": 360,
+            "admin_name": "Top Crush 9",
+            "label": "Top Crush 9",
+            "swatch_value": null
+          },
+          {
+            "id": 361,
+            "admin_name": "Top Glass 1",
+            "label": "Top Glass 1",
+            "swatch_value": null
+          },
+          {
+            "id": 362,
+            "admin_name": "Top Glass 2",
+            "label": "Top Glass 2",
+            "swatch_value": null
+          },
+          {
+            "id": 363,
+            "admin_name": "Top Glass 3",
+            "label": "Top Glass 3",
+            "swatch_value": null
+          },
+          {
+            "id": 364,
+            "admin_name": "Top Glass 4",
+            "label": "Top Glass 4",
+            "swatch_value": null
+          },
+          {
+            "id": 365,
+            "admin_name": "Top Glass 5",
+            "label": "Top Glass 5",
+            "swatch_value": null
+          },
+          {
+            "id": 366,
+            "admin_name": "Top Glass 6",
+            "label": "Top Glass 6",
+            "swatch_value": null
+          },
+          {
+            "id": 367,
+            "admin_name": "Top Glass 7",
+            "label": "Top Glass 7",
+            "swatch_value": null
+          },
+          {
+            "id": 368,
+            "admin_name": "Top Pastel 1",
+            "label": "Top Pastel 1",
+            "swatch_value": null
+          },
+          {
+            "id": 369,
+            "admin_name": "Top Pastel 10",
+            "label": "Top Pastel 10",
+            "swatch_value": null
+          },
+          {
+            "id": 370,
+            "admin_name": "Top Pastel 2",
+            "label": "Top Pastel 2",
+            "swatch_value": null
+          },
+          {
+            "id": 371,
+            "admin_name": "Top Pastel 4",
+            "label": "Top Pastel 4",
+            "swatch_value": null
+          },
+          {
+            "id": 372,
+            "admin_name": "Top Pastel 5",
+            "label": "Top Pastel 5",
+            "swatch_value": null
+          },
+          {
+            "id": 373,
+            "admin_name": "Top Pastel 6",
+            "label": "Top Pastel 6",
+            "swatch_value": null
+          },
+          {
+            "id": 374,
+            "admin_name": "Top Pastel 7",
+            "label": "Top Pastel 7",
+            "swatch_value": null
+          },
+          {
+            "id": 375,
+            "admin_name": "Top Pastel 8",
+            "label": "Top Pastel 8",
+            "swatch_value": null
+          },
+          {
+            "id": 376,
+            "admin_name": "Top Pastel 9",
+            "label": "Top Pastel 9",
+            "swatch_value": null
+          }
+        ],
+        "validation": null,
+        "position": 26,
+        "is_comparable": 0,
+        "is_configurable": 1,
+        "is_required": 0,
+        "is_unique": 0,
+        "is_filterable": 1,
+        "is_user_defined": 1,
+        "is_visible_on_front": 0,
+        "use_in_flat": null,
+        "value_per_locale": 0,
+        "value_per_channel": 0,
+        "created_at": "2025-12-18T15:32:47.000000Z",
+        "updated_at": "2025-12-18T15:32:47.000000Z"
+      }
+    ]
+  }
+}

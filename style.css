@@ -1,0 +1,579 @@
+/*
+Theme Name: Nailedit
+Theme URI: https://example.com/nailedit
+Author: Cascade Assistant
+Author URI: https://example.com/
+Description: Minimal starter theme for Nailedit.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.6
+Requires PHP: 7.4
+Text Domain: nailedit
+*/
+
+:root {
+
+    --white: #fff;
+    --black: #000;
+    --primary:  #671768;
+    --secondary:#f1ca71;
+    --third:    #915694;
+}   
+body {
+    margin: 0;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #67176808;
+    color: #222;
+}
+
+a {
+    color: var(--primary);
+}
+
+a:hover,
+a:focus {
+    color: var(--third);
+}
+
+.site-header,
+.site-footer {
+    background: #131313;
+    color: #fff;
+    padding: 1.5rem 2rem;
+}
+
+
+
+.site-title {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.site-description {
+    margin: 0.25rem 0 0;
+    color: #ccc;
+}
+
+.post {
+    margin-bottom: 2.5rem;
+}
+
+.post-title {
+    margin: 0 0 0.5rem;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.nailedit-products {
+    margin-top: 3rem;
+    padding: 2rem;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+}
+
+.nailedit-products-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-family: nailedit;
+}
+
+.nailedit-products-heading h2 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.nailedit-products-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.nailedit-products-grid.columns-4 {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.nailedit-products-grid.columns-3 {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.nailedit-products-grid.columns-2 {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.nailedit-product-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.nailedit-product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+}
+
+.nailedit-product-thumb img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.nailedit-product-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.nailedit-product-title {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.nailedit-product-price {
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0;
+}
+
+.nailedit-product-desc {
+    margin: 0;
+    color: #555;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.nailedit-products-error {
+    padding: 1rem;
+    border-radius: 8px;
+    background: #fee;
+    border: 1px solid #f5c2c7;
+    color: var(--primary);
+}
+
+/* Product Detail Page */
+.nailedit-product-detail {
+    padding: 3rem 2rem;
+}
+
+.nailedit-product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nailedit-product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nailedit-gallery-main {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background: #fafafa;
+}
+
+.nailedit-gallery-main img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nailedit-gallery-thumbs {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.nailedit-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.nailedit-thumb:hover,
+.nailedit-thumb.active {
+    border-color: var(--primary);
+    border-radius: 15px;
+}
+
+.nailedit-no-image {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: #f5f5f5;
+    border-radius: 12px;
+    color: #999;
+}
+
+.nailedit-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nailedit-product-name {
+    margin: 0;
+    font-size: 2.25rem;
+    line-height: 1.2;
+}
+
+.nailedit-product-sku {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.nailedit-product-price-large {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.nailedit-product-description {
+    line-height: 1.7;
+    color: #444;
+}
+
+.nailedit-add-to-cart-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--secondary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    align-self: flex-start;
+}
+
+.nailedit-add-to-cart-btn:hover:not(:disabled) {
+    background: var(--third);
+    transform: translateY(-2px);
+}
+
+.nailedit-add-to-cart-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.nailedit-cart-message {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    min-height: 1rem;
+}
+
+/* Hide default number input spinners for quantity fields */
+input.qty-input[type=number]::-webkit-outer-spin-button,
+input.qty-input[type=number]::-webkit-inner-spin-button,
+input.nailedit-cart-qty-input[type=number]::-webkit-outer-spin-button,
+input.nailedit-cart-qty-input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input.qty-input[type=number],
+input.nailedit-cart-qty-input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.nailedit-back-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #131313;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    align-self: flex-start;
+}
+
+.nailedit-back-btn:hover {
+    background: var(--secondary);
+    color: #fff;
+}
+
+.nailedit-error {
+    padding: 2rem;
+    background: #fee;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+    color: var(--primary);
+}
+
+.nailedit-product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.nailedit-product-link:hover {
+    color: inherit;
+}
+
+@media (max-width: 768px) {
+    .nailedit-product-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .nailedit-product-name {
+        font-size: 1.75rem;
+    }
+    
+    .nailedit-product-price-large {
+        font-size: 1.5rem;
+    }
+}
+
+/* Products Page */
+.nailedit-products-page {
+    padding: 3rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nailedit-page-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.nailedit-page-header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2.5rem;
+}
+
+.nailedit-products-count {
+    margin: 0;
+    color: #666;
+    font-size: 1rem;
+}
+
+.nailedit-no-products {
+    padding: 3rem;
+    text-align: center;
+    background: #f9f9f9;
+    border-radius: 12px;
+    color: #666;
+}
+
+/* Pagination */
+.nailedit-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.nailedit-page-numbers {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nailedit-page-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nailedit-page-link:hover {
+    background: #f5f5f5;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.nailedit-page-link.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    pointer-events: none;
+}
+
+.nailedit-prev,
+.nailedit-next {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .nailedit-page-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .nailedit-pagination {
+        flex-wrap: wrap;
+    }
+    
+    .nailedit-page-numbers {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
+
+/* Swiper carousel styles */
+.nailedit-products-by-attribute {
+    margin: 2rem 0;
+}
+
+.nailedit-products-swiper {
+    position: relative;
+    padding: 0 50px;
+}
+
+.nailedit-products-swiper .swiper-slide {
+    height: auto;
+}
+
+.nailedit-products-swiper .nailedit-product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nailedit-products-swiper .nailedit-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.nailedit-products-swiper .nailedit-product-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.nailedit-products-swiper .nailedit-product-thumb {
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+    background: #f5f5f5;
+}
+
+.nailedit-products-swiper .nailedit-product-thumb img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nailedit-products-swiper .nailedit-product-body {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nailedit-products-swiper .nailedit-product-title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.nailedit-products-swiper .nailedit-product-price {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.nailedit-products-swiper .nailedit-product-sku {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.swiper-button-prev,
+ .swiper-button-next {
+    color: var(--secondary);
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.swiper-button-prev:after,
+ .swiper-button-next:after {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+ .swiper-pagination-bullet {
+    background: var(--secondary);
+    opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+}
+
+@media (max-width: 1023px) {
+    .nailedit-products-swiper {
+        padding: 0 40px;
+    }
+}
+
+@media (max-width: 639px) {
+    .nailedit-products-swiper {
+        padding: 0 30px;
+    }
+    
+    .swiper-button-prev,
+     .swiper-button-next {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+        font-size: 16px;
+    }
+}
+
+p {
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-size: 16px;
+}
