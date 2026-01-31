@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main class="site-main nailedit-front-page py-10">
+<main class="site-main nailedit-front-page py-10 overflow-hidden">
 	<div class="max-w-[1200px] mx-auto px-4">
 		<?php
 		if ( have_posts() ) :

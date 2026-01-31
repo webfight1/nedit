@@ -289,9 +289,15 @@ get_header();
       // Hard-coded payment block: one simple method
       html += '<div class="mt-4 pt-3 border-t border-slate-100 space-y-2">'
         + '<div class="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase"><?php echo esc_js( __( 'Makseviis', 'nailedit' ) ); ?></div>'
+        + '<label for="nailedit-pay-everypay" class="flex items-center justify-between gap-3 text-xs md:text-sm cursor-pointer">'
+        +   '<div class="flex items-center gap-2">'
+        +     '<input type="radio" id="nailedit-pay-everypay" name="nailedit_payment_method" value="everypay" class="h-4 w-4 text-secondary border-slate-300 focus:ring-secondary" checked />'
+        +     '<span class="text-slate-700"><?php echo esc_js( __( 'Kaardimakse (EveryPay)', 'nailedit' ) ); ?></span>'
+        +   '</div>'
+        + '</label>'
         + '<label for="nailedit-pay-cod" class="flex items-center justify-between gap-3 text-xs md:text-sm cursor-pointer">'
         +   '<div class="flex items-center gap-2">'
-        +     '<input type="radio" id="nailedit-pay-cod" name="nailedit_payment_method" value="cashondelivery" class="h-4 w-4 text-secondary border-slate-300 focus:ring-secondary" checked />'
+        +     '<input type="radio" id="nailedit-pay-cod" name="nailedit_payment_method" value="cashondelivery" class="h-4 w-4 text-secondary border-slate-300 focus:ring-secondary" />'
         +     '<span class="text-slate-700"><?php echo esc_js( __( 'Sularaha kättesaamisel', 'nailedit' ) ); ?></span>'
         +   '</div>'
         + '</label>'
@@ -462,6 +468,108 @@ get_header();
       shippingFields.classList.add('hidden');
     }
 
+    function extractRedirectUrl(result) {
+      if (!result) return '';
+      var data = result.data || {};
+
+      if (data && typeof data.redirect_url === 'string' && data.redirect_url) {
+        return data.redirect_url;
+      }
+
+      if (data && data.data) {
+        var root = data.data;
+        if (Array.isArray(root) && root.length) {
+          var first = root[0] || {};
+          if (first && typeof first.redirect_url === 'string' && first.redirect_url) {
+            return first.redirect_url;
+          }
+          if (first && first.payment && typeof first.payment.redirect_url === 'string' && first.payment.redirect_url) {
+            return first.payment.redirect_url;
+          }
+        }
+        if (root && typeof root.redirect_url === 'string' && root.redirect_url) {
+          return root.redirect_url;
+        }
+        if (root && root.payment && typeof root.payment.redirect_url === 'string' && root.payment.redirect_url) {
+          return root.payment.redirect_url;
+        }
+      }
+
+      if (data && data.payment && typeof data.payment.redirect_url === 'string' && data.payment.redirect_url) {
+        return data.payment.redirect_url;
+      }
+
+      return '';
+    }
+
+    function pollEverypayStatus() {
+      var storedCookie = getStoredAuthCookie();
+      var storedToken = getStoredAuthToken();
+      var cartToken   = getStoredCartToken();
+
+      if (!storedToken && !cartToken) {
+        return;
+      }
+
+      var startedAt = Date.now();
+      var timeoutMs = 120000;
+      var intervalMs = 1500;
+
+      function step() {
+        var fd = new FormData();
+        fd.append('action', 'nailedit_checkout_payment_status');
+        if (storedCookie) fd.append('stored_cookie', storedCookie);
+        if (storedToken) {
+          fd.append('auth_token', storedToken);
+        } else if (cartToken) {
+          fd.append('cart_token', cartToken);
+        }
+
+        fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin'
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (res) {
+            if (!res || !res.success) {
+              return;
+            }
+
+            var data = res.data || {};
+            var status = '';
+
+            if (data && typeof data.status === 'string') {
+              status = data.status;
+            } else if (data && data.data && typeof data.data.status === 'string') {
+              status = data.data.status;
+            }
+
+            if (status === 'paid') {
+              window.location.href = '<?php echo esc_url( trailingslashit( site_url( '/aitah' ) ) ); ?>';
+            }
+          })
+          .catch(function () {})
+          .finally(function () {
+            if (Date.now() - startedAt < timeoutMs) {
+              setTimeout(step, intervalMs);
+            }
+          });
+      }
+
+      if (errorEl) {
+        errorEl.textContent = '<?php echo esc_js( __( 'Processing payment…', 'nailedit' ) ); ?>';
+      }
+      step();
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      if (params.has('payment_reference') || params.has('order_reference') || params.has('everypay_return')) {
+        pollEverypayStatus();
+      }
+    } catch (e) {}
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (errorEl) errorEl.textContent = '';
@@ -557,7 +665,7 @@ get_header();
 
           // 3) Save payment method
           const selectedPaymentInput = document.querySelector('input[name="nailedit_payment_method"]:checked');
-          const selectedPayment = selectedPaymentInput ? selectedPaymentInput.value : 'cashondelivery';
+          const selectedPayment = selectedPaymentInput ? selectedPaymentInput.value : 'everypay';
 
           if (submitBtn) {
             submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan makset...', 'nailedit' ) ); ?>';
@@ -673,9 +781,12 @@ get_header();
             }
           } catch (e) {}
 
-          // Temporarily do not redirect automatically so we can inspect response data.
-          // To re-enable redirect, uncomment the following line:
-           window.location.href = '<?php echo esc_url( trailingslashit( site_url( '/aitah' ) ) ); ?>';
+          var redirectUrl = extractRedirectUrl(orderResult);
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+          window.location.href = '<?php echo esc_url( trailingslashit( site_url( '/aitah' ) ) ); ?>';
         })
         .catch(function (err) {
           if (err && console && console.error) {
