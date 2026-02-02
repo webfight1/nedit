@@ -29,6 +29,13 @@ get_header();
         const root = document.getElementById('nailedit-cart-root');
         if (!root) return;
 
+        try {
+            localStorage.removeItem('nailedit_last_order');
+            localStorage.removeItem('nailedit_selected_shipping_method');
+            localStorage.removeItem('nailedit_selected_payment_method');
+            localStorage.removeItem('nailedit_omniva_location_id');
+        } catch (e) {}
+
         function renderCart(data) {
             if (!data || !data.data) {
                 root.innerHTML = '<p><?php echo esc_js( __( 'Sinu ostukorv on tühi.', 'nailedit' ) ); ?></p>';
@@ -449,7 +456,14 @@ get_header();
                     localStorage.setItem('bagisto_guest_cart_token', data.cart_token);
                 }
                 if (!data || !data.success) {
-                    const msg = (data && data.message) ? data.message : '<?php echo esc_js( __( 'Could not load cart.', 'nailedit' ) ); ?>';
+                    const rawMessage = (data && data.message) ? data.message : '';
+                    const isGuestTokenError = rawMessage && /guest cart token missing|token missing or invalid/i.test(rawMessage);
+                    if (isGuestTokenError) {
+                        localStorage.removeItem('bagisto_guest_cart_token');
+                    }
+                    const msg = isGuestTokenError
+                        ? '<?php echo esc_js( __( 'Ostukorv on tühi.', 'nailedit' ) ); ?>'
+                        : (rawMessage || '<?php echo esc_js( __( 'Could not load cart.', 'nailedit' ) ); ?>');
                     root.innerHTML = '<p>' + msg + '</p>';
                     return;
                 }

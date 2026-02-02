@@ -436,8 +436,7 @@ if ( $bagisto_cookie || $bagisto_token ) {
             </div>
         <?php else : ?>
             <div class="text-sm text-slate-700 space-y-1">
-                <p><?php esc_html_e( 'Sinu soovinimekiri on tühi või seda ei õnnestunud laadida.', 'nailedit' ); ?></p>
-                <p><?php esc_html_e( 'Palun värskenda lehte, et soovinimekirja uuesti laadida.', 'nailedit' ); ?></p>
+                <p><?php esc_html_e( 'Sinu soovinimekiri on tühi.', 'nailedit' ); ?></p>
             </div>
         <?php endif; ?>
         </section>

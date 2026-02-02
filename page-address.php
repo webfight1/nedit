@@ -148,6 +148,31 @@ get_header();
     if (customer.email) document.getElementById('email').value = customer.email;
     if (customer.phone) document.getElementById('phone').value = customer.phone;
 
+    let hasPrefilled = false;
+
+    function prefillFromAddress(addr) {
+        if (!addr || hasPrefilled) return;
+        const address1 = addr.address1 || (addr.address && addr.address[0]) || '';
+        const country = addr.country || '';
+        const state = addr.state || '';
+        const city = addr.city || '';
+        const postcode = addr.postcode || '';
+        const phone = addr.phone || '';
+        const company = addr.company_name || '';
+        const vat = addr.vat_id || '';
+
+        if (company) document.getElementById('company_name').value = company;
+        if (address1) document.getElementById('address1').value = address1;
+        if (country) document.getElementById('country').value = country;
+        if (state) document.getElementById('state').value = state;
+        if (city) document.getElementById('city').value = city;
+        if (postcode) document.getElementById('postcode').value = postcode;
+        if (phone) document.getElementById('phone').value = phone;
+        if (vat) document.getElementById('vat_id').value = vat;
+
+        hasPrefilled = true;
+    }
+
     function loadAddresses() {
         if (!listEl) return;
 
@@ -183,6 +208,13 @@ get_header();
             if (!items || !items.length) {
                 listEl.innerHTML = '<p><?php echo esc_js( __( 'Aadresse ei ole.', 'nailedit' ) ); ?></p>';
                 return;
+            }
+
+            if (!hasPrefilled) {
+                const defaultAddr = items.find(function(addr) {
+                    return addr.is_default === '1' || addr.is_default === 1 || addr.is_default === true;
+                }) || items[0];
+                prefillFromAddress(defaultAddr);
             }
 
             listEl.innerHTML = items.map(function(addr) {

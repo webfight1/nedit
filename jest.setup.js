@@ -1,0 +1,1 @@
+globalThis.__NAILEDIT_DISABLE_AUTO_BOOTSTRAP__ = true;

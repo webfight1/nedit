@@ -66,6 +66,19 @@ get_header();
         return;
     }
 
+    function formatOrderDate(value) {
+        if (!value) return '';
+        const parsed = new Date(value.replace(' ', 'T'));
+        if (Number.isNaN(parsed.getTime())) {
+            return value;
+        }
+        return parsed.toLocaleDateString('et-EE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    }
+
     function renderOrders(data) {
         const items = data.data || data || [];
         if (!items || !items.length) {
@@ -79,27 +92,27 @@ get_header();
             const status = order.status || '';
             const total = order.formatted_grand_total || order.grand_total || '';
             const method = order.payment_title || '';
-            const createdAt = order.created_at || '';
+            const createdAt = formatOrderDate(order.created_at || '');
 
             let itemSummary = '';
             if (order.items) {
                 const it = Array.isArray(order.items) ? order.items : [order.items];
                 if (it.length) {
-                    const first = it[0];
-                    itemSummary = (first.qty_ordered || '') + ' × ' + (first.name || '');
-                    if (it.length > 1) {
-                        itemSummary += ' + ' + (it.length - 1) + ' <?php echo esc_js( __( 'toodet', 'nailedit' ) ); ?>';
-                    }
+                    itemSummary = '<ul class="list-disc pl-4">' + it.map(function(item) {
+                        const qty = item.qty_ordered || '';
+                        const name = item.name || '';
+                        return '<li>' + qty + ' × ' + name + '</li>';
+                    }).join('') + '</ul>';
                 }
             }
 
             return '<div class="nailedit-order-item" style="border:1px solid #ddd;padding:10px;margin-bottom:8px;">'
                 + '<strong><?php echo esc_js( __( 'Tellimus ', 'nailedit' ) ); ?>' + number + '</strong><br>'
-                + (createdAt ? '<?php echo esc_js( __( 'Kuupäev: ', 'nailedit' ) ); ?>' + createdAt + '<br>' : '')
-                + (status ? '<?php echo esc_js( __( 'Staatus: ', 'nailedit' ) ); ?>' + status + '<br>' : '')
-                + (total ? '<?php echo esc_js( __( 'Kokku: ', 'nailedit' ) ); ?>' + total + '<br>' : '')
-                + (method ? '<?php echo esc_js( __( 'Maksetüüp: ', 'nailedit' ) ); ?>' + method + '<br>' : '')
-                + (itemSummary ? '<?php echo esc_js( __( 'Tooted: ', 'nailedit' ) ); ?>' + itemSummary + '<br>' : '')
+                + (createdAt ? '<strong><?php echo esc_js( __( 'Kuupäev: ', 'nailedit' ) ); ?></strong>' + createdAt + '<br>' : '')
+                + (status ? '<strong><?php echo esc_js( __( 'Staatus: ', 'nailedit' ) ); ?></strong>' + status + '<br>' : '')
+                + (total ? '<strong><?php echo esc_js( __( 'Kokku: ', 'nailedit' ) ); ?></strong>' + total + '<br>' : '')
+                + (method ? '<strong><?php echo esc_js( __( 'Maksetüüp: ', 'nailedit' ) ); ?></strong>' + method + '<br>' : '')
+                + (itemSummary ? '<strong><?php echo esc_js( __( 'Tooted: ', 'nailedit' ) ); ?></strong>' + itemSummary : '')
                 + '</div>';
         }).join('');
     }

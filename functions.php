@@ -117,6 +117,87 @@ function nailedit_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'nailedit_assets' );
 
+/**
+ * Enqueue modular checkout bundle only on the custom checkout template.
+ */
+function nailedit_enqueue_checkout_assets() {
+	if ( ! is_page_template( 'page-checkout.php' ) ) {
+		return;
+	}
+
+	$script_path = get_template_directory() . '/assets/js/checkout/checkout.js';
+	if ( ! file_exists( $script_path ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'nailedit-checkout',
+		get_template_directory_uri() . '/assets/js/checkout/checkout.js',
+		array(),
+		filemtime( $script_path ),
+		true
+	);
+
+	wp_localize_script(
+		'nailedit-checkout',
+		'NaileditCheckoutConfig',
+		array(
+			'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+			'thankYouUrl'  => esc_url_raw( trailingslashit( site_url( '/aitah' ) ) ),
+			'features'     => array(
+				'omniva' => true,
+			),
+			'strings'      => array(
+				'cartEmpty'              => __( 'Sinu ostukorv on tühi.', 'nailedit' ),
+				'cartLoadError'          => __( 'Ostukorvi ei õnnestunud laadida.', 'nailedit' ),
+				'cartRequired'           => __( 'Ostukorv on tühi või seda ei õnnestunud laadida.', 'nailedit' ),
+				'subtotal'               => __( 'Vahesumma', 'nailedit' ),
+				'taxes'                  => __( 'Maksud', 'nailedit' ),
+				'discount'               => __( 'Allahindlus', 'nailedit' ),
+				'grandTotal'             => __( 'Kokku', 'nailedit' ),
+				'shippingTitle'          => __( 'Tarneviisid', 'nailedit' ),
+				'shippingPlaceholder'    => __( 'Tarneviisid ilmuvad siia pärast aadressi täitmist.', 'nailedit' ),
+				'shippingSelectPrompt'   => __( 'Palun vali tarneviis enne tellimuse esitamist.', 'nailedit' ),
+				'shippingLoading'        => __( 'Laen tarneviise...', 'nailedit' ),
+				'shippingSlow'           => __( 'Tarneviiside laadimine võtab liiga kaua aega.', 'nailedit' ),
+				'shippingLoadError'      => __( 'Tarneviise ei õnnestunud laadida.', 'nailedit' ),
+				'shippingNotFound'       => __( 'Tarneviise ei leitud.', 'nailedit' ),
+				'shippingSelectError'    => __( 'Palun vali tarneviis.', 'nailedit' ),
+				'paymentTitle'           => __( 'Makseviis', 'nailedit' ),
+				'paymentPlaceholder'     => __( 'Makseviisid ilmuvad siia pärast tarneviisi valimist. Palun vali makseviis enne tellimuse esitamist.', 'nailedit' ),
+				'paymentLoading'         => __( 'Laen makseviise...', 'nailedit' ),
+				'paymentLoadError'       => __( 'Makseviise ei õnnestunud laadida.', 'nailedit' ),
+				'paymentNotFound'        => __( 'Makseviise ei leitud.', 'nailedit' ),
+				'paymentSelectError'     => __( 'Palun vali makseviis.', 'nailedit' ),
+				'omnivaTitle'            => __( 'Pakiautomaat', 'nailedit' ),
+				'omnivaSearchPlaceholder'=> __( 'Otsi automaati...', 'nailedit' ),
+				'omnivaLoading'          => __( 'Laen automaate...', 'nailedit' ),
+				'omnivaLoadError'        => __( 'Automaate ei õnnestunud laadida.', 'nailedit' ),
+				'savingAddress'          => __( 'Salvestan aadressi...', 'nailedit' ),
+				'savingShipping'         => __( 'Salvestan tarnet...', 'nailedit' ),
+				'savingPayment'          => __( 'Salvestan makset...', 'nailedit' ),
+				'savingOrder'            => __( 'Salvestan tellimust...', 'nailedit' ),
+				'orderSuccess'           => __( 'Tellimus salvestati edukalt.', 'nailedit' ),
+				'genericError'           => __( 'Midagi läks valesti!', 'nailedit' ),
+				'processingPayment'      => __( 'Processing payment…', 'nailedit' ),
+			),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'nailedit_enqueue_checkout_assets' );
+
+/**
+ * Mark the checkout bundle as an ES module so imports work without a bundler.
+ */
+function nailedit_checkout_module_type( $tag, $handle, $src ) {
+	if ( 'nailedit-checkout' !== $handle ) {
+		return $tag;
+	}
+
+	return str_replace( '<script ', '<script type="module" ', $tag );
+}
+add_filter( 'script_loader_tag', 'nailedit_checkout_module_type', 10, 3 );
+
 // Custom rewrite rules for /product/{id}/
 function nailedit_rewrite_rules() {
     add_rewrite_rule( '^product/([0-9]+)/?$', 'index.php?product_id=$matches[1]', 'top' );
@@ -798,498 +879,6 @@ function nailedit_remove_cart_item() {
 }
 add_action( 'wp_ajax_nailedit_remove_cart_item', 'nailedit_remove_cart_item' );
 add_action( 'wp_ajax_nopriv_nailedit_remove_cart_item', 'nailedit_remove_cart_item' );
-
-// AJAX handler for checkout save address (proxy to Bagisto /v1/customer/checkout/save-address)
-function nailedit_checkout_save_address() {
-    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
-        $base = nailedit_get_local_api_base();
-    } else {
-        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
-    }
-
-    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
-    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
-
-    if ( $auth_token ) {
-        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-address';
-    } else {
-        if ( ! $cart_token ) {
-            $cart_token = nailedit_guest_cart_create( $base );
-            if ( is_wp_error( $cart_token ) ) {
-                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
-            }
-        }
-        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/addresses';
-    }
-
-    $headers = array(
-        'Accept'       => 'application/json',
-        'Content-Type' => 'application/json',
-    );
-
-    $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
-        $headers['Cookie'] = $stored_cookie;
-    }
-
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    } else {
-        $headers['X-Cart-Token'] = $cart_token;
-        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
-            $headers['Host'] = '45.93.139.96';
-            $headers['X-Forwarded-Host'] = '45.93.139.96';
-        }
-    }
-
-    // Expect billing_* and shipping_* fields and map them into Bagisto structure
-    $billing = array(
-        'id'              => isset( $_POST['billing_id'] ) ? intval( $_POST['billing_id'] ) : null,
-        'address'         => isset( $_POST['billing_address'] ) ? array_map( 'sanitize_text_field', (array) $_POST['billing_address'] ) : array(),
-        'save_as_address' => isset( $_POST['billing_save_as_address'] ) && '1' === (string) $_POST['billing_save_as_address'],
-        'use_for_shipping'=> isset( $_POST['billing_use_for_shipping'] ) && '1' === (string) $_POST['billing_use_for_shipping'],
-        'first_name'      => isset( $_POST['billing_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_first_name'] ) ) : '',
-        'last_name'       => isset( $_POST['billing_last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_last_name'] ) ) : '',
-        'email'           => isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '',
-        'company_name'    => isset( $_POST['billing_company_name'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_company_name'] ) ) : '',
-        'city'            => isset( $_POST['billing_city'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_city'] ) ) : '',
-        'state'           => isset( $_POST['billing_state'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_state'] ) ) : '',
-        'country'         => isset( $_POST['billing_country'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_country'] ) ) : '',
-        'postcode'        => isset( $_POST['billing_postcode'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_postcode'] ) ) : '',
-        'phone'           => isset( $_POST['billing_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) : '',
-    );
-
-    $shipping = array(
-        'id'              => isset( $_POST['shipping_id'] ) ? intval( $_POST['shipping_id'] ) : null,
-        'address'         => isset( $_POST['shipping_address'] ) ? array_map( 'sanitize_text_field', (array) $_POST['shipping_address'] ) : array(),
-        'save_as_address' => isset( $_POST['shipping_save_as_address'] ) && '1' === (string) $_POST['shipping_save_as_address'],
-        'first_name'      => isset( $_POST['shipping_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_first_name'] ) ) : '',
-        'last_name'       => isset( $_POST['shipping_last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_last_name'] ) ) : '',
-        'email'           => isset( $_POST['shipping_email'] ) ? sanitize_email( wp_unslash( $_POST['shipping_email'] ) ) : '',
-        'company_name'    => isset( $_POST['shipping_company_name'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_company_name'] ) ) : '',
-        'city'            => isset( $_POST['shipping_city'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_city'] ) ) : '',
-        'state'           => isset( $_POST['shipping_state'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_state'] ) ) : '',
-        'country'         => isset( $_POST['shipping_country'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_country'] ) ) : '',
-        'postcode'        => isset( $_POST['shipping_postcode'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_postcode'] ) ) : '',
-        'phone'           => isset( $_POST['shipping_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_phone'] ) ) : '',
-    );
-
-    $body = array(
-        'billing'  => $billing,
-        'shipping' => $shipping,
-    );
-
-    $args = array(
-        'method'  => 'POST',
-        'timeout' => 30,
-        'headers' => $headers,
-        'body'    => wp_json_encode( $body ),
-    );
-
-    $response = wp_remote_post( $url, $args );
-
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
-    }
-
-    $status_code = wp_remote_retrieve_response_code( $response );
-    $body_raw    = wp_remote_retrieve_body( $response );
-    $data        = json_decode( $body_raw, true );
-
-    $payload = array(
-        'data'   => $data,
-        'status' => $status_code,
-    );
-
-    if ( ! $auth_token && $cart_token ) {
-        $payload['cart_token'] = $cart_token;
-    }
-
-    if ( $status_code >= 200 && $status_code < 300 ) {
-        $payload['success'] = true;
-        wp_send_json( $payload, $status_code );
-    }
-
-    $payload['success'] = false;
-    if ( isset( $data['message'] ) ) {
-        $payload['message'] = $data['message'];
-    }
-
-    wp_send_json( $payload, $status_code );
-}
-add_action( 'wp_ajax_nailedit_checkout_save_address', 'nailedit_checkout_save_address' );
-add_action( 'wp_ajax_nopriv_nailedit_checkout_save_address', 'nailedit_checkout_save_address' );
-
-// AJAX handler for checkout save order (proxy to Bagisto /v1/customer/checkout/save-order)
-function nailedit_checkout_save_order() {
-    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
-        $base = nailedit_get_local_api_base();
-    } else {
-        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
-    }
-
-    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
-    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
-
-    if ( $auth_token ) {
-        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-order';
-    } else {
-        if ( ! $cart_token ) {
-            $cart_token = nailedit_guest_cart_create( $base );
-            if ( is_wp_error( $cart_token ) ) {
-                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
-            }
-        }
-        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/place-order';
-    }
-
-    $headers = array(
-        'Accept' => 'application/json',
-    );
-
-    $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
-        $headers['Cookie'] = $stored_cookie;
-    }
-
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    } else {
-        $headers['X-Cart-Token'] = $cart_token;
-        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
-            $headers['Host'] = '45.93.139.96';
-            $headers['X-Forwarded-Host'] = '45.93.139.96';
-        }
-    }
-
-    $args = array(
-        'method'  => 'POST',
-        'timeout' => 30,
-        'headers' => $headers,
-    );
-
-    $response = wp_remote_post( $url, $args );
-
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
-    }
-
-    $status_code = wp_remote_retrieve_response_code( $response );
-    $body_raw    = wp_remote_retrieve_body( $response );
-    $data        = json_decode( $body_raw, true );
-
-    $payload = array(
-        'data'   => $data,
-        'status' => $status_code,
-    );
-
-    if ( ! $auth_token && $cart_token ) {
-        $payload['cart_token'] = $cart_token;
-    }
-
-    if ( $status_code >= 200 && $status_code < 300 ) {
-        $payload['success'] = true;
-        wp_send_json( $payload, $status_code );
-    }
-
-    $payload['success'] = false;
-    if ( isset( $data['message'] ) ) {
-        $payload['message'] = $data['message'];
-    }
-
-    wp_send_json( $payload, $status_code );
-}
-add_action( 'wp_ajax_nailedit_checkout_save_order', 'nailedit_checkout_save_order' );
-add_action( 'wp_ajax_nopriv_nailedit_checkout_save_order', 'nailedit_checkout_save_order' );
-
-// AJAX handler for checkout save shipping (proxy to Bagisto /v1/customer/checkout/save-shipping)
-function nailedit_checkout_save_shipping() {
-    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
-        $base = nailedit_get_local_api_base();
-    } else {
-        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
-    }
-
-    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
-    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
-
-    if ( $auth_token ) {
-        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-shipping';
-    } else {
-        if ( ! $cart_token ) {
-            $cart_token = nailedit_guest_cart_create( $base );
-            if ( is_wp_error( $cart_token ) ) {
-                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
-            }
-        }
-        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/shipping-method';
-    }
-
-    $headers = array(
-        'Accept'       => 'application/json',
-        'Content-Type' => 'application/json',
-    );
-
-    $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
-        $headers['Cookie'] = $stored_cookie;
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    } else {
-        $headers['X-Cart-Token'] = $cart_token;
-        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
-            $headers['Host'] = '45.93.139.96';
-            $headers['X-Forwarded-Host'] = '45.93.139.96';
-        }
-    }
-
-    // Shipping method can be overridden via POST; default to flatrate_flatrate
-    $shipping_method = isset( $_POST['shipping_method'] ) ? sanitize_text_field( wp_unslash( $_POST['shipping_method'] ) ) : 'flatrate_flatrate';
-
-    $body = array(
-        'shipping_method' => $shipping_method,
-    );
-
-    $args = array(
-        'method'  => 'POST',
-        'timeout' => 30,
-        'headers' => $headers,
-        'body'    => wp_json_encode( $body ),
-    );
-
-    $response = wp_remote_post( $url, $args );
-
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
-    }
-
-    $status_code = wp_remote_retrieve_response_code( $response );
-    $body_raw    = wp_remote_retrieve_body( $response );
-    $data        = json_decode( $body_raw, true );
-
-    $payload = array(
-        'data'   => $data,
-        'status' => $status_code,
-    );
-
-    if ( ! $auth_token && $cart_token ) {
-        $payload['cart_token'] = $cart_token;
-    }
-
-    if ( $status_code >= 200 && $status_code < 300 ) {
-        $payload['success'] = true;
-        wp_send_json( $payload, $status_code );
-    }
-
-    $payload['success'] = false;
-    if ( isset( $data['message'] ) ) {
-        $payload['message'] = $data['message'];
-    }
-
-    wp_send_json( $payload, $status_code );
-}
-add_action( 'wp_ajax_nailedit_checkout_save_shipping', 'nailedit_checkout_save_shipping' );
-add_action( 'wp_ajax_nopriv_nailedit_checkout_save_shipping', 'nailedit_checkout_save_shipping' );
-
-// AJAX handler for checkout save payment (proxy to Bagisto /v1/customer/checkout/save-payment)
-function nailedit_checkout_save_payment() {
-    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
-        $base = nailedit_get_local_api_base();
-    } else {
-        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
-    }
-
-    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
-    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
-
-    if ( $auth_token ) {
-        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/save-payment';
-    } else {
-        if ( ! $cart_token ) {
-            $cart_token = nailedit_guest_cart_create( $base );
-            if ( is_wp_error( $cart_token ) ) {
-                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
-            }
-        }
-        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/payment-method';
-    }
-
-    $headers = array(
-        'Accept'       => 'application/json',
-        'Content-Type' => 'application/json',
-    );
-
-    $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
-        $headers['Cookie'] = $stored_cookie;
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    } else {
-        $headers['X-Cart-Token'] = $cart_token;
-        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
-            $headers['Host'] = '45.93.139.96';
-            $headers['X-Forwarded-Host'] = '45.93.139.96';
-        }
-    }
-
-    // Payment method can be overridden via POST; default to cashondelivery
-    $payment_method = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : 'cashondelivery';
-
-    $body = array(
-        'payment' => array(
-            'method' => $payment_method,
-        ),
-    );
-
-    $args = array(
-        'method'  => 'POST',
-        'timeout' => 30,
-        'headers' => $headers,
-        'body'    => wp_json_encode( $body ),
-    );
-
-    $response = wp_remote_post( $url, $args );
-
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
-    }
-
-    $status_code = wp_remote_retrieve_response_code( $response );
-    $body_raw    = wp_remote_retrieve_body( $response );
-    $data        = json_decode( $body_raw, true );
-
-    $payload = array(
-        'data'   => $data,
-        'status' => $status_code,
-    );
-
-    if ( ! $auth_token && $cart_token ) {
-        $payload['cart_token'] = $cart_token;
-    }
-
-    if ( $status_code >= 200 && $status_code < 300 ) {
-        $payload['success'] = true;
-        wp_send_json( $payload, $status_code );
-    }
-
-    $payload['success'] = false;
-    if ( isset( $data['message'] ) ) {
-        $payload['message'] = $data['message'];
-    }
-
-    wp_send_json( $payload, $status_code );
-}
-add_action( 'wp_ajax_nailedit_checkout_save_payment', 'nailedit_checkout_save_payment' );
-add_action( 'wp_ajax_nopriv_nailedit_checkout_save_payment', 'nailedit_checkout_save_payment' );
-
-// AJAX handler for checkout payment status (proxy to Bagisto /v1/guest/checkout/payment-status)
-function nailedit_checkout_payment_status() {
-    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
-        $base = nailedit_get_local_api_base();
-    } else {
-        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
-    }
-
-    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
-    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
-
-    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
-    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
-
-    if ( $auth_token ) {
-        $url = rtrim( $base, '/' ) . '/v1/customer/checkout/payment-status';
-    } else {
-        if ( ! $cart_token ) {
-            $cart_token = nailedit_guest_cart_create( $base );
-            if ( is_wp_error( $cart_token ) ) {
-                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
-            }
-        }
-        $url = rtrim( $base, '/' ) . '/v1/guest/checkout/payment-status';
-    }
-
-    $headers = array(
-        'Accept' => 'application/json',
-    );
-
-    $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
-    if ( $stored_cookie ) {
-        $headers['Cookie'] = $stored_cookie;
-    }
-
-    if ( $auth_token ) {
-        $headers['Authorization'] = 'Bearer ' . $auth_token;
-    } else {
-        $headers['X-Cart-Token'] = $cart_token;
-        if ( strpos( $url, '45.93.139.96:8088' ) !== false ) {
-            $headers['Host'] = '45.93.139.96';
-            $headers['X-Forwarded-Host'] = '45.93.139.96';
-        }
-    }
-
-    $response = wp_remote_get(
-        $url,
-        array(
-            'timeout' => 20,
-            'headers' => $headers,
-        )
-    );
-
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
-    }
-
-    $status_code = wp_remote_retrieve_response_code( $response );
-    $body_raw    = wp_remote_retrieve_body( $response );
-    $data        = json_decode( $body_raw, true );
-
-    $payload = array(
-        'data'   => $data,
-        'status' => $status_code,
-    );
-
-    if ( ! $auth_token && $cart_token ) {
-        $payload['cart_token'] = $cart_token;
-    }
-
-    $payload['success'] = $status_code >= 200 && $status_code < 300;
-
-    if ( ! $payload['success'] && is_array( $data ) && isset( $data['message'] ) && is_string( $data['message'] ) ) {
-        $payload['message'] = $data['message'];
-    }
-
-    wp_send_json( $payload, $status_code );
-}
-add_action( 'wp_ajax_nailedit_checkout_payment_status', 'nailedit_checkout_payment_status' );
-add_action( 'wp_ajax_nopriv_nailedit_checkout_payment_status', 'nailedit_checkout_payment_status' );
 
 // AJAX handler for customer login (proxy to avoid CORS)
 function nailedit_customer_login() {
@@ -2503,6 +2092,7 @@ add_action( 'wp_ajax_nopriv_nailedit_toggle_wishlist', 'nailedit_toggle_wishlist
 // Load helpers and shortcodes.
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/shortcodes.php';
+require_once get_template_directory() . '/inc/ajax/checkout.php';
 
 
 function nailedit_get_wishlist() {
@@ -2566,30 +2156,32 @@ function nailedit_add_image_sizes() {
 add_action('after_setup_theme', 'nailedit_add_image_sizes');
 
 // Fix image URLs to use WordPress image sizes
-function nailedit_fix_image_url($image_url) {
-    if (empty($image_url)) {
-        return $image_url;
-    }
-    
-    // Try to get attachment ID from URL
-    $attachment_id = attachment_url_to_postid($image_url);
-    
-    if ($attachment_id) {
-        // Try to get medium-large image first, then fallback to medium
-        $new_url = wp_get_attachment_image_url($attachment_id, 'product-large');
-        if (!$new_url) {
-            $new_url = wp_get_attachment_image_url($attachment_id, 'medium');
-        }
-        if (!$new_url) {
-            $new_url = wp_get_attachment_image_url($attachment_id, 'full');
+if ( ! function_exists( 'nailedit_fix_image_url' ) ) {
+    function nailedit_fix_image_url($image_url) {
+        if (empty($image_url)) {
+            return $image_url;
         }
         
-        if ($new_url) {
-            return $new_url;
+        // Try to get attachment ID from URL
+        $attachment_id = attachment_url_to_postid($image_url);
+        
+        if ($attachment_id) {
+            // Try to get medium-large image first, then fallback to medium
+            $new_url = wp_get_attachment_image_url($attachment_id, 'product-large');
+            if (!$new_url) {
+                $new_url = wp_get_attachment_image_url($attachment_id, 'medium');
+            }
+            if (!$new_url) {
+                $new_url = wp_get_attachment_image_url($attachment_id, 'full');
+            }
+            
+            if ($new_url) {
+                return $new_url;
+            }
         }
+        
+        return $image_url;
     }
-    
-    return $image_url;
 }
 
 /**

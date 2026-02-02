@@ -19,7 +19,7 @@ get_header();
         <section class="bg-white/80 rounded-3xl shadow-lg px-6 py-8 md:px-10 md:py-10 inline-block text-left">
             <p class="text-sm text-slate-700 mb-2"><?php esc_html_e( 'Your order number is', 'nailedit' ); ?></p>
             <p id="nailedit-thankyou-order-id" class="text-2xl font-semibold text-primary mb-4">&mdash;</p>
-            <p class="text-xs text-slate-500"><?php esc_html_e( 'A confirmation email with order details has been sent to you, if applicable.', 'nailedit' ); ?></p>
+            <p class="text-xs text-slate-500"><?php esc_html_e( 'Kinnitusmeil tellimuse andmetega on sulle saadetud (kui see on kohaldatav).', 'nailedit' ); ?></p>
         </section>
     </div>
 </main>
@@ -29,6 +29,13 @@ get_header();
   document.addEventListener('DOMContentLoaded', function () {
     var el = document.getElementById('nailedit-thankyou-order-id');
     if (!el) return;
+
+    try {
+      localStorage.removeItem('bagisto_guest_cart_token');
+      localStorage.removeItem('nailedit_selected_shipping_method');
+      localStorage.removeItem('nailedit_selected_payment_method');
+      localStorage.removeItem('nailedit_omniva_location_id');
+    } catch (e) {}
 
     var incrementId = '';
     try {

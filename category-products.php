@@ -86,6 +86,7 @@ echo '<!-- NAILEDIT CATEGORY DEBUG: slug=' . esc_html( $category_slug ) . ' id='
 
 if ( ! $category_id ) {
     ?>
+
     <main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
         <div class="nailedit-no-products">
             <p><?php esc_html_e( 'Category not found.', 'nailedit' ); ?></p>

@@ -1,0 +1,1382 @@
+<?php
+/**
+ * Template Name: Checkout Page
+ * Description: Bagisto checkout address step via AJAX (save-address)
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+get_header();
+?>
+
+<?php get_template_part( 'template-parts/page-header' ); ?>
+
+<main class="site-main nailedit-checkout-page py-10">
+    <div class="max-w-[1200px] mx-auto px-4">
+       
+
+        <div id="nailedit-checkout-require-cart" class="hidden mb-4 text-center text-sm text-red-600"></div>
+
+        <div id="nailedit-checkout-wrapper" class="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
+            <section id="nailedit-checkout-form-section" class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
+                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Tarne andmed', 'nailedit' ); ?></h2>
+
+                <form id="nailedit-checkout-address-form" class="space-y-6">
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-[0.12em]"><?php esc_html_e( 'Arveaadress', 'nailedit' ); ?></h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_first_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Eesnimi', 'nailedit' ); ?> *</label>
+                                <input id="billing_first_name" name="billing_first_name" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_last_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Perekonnanimi', 'nailedit' ); ?> *</label>
+                                <input id="billing_last_name" name="billing_last_name" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="billing_email" class="text-sm font-medium text-primary"><?php esc_html_e( 'E-post', 'nailedit' ); ?> *</label>
+                            <input id="billing_email" name="billing_email" type="email" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="billing_company_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Ettevõte (valikuline)', 'nailedit' ); ?></label>
+                            <input id="billing_company_name" name="billing_company_name" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="billing_address" class="text-sm font-medium text-primary"><?php esc_html_e( 'Aadress', 'nailedit' ); ?> *</label>
+                            <input id="billing_address" name="billing_address[]" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_postcode" class="text-sm font-medium text-primary"><?php esc_html_e( 'Sihtnumber', 'nailedit' ); ?> *</label>
+                                <input id="billing_postcode" name="billing_postcode" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_city" class="text-sm font-medium text-primary"><?php esc_html_e( 'Linn', 'nailedit' ); ?> *</label>
+                                <input id="billing_city" name="billing_city" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_state" class="text-sm font-medium text-primary"><?php esc_html_e( 'Maakond', 'nailedit' ); ?></label>
+                                <input id="billing_state" name="billing_state" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_country" class="text-sm font-medium text-primary"><?php esc_html_e( 'Riik', 'nailedit' ); ?> *</label>
+                                <input id="billing_country" name="billing_country" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="billing_phone" class="text-sm font-medium text-primary"><?php esc_html_e( 'Telefon', 'nailedit' ); ?> *</label>
+                                <input id="billing_phone" name="billing_phone" type="text" required class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-2">
+                            <input id="billing_use_for_shipping" name="billing_use_for_shipping" type="checkbox" value="1" class="h-4 w-4 rounded border-slate-300 text-secondary focus:ring-secondary" checked />
+                            <label for="billing_use_for_shipping" class="text-xs text-slate-700"><?php esc_html_e( 'Kasuta sama aadressi ka tarneks', 'nailedit' ); ?></label>
+                        </div>
+                    </div>
+
+                    <div id="nailedit-shipping-fields" class="space-y-4 border-t border-slate-100 pt-6 mt-4 hidden">
+                        <h3 class="text-sm font-semibold text-slate-800 uppercase tracking-[0.12em]"><?php esc_html_e( 'Tarneaadress', 'nailedit' ); ?></h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_first_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Eesnimi', 'nailedit' ); ?> *</label>
+                                <input id="shipping_first_name" name="shipping_first_name" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_last_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Perekonnanimi', 'nailedit' ); ?> *</label>
+                                <input id="shipping_last_name" name="shipping_last_name" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="shipping_email" class="text-sm font-medium text-primary"><?php esc_html_e( 'E-post', 'nailedit' ); ?> *</label>
+                            <input id="shipping_email" name="shipping_email" type="email" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="shipping_company_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Ettevõte (valikuline)', 'nailedit' ); ?></label>
+                            <input id="shipping_company_name" name="shipping_company_name" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="shipping_address" class="text-sm font-medium text-primary"><?php esc_html_e( 'Aadress', 'nailedit' ); ?> *</label>
+                            <input id="shipping_address" name="shipping_address[]" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_postcode" class="text-sm font-medium text-primary"><?php esc_html_e( 'Sihtnumber', 'nailedit' ); ?> *</label>
+                                <input id="shipping_postcode" name="shipping_postcode" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_city" class="text-sm font-medium text-primary"><?php esc_html_e( 'Linn', 'nailedit' ); ?> *</label>
+                                <input id="shipping_city" name="shipping_city" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_state" class="text-sm font-medium text-primary"><?php esc_html_e( 'Maakond', 'nailedit' ); ?></label>
+                                <input id="shipping_state" name="shipping_state" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_country" class="text-sm font-medium text-primary"><?php esc_html_e( 'Riik', 'nailedit' ); ?> *</label>
+                                <input id="shipping_country" name="shipping_country" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label for="shipping_phone" class="text-sm font-medium text-primary"><?php esc_html_e( 'Telefon', 'nailedit' ); ?> *</label>
+                                <input id="shipping_phone" name="shipping_phone" type="text" class="w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="nailedit-checkout-address-error" class="text-sm text-red-600 min-h-[20px]"></div>
+
+                    <div class="pt-2">
+                        <button type="submit" id="nailedit-checkout-address-submit" class="w-full rounded-full min-h-[51px] px-4 bg-secondary text-primary font-semibold hover:bg-fourth transition">
+                            <?php esc_html_e( 'Esita tellimus', 'nailedit' ); ?>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <aside id="nailedit-checkout-summary" class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
+                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Tellimuse kokkuvõte', 'nailedit' ); ?></h2>
+                <div id="nailedit-checkout-summary-body" class="text-sm text-slate-700 space-y-2">
+                    <p><?php esc_html_e( 'Laen ostukorvi...', 'nailedit' ); ?></p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('nailedit-checkout-address-form');
+    const useForShipping = document.getElementById('billing_use_for_shipping');
+    const shippingFields = document.getElementById('nailedit-shipping-fields');
+    const errorEl = document.getElementById('nailedit-checkout-address-error');
+    const summaryBody = document.getElementById('nailedit-checkout-summary-body');
+    const requireCartEl = document.getElementById('nailedit-checkout-require-cart');
+    const submitBtn = document.getElementById('nailedit-checkout-address-submit');
+
+    if (!form || !summaryBody) return;
+
+    function getStoredAuthCookie() {
+      try {
+        return localStorage.getItem('bagisto_auth_cookie') || localStorage.getItem('bagisto_cart_cookie') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function normalizePaymentMethodsPayload(result) {
+      if (!result) return null;
+      if (result.data && result.data.payment_methods) {
+        return result.data;
+      }
+      if (result.data && result.data.paymentMethods) {
+        return result.data;
+      }
+      if (result.data && result.data.data && (result.data.data.payment_methods || result.data.data.paymentMethods)) {
+        return result.data.data;
+      }
+      return result.data || null;
+    }
+
+    function flattenPaymentMethods(paymentData) {
+      if (!paymentData) return [];
+      var list = paymentData.payment_methods || paymentData.paymentMethods || paymentData.methods || paymentData.data || [];
+      if (Array.isArray(list)) {
+        return list;
+      }
+      // Sometimes methods may be keyed object
+      try {
+        return Object.keys(list).map(function (k) { return list[k]; }).filter(Boolean);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getPaymentMethodCode(m) {
+      if (!m) return '';
+      return m.method || m.code || m.key || '';
+    }
+
+    function getPaymentMethodTitle(m) {
+      if (!m) return '';
+      return m.method_title || m.title || m.label || m.name || getPaymentMethodCode(m);
+    }
+
+    function renderPaymentMethods(paymentData) {
+      var container = document.getElementById('nailedit-payment-methods');
+      if (!container) return;
+
+      var methods = flattenPaymentMethods(paymentData);
+      methods = methods.filter(function (m) {
+        var code = getPaymentMethodCode(m);
+        return !!code;
+      });
+
+      if (!methods.length) {
+        container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Makseviise ei leitud.', 'nailedit' ) ); ?></div>';
+        return;
+      }
+
+      var selected = '';
+      try {
+        selected = localStorage.getItem('nailedit_selected_payment_method') || '';
+      } catch (e) {}
+
+      if (!selected || !methods.some(function (m) { return getPaymentMethodCode(m) === selected; })) {
+        selected = getPaymentMethodCode(methods[0]);
+      }
+
+      var html = '';
+      methods.forEach(function (m, idx) {
+        var code = getPaymentMethodCode(m);
+        var title = getPaymentMethodTitle(m);
+        var id = 'nailedit-pay-' + idx;
+        var checked = code === selected ? ' checked' : '';
+
+        html += '<label for="' + id + '" class="flex items-center justify-between gap-3 text-xs md:text-sm cursor-pointer">'
+          + '<div class="flex items-center gap-2">'
+          + '<input type="radio" id="' + id + '" name="nailedit_payment_method" value="' + code + '" class="h-4 w-4 text-secondary border-slate-300 focus:ring-secondary"' + checked + ' />'
+          + '<span class="text-slate-700">' + title + '</span>'
+          + '</div>'
+          + '</label>';
+      });
+
+      container.innerHTML = html;
+      try {
+        localStorage.setItem('nailedit_selected_payment_method', selected);
+      } catch (e2) {}
+    }
+
+    function loadPaymentMethods() {
+      var storedCookie = getStoredAuthCookie();
+      var storedToken = getStoredAuthToken();
+      var cartToken   = getStoredCartToken();
+
+      var container = document.getElementById('nailedit-payment-methods');
+      if (container) {
+        container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Laen makseviise...', 'nailedit' ) ); ?></div>';
+      }
+
+      var fd = new FormData();
+      fd.append('action', 'nailedit_checkout_payment_methods');
+      if (storedCookie) fd.append('stored_cookie', storedCookie);
+      if (storedToken) {
+        fd.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fd.append('cart_token', cartToken);
+      }
+
+      return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+        .then(function (r) {
+          return r.text().then(function (t) {
+            var parsed = null;
+            try {
+              parsed = JSON.parse(t);
+            } catch (e) {
+              if (window && window.console) {
+                console.error('payment-methods: invalid JSON response', { status: r.status, body: t });
+              }
+            }
+            return { ok: r.ok, status: r.status, json: parsed, raw: t };
+          });
+        })
+        .then(function (resp) {
+          var res = resp && resp.json ? resp.json : null;
+          persistCartToken(res);
+          if (!res || !res.success) {
+            if (container) {
+              var msg = (res && (res.message || (res.data && res.data.message))) || '';
+              container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Makseviise ei õnnestunud laadida.', 'nailedit' ) ); ?>' + (msg ? (' (' + msg + ')') : '') + '</div>';
+            }
+            return null;
+          }
+          var data = normalizePaymentMethodsPayload(res);
+          renderPaymentMethods(data);
+          return res;
+        })
+        .catch(function () {
+          if (container) {
+            container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Makseviise ei õnnestunud laadida.', 'nailedit' ) ); ?></div>';
+          }
+          return null;
+        });
+    }
+
+    function normalizeShippingMethodsPayload(result) {
+      if (!result) return null;
+      if (result.data && result.data.data && result.data.data.shipping_rates) {
+        return result.data.data.shipping_rates;
+      }
+      if (result.data && result.data.shipping_rates) {
+        return result.data.shipping_rates;
+      }
+      if (result.data && result.data.shippingMethods) {
+        return { shippingMethods: result.data.shippingMethods };
+      }
+      if (result.data && result.data.data && result.data.data.shippingMethods) {
+        return { shippingMethods: result.data.data.shippingMethods };
+      }
+      return result.data || null;
+    }
+
+    function flattenShippingRates(shippingData) {
+      if (!shippingData) return [];
+      var carriers = shippingData.shippingMethods || shippingData;
+      if (!carriers || typeof carriers !== 'object') return [];
+      var out = [];
+
+      try {
+        Object.keys(carriers).forEach(function (carrierCode) {
+          var carrier = carriers[carrierCode] || {};
+          var rates = carrier.rates || [];
+          if (!Array.isArray(rates)) rates = [rates];
+          rates.forEach(function (r) {
+            if (!r) return;
+            out.push(r);
+          });
+        });
+      } catch (e) {}
+
+      return out;
+    }
+
+    function renderShippingMethods(shippingData) {
+      var container = document.getElementById('nailedit-shipping-methods');
+      if (!container) return;
+
+      var rates = flattenShippingRates(shippingData);
+      if (!rates.length) {
+        container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Tarneviise ei leitud.', 'nailedit' ) ); ?></div>';
+        return;
+      }
+
+      var selected = '';
+      try {
+        selected = localStorage.getItem('nailedit_selected_shipping_method') || '';
+      } catch (e) {}
+
+      if (selected && !rates.some(function (r) { return r && r.method === selected; })) {
+        selected = '';
+      }
+
+      var html = '';
+      rates.forEach(function (r, idx) {
+        var method = r.method || '';
+        if (!method) return;
+        var label = r.method_title || r.carrier_title || method;
+        var price = r.base_formatted_price || r.formatted_price || '';
+        var id = 'nailedit-ship-' + idx;
+        var checked = (selected && method === selected) ? ' checked' : '';
+
+        html += '<label for="' + id + '" class="flex items-center justify-between gap-3 text-xs md:text-sm cursor-pointer">'
+          + '<div class="flex items-center gap-2">'
+          + '<input type="radio" id="' + id + '" name="nailedit_shipping_method" value="' + method + '" class="h-4 w-4 text-secondary border-slate-300 focus:ring-secondary"' + checked + ' />'
+          + '<span class="text-slate-700">' + label + '</span>'
+          + '</div>'
+          + (price ? ('<span class="text-slate-800">' + price + '</span>') : '')
+          + '</label>';
+      });
+
+      container.innerHTML = html;
+
+      var firstChecked = container.querySelector('input[name="nailedit_shipping_method"]:checked');
+      if (firstChecked) {
+        handleShippingMethodChange(firstChecked.value);
+      }
+    }
+
+    function loadShippingMethods() {
+      var storedCookie = getStoredAuthCookie();
+      var storedToken = getStoredAuthToken();
+      var cartToken   = getStoredCartToken();
+
+      var container = document.getElementById('nailedit-shipping-methods');
+      if (container) {
+        container.innerHTML = '<div class="text-xs text-slate-600"><?php echo esc_js( __( 'Laen tarneviise...', 'nailedit' ) ); ?></div>';
+      }
+
+      var didFinish = false;
+      window.setTimeout(function () {
+        if (didFinish) return;
+        if (container) {
+          container.innerHTML = '<div class="text-xs text-red-600"><?php echo esc_js( __( 'Tarneviiside laadimine võtab liiga kaua aega.', 'nailedit' ) ); ?></div>';
+        }
+      }, 12000);
+
+      var fd = new FormData();
+      fd.append('action', 'nailedit_checkout_shipping_methods');
+      if (storedCookie) fd.append('stored_cookie', storedCookie);
+      if (storedToken) {
+        fd.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fd.append('cart_token', cartToken);
+      }
+
+      return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+        .then(function (r) {
+          return r.text().then(function (t) {
+            var parsed = null;
+            try {
+              parsed = JSON.parse(t);
+            } catch (e) {
+              if (window && window.console) {
+                console.error('shipping-methods: invalid JSON response', { status: r.status, body: t });
+              }
+            }
+            return { ok: r.ok, status: r.status, json: parsed, raw: t };
+          });
+        })
+        .then(function (resp) {
+          didFinish = true;
+          var res = resp && resp.json ? resp.json : null;
+          persistCartToken(res);
+          if (window && window.console) {
+            console.log('shipping-methods result:', res);
+          }
+          if (!res || !res.success) {
+            if (container) {
+              var msg = (res && (res.message || (res.data && res.data.message))) || '';
+              container.innerHTML = '<div class="text-xs text-red-600"><?php echo esc_js( __( 'Tarneviise ei õnnestunud laadida.', 'nailedit' ) ); ?>' + (msg ? (' (' + msg + ')') : '') + '</div>';
+            }
+            return null;
+          }
+          var data = normalizeShippingMethodsPayload(res);
+          renderShippingMethods(data);
+          return res;
+        })
+        .catch(function () {
+          didFinish = true;
+          if (container) {
+            container.innerHTML = '<div class="text-xs text-red-600"><?php echo esc_js( __( 'Tarneviise ei õnnestunud laadida.', 'nailedit' ) ); ?></div>';
+          }
+          return null;
+        });
+    }
+
+    function normalizeOmnivaLocations(result) {
+      if (!result) return [];
+      if (result.data && result.data.data && result.data.data.locations && Array.isArray(result.data.data.locations)) {
+        return result.data.data.locations;
+      }
+      if (result.data && result.data.locations && Array.isArray(result.data.locations)) {
+        return result.data.locations;
+      }
+      if (result.data && Array.isArray(result.data)) return result.data;
+      if (result.data && result.data.data && Array.isArray(result.data.data)) return result.data.data;
+      return [];
+    }
+
+    var omnivaLocationsCache = null;
+
+    function renderOmnivaLocations(locations) {
+      var select = document.getElementById('nailedit-omniva-location');
+      if (!select) return;
+
+      var selectedId = '';
+      try {
+        selectedId = localStorage.getItem('nailedit_omniva_location_id') || '';
+      } catch (e) {}
+
+      var html = '';
+      locations.forEach(function (loc, idx) {
+        if (!loc) return;
+        var zip = loc.zip || loc.postcode || '';
+        var name = loc.name || loc.title || '';
+        var id = loc.id != null ? String(loc.id) : (zip + '_' + idx);
+        var label = (zip ? (zip + ' ') : '') + name;
+        if (!id || !label) return;
+        var sel = (selectedId && id === selectedId) ? ' selected' : '';
+        html += '<option value="' + id + '"' + sel + '>' + label + '</option>';
+      });
+
+      select.innerHTML = html;
+    }
+
+    function filterOmnivaLocations(query) {
+      if (!omnivaLocationsCache) return;
+      var q = (query || '').toLowerCase();
+      var filtered = omnivaLocationsCache;
+      if (q) {
+        filtered = omnivaLocationsCache.filter(function (loc) {
+          var s = '';
+          try {
+            s = (String(loc.zip || '') + ' ' + String(loc.name || loc.title || '') + ' ' + String(loc.address || '') + ' ' + String(loc.city || '')).toLowerCase();
+          } catch (e) {}
+          return s.indexOf(q) !== -1;
+        });
+      }
+      renderOmnivaLocations(filtered);
+    }
+
+    function loadOmnivaLocations() {
+      if (omnivaLocationsCache) {
+        return;
+      }
+
+      var note = document.getElementById('nailedit-omniva-note');
+      if (note) {
+        note.textContent = '<?php echo esc_js( __( 'Laen automaate...', 'nailedit' ) ); ?>';
+      }
+
+      var fd = new FormData();
+      fd.append('action', 'nailedit_omniva_locations');
+
+      fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res || !res.success) {
+            if (note) {
+              note.textContent = '<?php echo esc_js( __( 'Automaate ei õnnestunud laadida.', 'nailedit' ) ); ?>';
+            }
+            return;
+          }
+          omnivaLocationsCache = normalizeOmnivaLocations(res);
+          renderOmnivaLocations(omnivaLocationsCache);
+          if (note) {
+            note.textContent = '';
+          }
+        })
+        .catch(function () {
+          if (note) {
+            note.textContent = '<?php echo esc_js( __( 'Automaate ei õnnestunud laadida.', 'nailedit' ) ); ?>';
+          }
+        });
+    }
+
+    function setOmnivaPickupVisible(isVisible) {
+      var wrap = document.getElementById('nailedit-omniva-pickup');
+      if (!wrap) return;
+      if (isVisible) {
+        wrap.classList.remove('hidden');
+      } else {
+        wrap.classList.add('hidden');
+      }
+    }
+
+    function handleShippingMethodChange(method) {
+      try {
+        if (method) {
+          localStorage.setItem('nailedit_selected_shipping_method', method);
+        }
+      } catch (e) {}
+
+      if (method === 'omniva_omniva') {
+        setOmnivaPickupVisible(true);
+        loadOmnivaLocations();
+      } else {
+        setOmnivaPickupVisible(false);
+      }
+    }
+
+    document.addEventListener('change', function (e) {
+      var t = e && e.target ? e.target : null;
+      if (t && t.name === 'nailedit_shipping_method') {
+        handleShippingMethodChange(t.value);
+      }
+      if (t && t.name === 'nailedit_payment_method') {
+        try {
+          localStorage.setItem('nailedit_selected_payment_method', String(t.value || ''));
+        } catch (e3) {}
+      }
+      if (t && t.id === 'nailedit-omniva-location') {
+        try {
+          localStorage.setItem('nailedit_omniva_location_id', String(t.value || ''));
+        } catch (e2) {}
+      }
+    });
+
+    document.addEventListener('input', function (e) {
+      var t = e && e.target ? e.target : null;
+      if (t && t.id === 'nailedit-omniva-search') {
+        filterOmnivaLocations(t.value);
+      }
+    });
+
+    function getStoredAuthToken() {
+      try {
+        return localStorage.getItem('bagisto_auth_token') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function getStoredCartToken() {
+      try {
+        return localStorage.getItem('bagisto_guest_cart_token') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function persistCartToken(result) {
+      try {
+        if (result && result.cart_token) {
+          localStorage.setItem('bagisto_guest_cart_token', result.cart_token);
+        }
+      } catch (e) {}
+    }
+
+    function renderSummaryFromCartPayload(payload) {
+      const root = summaryBody;
+      if (window && window.console) {
+        console.log('Checkout summary payload:', payload);
+      }
+      if (!payload) {
+        root.innerHTML = '<p><?php echo esc_js( __( 'Sinu ostukorv on tühi.', 'nailedit' ) ); ?></p>';
+        return;
+      }
+
+      let cart = null;
+      if (payload.data && Array.isArray(payload.data) && payload.data.length) {
+        const first = payload.data[0] || {};
+        cart = first.cart || first;
+      } else if (payload.data && payload.data.cart) {
+        cart = payload.data.cart;
+      } else if (payload.data && payload.data.data && payload.data.data.cart) {
+        cart = payload.data.data.cart;
+      } else if (payload.data) {
+        cart = payload.data;
+      }
+
+      if (cart && cart.data) {
+        cart = cart.data;
+      }
+
+      if (!cart || typeof cart !== 'object') {
+        return;
+      }
+
+      const items = cart.items ? (Array.isArray(cart.items) ? cart.items : [cart.items]) : [];
+
+      let html = '';
+
+      if (!items.length) {
+        html += '<p><?php echo esc_js( __( 'Sinu ostukorv on tühi.', 'nailedit' ) ); ?></p>';
+      } else {
+        html += '<div class="space-y-3 mb-4">';
+        items.forEach(function (item) {
+          const name = item.name || '';
+          const qty = item.quantity || 0;
+          const total = item.formatted_total || item.total || '';
+          html += '<div class="flex items-center justify-between text-sm">'
+            + '<span class="text-slate-700">' + qty + ' × ' + name + '</span>'
+            + '<span class="font-medium text-slate-900">' + (total || '') + '</span>'
+            + '</div>';
+        });
+        html += '</div>';
+      }
+
+      const grand = cart.formatted_grand_total || cart.grand_total || '';
+      const sub   = cart.formatted_sub_total || cart.sub_total || '';
+      const tax   = cart.formatted_tax_total || cart.tax_total || '';
+      const disc  = cart.formatted_discount || cart.discount || '';
+
+      html += '<div class="border-t border-slate-100 pt-3 mt-2 space-y-1 text-sm">';
+      if (sub) {
+        html += '<div class="flex justify-between">'
+          + '<span class="text-slate-600"><?php echo esc_js( __( 'Vahesumma', 'nailedit' ) ); ?></span>'
+          + '<span class="text-slate-800">' + sub + '</span>'
+          + '</div>';
+      }
+      if (tax) {
+        html += '<div class="flex justify-between">'
+          + '<span class="text-slate-600"><?php echo esc_js( __( 'Maksud', 'nailedit' ) ); ?></span>'
+          + '<span class="text-slate-800">' + tax + '</span>'
+          + '</div>';
+      }
+      if (disc) {
+        html += '<div class="flex justify-between">'
+          + '<span class="text-slate-600"><?php echo esc_js( __( 'Allahindlus', 'nailedit' ) ); ?></span>'
+          + '<span class="text-slate-800">' + disc + '</span>'
+          + '</div>';
+      }
+
+      // Hard-coded shipping block: two methods the user can click
+      html += '<div class="mt-3 pt-3 border-t border-slate-100 space-y-2">'
+        + '<div class="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase"><?php echo esc_js( __( 'Tarneviisid', 'nailedit' ) ); ?></div>'
+        + '<div id="nailedit-shipping-methods" class="space-y-2">'
+        +   '<div class="text-xs text-slate-600 italic"><?php echo esc_js( __( 'Tarneviisid ilmuvad siia pärast aadressi täitmist. Palun vali tarneviis enne tellimuse esitamist.', 'nailedit' ) ); ?></div>'
+        + '</div>'
+        + '<div id="nailedit-omniva-pickup" class="hidden mt-3 space-y-2">'
+        +   '<div class="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase"><?php echo esc_js( __( 'Pakiautomaat', 'nailedit' ) ); ?></div>'
+        +   '<input id="nailedit-omniva-search" type="text" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="<?php echo esc_js( __( 'Otsi automaati...', 'nailedit' ) ); ?>" />'
+        +   '<select id="nailedit-omniva-location" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary border border-third focus:outline-none focus:ring-2 focus:ring-secondary"></select>'
+        +   '<div id="nailedit-omniva-note" class="text-xs text-slate-600"></div>'
+        + '</div>'
+        + '</div>';
+
+      // Payment block: rendered dynamically from Bagisto payment-methods
+      html += '<div class="mt-4 pt-3 border-t border-slate-100 space-y-2">'
+        + '<div class="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase"><?php echo esc_js( __( 'Makseviis', 'nailedit' ) ); ?></div>'
+        + '<div id="nailedit-payment-methods" class="space-y-2">'
+        +   '<div class="text-xs text-slate-600 italic"><?php echo esc_js( __( 'Makseviisid ilmuvad siia pärast tarneviisi valimist. Palun vali makseviis enne tellimuse esitamist.', 'nailedit' ) ); ?></div>'
+        + '</div>'
+        + '</div>';
+
+      if (grand) {
+        html += '<div class="flex justify-between pt-2 mt-1 border-t border-slate-200">'
+          + '<span class="text-slate-900 font-semibold"><?php echo esc_js( __( 'Kokku', 'nailedit' ) ); ?></span>'
+          + '<span class="text-slate-900 font-semibold">' + grand + '</span>'
+          + '</div>';
+      }
+
+      html += '</div>';
+
+      root.innerHTML = html;
+    }
+
+    function loadCartForSummary() {
+      const fd = new FormData();
+      fd.append('action', 'nailedit_get_cart');
+
+      const storedCookie = getStoredAuthCookie();
+      const storedToken = getStoredAuthToken();
+      const cartToken   = getStoredCartToken();
+      if (storedCookie) fd.append('stored_cookie', storedCookie);
+      if (storedToken) {
+        fd.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fd.append('cart_token', cartToken);
+      }
+
+      fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          persistCartToken(data);
+          if (!data || !data.success) {
+            if (requireCartEl) {
+              requireCartEl.classList.remove('hidden');
+              requireCartEl.textContent = (data && data.message) ? data.message : '<?php echo esc_js( __( 'Ostukorv on tühi või seda ei õnnestunud laadida.', 'nailedit' ) ); ?>';
+            }
+            summaryBody.innerHTML = '<p><?php echo esc_js( __( 'Sinu ostukorv on tühi.', 'nailedit' ) ); ?></p>';
+            return;
+          }
+          // For consistency with save-address payload, wrap into similar shape
+          const wrapped = {
+            data: [
+              {
+                cart: data.data,
+                rates: []
+              }
+            ]
+          };
+          renderSummaryFromCartPayload(wrapped);
+        })
+        .catch(function () {
+          summaryBody.innerHTML = '<p><?php echo esc_js( __( 'Ostukorvi ei õnnestunud laadida.', 'nailedit' ) ); ?></p>';
+        });
+    }
+
+    function prefillFromAddress(addr, prefix) {
+      if (!addr) return;
+      function setValue(id, value) {
+        var el = document.getElementById(prefix + '_' + id);
+        if (el && value != null && value !== '') {
+          el.value = value;
+        }
+      }
+
+      var firstName = addr.first_name || '';
+      var lastName  = addr.last_name || '';
+      var email     = addr.email || '';
+      var company   = addr.company_name || addr.company || '';
+      var address1  = '';
+      if (Array.isArray(addr.address1) && addr.address1.length) {
+        address1 = addr.address1[0];
+      } else if (Array.isArray(addr.address) && addr.address.length) {
+        address1 = addr.address[0];
+      } else if (addr.address1) {
+        address1 = addr.address1;
+      }
+      var postcode  = addr.postcode || '';
+      var city      = addr.city || '';
+      var state     = addr.state || '';
+      var country   = addr.country || '';
+      var phone     = addr.phone || '';
+
+      setValue('first_name', firstName);
+      setValue('last_name', lastName);
+      setValue('email', email);
+      setValue('company_name', company);
+
+      var addressInput = document.getElementById(prefix + '_address');
+      if (addressInput && address1) {
+        addressInput.value = address1;
+      }
+
+      setValue('postcode', postcode);
+      setValue('city', city);
+      setValue('state', state);
+      setValue('country', country);
+      setValue('phone', phone);
+    }
+
+    function loadDefaultAddress() {
+      // Only for logged-in customers (auth token/cookie present)
+      var storedCookie = getStoredAuthCookie();
+      var storedToken  = getStoredAuthToken();
+      if (!storedCookie && !storedToken) {
+        return;
+      }
+
+      var fd = new FormData();
+      fd.append('action', 'nailedit_list_addresses');
+      if (storedCookie) fd.append('stored_cookie', storedCookie);
+      if (storedToken) fd.append('auth_token', storedToken);
+
+      fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (result) {
+          var ok = result && result.success;
+          if (!ok) return;
+
+          var data = result && result.data ? result.data : {};
+          var items = data.data || data || [];
+          if (!items || !items.length) return;
+
+          var def = null;
+          for (var i = 0; i < items.length; i++) {
+            var a = items[i];
+            if (a && (a.is_default === 1 || a.is_default === '1' || a.default_address === 1 || a.default_address === '1')) {
+              def = a;
+              break;
+            }
+          }
+          if (!def) {
+            def = items[0];
+          }
+
+          prefillFromAddress(def, 'billing');
+
+          // Kui kasutame billingut ka shippinguks, kopeerime samad väärtused shipping-väljadele
+          if (useForShipping && useForShipping.checked) {
+            prefillFromAddress(def, 'shipping');
+          }
+        })
+        .catch(function () {
+          // vaikne ebaõnnestumine – ei täida, aga checkout töötab edasi
+        });
+    }
+
+    if (useForShipping && shippingFields) {
+      useForShipping.addEventListener('change', function () {
+        if (this.checked) {
+          shippingFields.classList.add('hidden');
+        } else {
+          shippingFields.classList.remove('hidden');
+        }
+      });
+      // initial state
+      shippingFields.classList.add('hidden');
+    }
+
+    function extractRedirectUrl(result) {
+      if (!result) return '';
+      var data = result.data || {};
+
+      if (data && typeof data.redirect_url === 'string' && data.redirect_url) {
+        return data.redirect_url;
+      }
+
+      if (data && data.data) {
+        var root = data.data;
+        if (Array.isArray(root) && root.length) {
+          var first = root[0] || {};
+          if (first && typeof first.redirect_url === 'string' && first.redirect_url) {
+            return first.redirect_url;
+          }
+          if (first && first.payment && typeof first.payment.redirect_url === 'string' && first.payment.redirect_url) {
+            return first.payment.redirect_url;
+          }
+        }
+        if (root && typeof root.redirect_url === 'string' && root.redirect_url) {
+          return root.redirect_url;
+        }
+        if (root && root.payment && typeof root.payment.redirect_url === 'string' && root.payment.redirect_url) {
+          return root.payment.redirect_url;
+        }
+      }
+
+      if (data && data.payment && typeof data.payment.redirect_url === 'string' && data.payment.redirect_url) {
+        return data.payment.redirect_url;
+      }
+
+      return '';
+    }
+
+    function pollEverypayStatus() {
+      var storedCookie = getStoredAuthCookie();
+      var storedToken = getStoredAuthToken();
+      var cartToken   = getStoredCartToken();
+
+      if (!storedToken && !cartToken) {
+        return;
+      }
+
+      var startedAt = Date.now();
+      var timeoutMs = 120000;
+      var intervalMs = 1500;
+
+      function step() {
+        var fd = new FormData();
+        fd.append('action', 'nailedit_checkout_payment_status');
+        if (storedCookie) fd.append('stored_cookie', storedCookie);
+        if (storedToken) {
+          fd.append('auth_token', storedToken);
+        } else if (cartToken) {
+          fd.append('cart_token', cartToken);
+        }
+
+        fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+          method: 'POST',
+          body: fd,
+          credentials: 'same-origin'
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (res) {
+            if (!res || !res.success) {
+              return;
+            }
+
+            var data = res.data || {};
+            var status = '';
+
+            if (data && typeof data.status === 'string') {
+              status = data.status;
+            } else if (data && data.data && typeof data.data.status === 'string') {
+              status = data.data.status;
+            }
+
+            if (status === 'paid') {
+              window.location.href = '<?php echo esc_url( trailingslashit( site_url( '/aitah' ) ) ); ?>';
+            }
+          })
+          .catch(function () {})
+          .finally(function () {
+            if (Date.now() - startedAt < timeoutMs) {
+              setTimeout(step, intervalMs);
+            }
+          });
+      }
+
+      if (errorEl) {
+        errorEl.textContent = '<?php echo esc_js( __( 'Processing payment…', 'nailedit' ) ); ?>';
+      }
+      step();
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      if (params.has('payment_reference') || params.has('order_reference') || params.has('everypay_return')) {
+        pollEverypayStatus();
+      }
+    } catch (e) {}
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (errorEl) errorEl.textContent = '';
+
+      const storedCookie = getStoredAuthCookie();
+      const storedToken = getStoredAuthToken();
+      const cartToken   = getStoredCartToken();
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan aadressi...', 'nailedit' ) ); ?>';
+      }
+      // 1) Save address from form
+      const fdAddress = new FormData(form);
+      fdAddress.append('action', 'nailedit_checkout_save_address');
+      if (storedCookie) fdAddress.append('stored_cookie', storedCookie);
+      if (storedToken) {
+        fdAddress.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fdAddress.append('cart_token', cartToken);
+      }
+
+      fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fdAddress,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (addressResult) {
+          persistCartToken(addressResult);
+          var okAddr = addressResult && addressResult.success;
+          var addrData = addressResult && addressResult.data ? addressResult.data : {};
+
+          if (!okAddr) {
+            var msg = (addrData && addrData.message) || (addressResult && addressResult.message) || '<?php echo esc_js( __( 'Aadressi ei õnnestunud salvestada.', 'nailedit' ) ); ?>';
+            if (errorEl) {
+              errorEl.textContent = msg;
+            }
+            throw new Error('save-address failed');
+          }
+
+          // After address save, load dynamic shipping methods (requires cart token)
+          return loadShippingMethods().then(function (shipMethodsRes) {
+            if (!shipMethodsRes || !shipMethodsRes.success) {
+              throw new Error('load-shipping-methods failed');
+            }
+            addressSaved = true;
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '<?php echo esc_js( __( 'Esita tellimus', 'nailedit' ) ); ?>';
+            }
+            if (errorEl) {
+              errorEl.textContent = '';
+            }
+            return addressResult;
+          })
+          .catch(function (err) {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '<?php echo esc_js( __( 'Esita tellimus', 'nailedit' ) ); ?>';
+            }
+            throw err;
+          });
+      }
+
+      function saveAddressAndLoadOptions() {
+        const fdAddress = new FormData(form);
+        fdAddress.append('action', 'nailedit_checkout_save_address');
+        if (storedCookie) fdAddress.append('stored_cookie', storedCookie);
+        if (storedToken) {
+          fdAddress.append('auth_token', storedToken);
+        } else if (cartToken) {
+          fdAddress.append('cart_token', cartToken);
+        }
+
+        fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+          method: 'POST',
+          body: fdAddress,
+          credentials: 'same-origin'
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (addressResult) {
+            persistCartToken(addressResult);
+            var okAddr = addressResult && addressResult.success;
+            var addrData = addressResult && addressResult.data ? addressResult.data : {};
+
+            if (!okAddr) {
+              var msg = (addrData && addrData.message) || (addressResult && addressResult.message) || '<?php echo esc_js( __( 'Aadressi ei õnnestunud salvestada.', 'nailedit' ) ); ?>';
+              if (errorEl) {
+                errorEl.textContent = msg;
+              }
+              throw new Error('save-address failed');
+            }
+
+            return loadShippingMethods().then(function (shipMethodsRes) {
+              if (!shipMethodsRes || !shipMethodsRes.success) {
+                throw new Error('load-shipping-methods failed');
+              }
+              addressSaved = true;
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '<?php echo esc_js( __( 'Esita tellimus', 'nailedit' ) ); ?>';
+              }
+              if (errorEl) {
+                errorEl.textContent = '';
+              }
+              return addressResult;
+            });
+          })
+          .catch(function (err) {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = '<?php echo esc_js( __( 'Esita tellimus', 'nailedit' ) ); ?>';
+            }
+            throw err;
+          });
+      }
+
+      // Phase 2: Save shipping, payment, order
+      const fdAddress2 = new FormData(form);
+      fdAddress2.append('action', 'nailedit_checkout_save_address');
+      if (storedCookie) fdAddress2.append('stored_cookie', storedCookie);
+      if (storedToken) {
+        fdAddress2.append('auth_token', storedToken);
+      } else if (cartToken) {
+        fdAddress2.append('cart_token', cartToken);
+      }
+
+      fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+        method: 'POST',
+        body: fdAddress2,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (addressResult) {
+          persistCartToken(addressResult);
+          var okAddr = addressResult && addressResult.success;
+          var addrData = addressResult && addressResult.data ? addressResult.data : {};
+
+          if (!okAddr) {
+            var msg = (addrData && addrData.message) || (addressResult && addressResult.message) || '<?php echo esc_js( __( 'Aadressi ei õnnestunud salvestada.', 'nailedit' ) ); ?>';
+            if (errorEl) {
+              errorEl.textContent = msg;
+            }
+            throw new Error('save-address failed');
+          }
+
+          return loadShippingMethods().then(function (shipMethodsRes) {
+            if (!shipMethodsRes || !shipMethodsRes.success) {
+              throw new Error('load-shipping-methods failed');
+            }
+            return addressResult;
+          });
+        })
+        .then(function () {
+          // 2) Save shipping method using selected option
+          const selectedMethodInput = document.querySelector('input[name="nailedit_shipping_method"]:checked');
+          let selectedMethod = selectedMethodInput ? selectedMethodInput.value : '';
+          if (!selectedMethod) {
+            if (errorEl) {
+              errorEl.textContent = '<?php echo esc_js( __( 'Palun vali tarneviis.', 'nailedit' ) ); ?>';
+            }
+            throw new Error('shipping-method not selected');
+          }
+
+          if (submitBtn) {
+            submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan tarnet...', 'nailedit' ) ); ?>';
+          }
+
+          const fdShipping = new FormData();
+          fdShipping.append('action', 'nailedit_checkout_save_shipping');
+          fdShipping.append('shipping_method', selectedMethod);
+          if (storedCookie) fdShipping.append('stored_cookie', storedCookie);
+          if (storedToken) {
+            fdShipping.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdShipping.append('cart_token', latestCartToken);
+            }
+          }
+
+          return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+            method: 'POST',
+            body: fdShipping,
+            credentials: 'same-origin'
+          }).then(function (r) { return r.json(); });
+        })
+        .then(function (shippingResult) {
+          persistCartToken(shippingResult);
+          if (!shippingResult) return;
+
+          if (window && window.console) {
+            console.log('save-shipping result:', shippingResult);
+          }
+          var okShip = shippingResult && shippingResult.success;
+          var shipData = shippingResult && shippingResult.data ? shippingResult.data : {};
+
+          if (!okShip) {
+            var msg = (shipData && shipData.message) || (shippingResult && shippingResult.message) || '<?php echo esc_js( __( 'Tarneviisi ei õnnestunud salvestada.', 'nailedit' ) ); ?>';
+            if (errorEl) {
+              errorEl.textContent = msg;
+            }
+            throw new Error('save-shipping failed');
+          }
+
+          // Update summary based on shipping response
+          renderSummaryFromCartPayload(shipData);
+
+          // After shipping save, load payment methods (EveryPay may be disabled)
+          return loadPaymentMethods().then(function (payMethodsRes) {
+            if (!payMethodsRes || !payMethodsRes.success) {
+              throw new Error('load-payment-methods failed');
+            }
+            return shippingResult;
+          });
+        })
+        .then(function () {
+          // 3) Save payment method
+          const selectedPaymentInput = document.querySelector('input[name="nailedit_payment_method"]:checked');
+          let selectedPayment = selectedPaymentInput ? selectedPaymentInput.value : '';
+          if (!selectedPayment) {
+            if (errorEl) {
+              errorEl.textContent = '<?php echo esc_js( __( 'Palun vali makseviis.', 'nailedit' ) ); ?>';
+            }
+            throw new Error('payment-method not selected');
+          }
+
+          if (submitBtn) {
+            submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan makset...', 'nailedit' ) ); ?>';
+          }
+
+          const fdPayment = new FormData();
+          fdPayment.append('action', 'nailedit_checkout_save_payment');
+          fdPayment.append('payment_method', selectedPayment);
+          if (storedCookie) fdPayment.append('stored_cookie', storedCookie);
+          if (storedToken) {
+            fdPayment.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdPayment.append('cart_token', latestCartToken);
+            }
+          }
+
+          return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+            method: 'POST',
+            body: fdPayment,
+            credentials: 'same-origin'
+          }).then(function (r) { return r.json(); });
+        })
+        .then(function (paymentResult) {
+          persistCartToken(paymentResult);
+          if (!paymentResult) return;
+
+          var okPay = paymentResult && paymentResult.success;
+          var payData = paymentResult && paymentResult.data ? paymentResult.data : {};
+
+          if (!okPay) {
+            var msg = (payData && payData.message) || (paymentResult && paymentResult.message) || '<?php echo esc_js( __( 'Makseviisi ei õnnestunud salvestada.', 'nailedit' ) ); ?>';
+            if (errorEl) {
+              errorEl.textContent = msg;
+            }
+            throw new Error('save-payment failed');
+          }
+
+          // 4) Save order
+          if (submitBtn) {
+            submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan tellimust...', 'nailedit' ) ); ?>';
+          }
+
+          const fdOrder = new FormData();
+          fdOrder.append('action', 'nailedit_checkout_save_order');
+          if (storedCookie) fdOrder.append('stored_cookie', storedCookie);
+          if (storedToken) {
+            fdOrder.append('auth_token', storedToken);
+          } else {
+            const latestCartToken = getStoredCartToken();
+            if (latestCartToken) {
+              fdOrder.append('cart_token', latestCartToken);
+            }
+          }
+
+          return fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+            method: 'POST',
+            body: fdOrder,
+            credentials: 'same-origin'
+          }).then(function (r) { return r.json(); });
+        })
+        .then(function (orderResult) {
+          persistCartToken(orderResult);
+          if (!orderResult) return;
+
+          var ok = orderResult && orderResult.success;
+          var data = orderResult && orderResult.data ? orderResult.data : {};
+
+          if (!ok) {
+            var msg = (data && data.message) || (orderResult && orderResult.message) || '<?php echo esc_js( __( 'Midagi läks valesti!', 'nailedit' ) ); ?>';
+            if (errorEl) {
+              errorEl.textContent = msg;
+            }
+            return;
+          }
+
+          var message = (data && data.message) || '<?php echo esc_js( __( 'Tellimus salvestati edukalt.', 'nailedit' ) ); ?>';
+          if (errorEl) {
+            errorEl.textContent = message;
+          }
+
+          // Save order info locally for thank-you page
+          try {
+            var orderObj = null;
+            var root = data && data.data ? data.data : null;
+
+            if (root) {
+              // Shape A: { data: [ { order: {...} } ] }
+              if (Array.isArray(root) && root.length) {
+                var w = root[0] || {};
+                if (w.order) {
+                  orderObj = w.order;
+                }
+              }
+
+              // Shape B: { data: { order: {...} } }
+              if (!orderObj && root.data && root.data.order) {
+                orderObj = root.data.order;
+              }
+
+              // Shape C: { order: {...} }
+              if (!orderObj && root.order) {
+                orderObj = root.order;
+              }
+            }
+
+            if (orderObj) {
+              if (window && window.console) {
+                console.log('Saving last order for thank-you page:', orderObj);
+              }
+              localStorage.setItem('nailedit_last_order', JSON.stringify(orderObj));
+            }
+          } catch (e) {}
+
+          var redirectUrl = extractRedirectUrl(orderResult);
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+          window.location.href = '<?php echo esc_url( trailingslashit( site_url( '/aitah' ) ) ); ?>';
+        })
+        .catch(function (err) {
+          if (err && console && console.error) {
+            console.error('Checkout flow error', err);
+          }
+        })
+        .finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '<?php echo esc_js( __( 'Jätka tarne ja maksega', 'nailedit' ) ); ?>';
+          }
+        });
+    });
+
+    loadCartForSummary();
+    loadDefaultAddress();
+  });
+})();
+</script>
+
+<?php
+get_footer();
