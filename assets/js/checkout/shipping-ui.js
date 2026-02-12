@@ -2,6 +2,7 @@ import { renderShippingMethods } from './shipping-render.js';
 import { normalizeShipping } from './shipping-adapter.js';
 import { State } from './state.js';
 import { show as showOmniva, hide as hideOmniva } from './omniva.js';
+import { show as showSmartpost, hide as hideSmartpost } from './smartpost.js';
 
 const container = document.getElementById('nailedit-shipping-methods');
 
@@ -9,6 +10,7 @@ export function updateShippingUI(payload, { onSelect } = {}) {
   if (!container) {
     return [];
   }
+  
 
   const methods = normalizeShipping(payload);
   container.innerHTML = renderShippingMethods(methods, State.shipping);
@@ -25,6 +27,7 @@ export function updateShippingUI(payload, { onSelect } = {}) {
     input.addEventListener('change', () => {
       State.shipping = input.value || '';
       toggleOmniva(State.shipping);
+      toggleSmartpost(State.shipping);
       if (typeof onSelect === 'function') {
         const label = input.parentElement?.querySelector('span')?.textContent?.trim() || '';
         onSelect({ code: State.shipping, label });
@@ -33,6 +36,7 @@ export function updateShippingUI(payload, { onSelect } = {}) {
   });
 
   toggleOmniva(State.shipping);
+  toggleSmartpost(State.shipping);
 
   return methods;
 }
@@ -42,5 +46,13 @@ function toggleOmniva(method) {
     showOmniva();
   } else {
     hideOmniva();
+  }
+}
+
+function toggleSmartpost(method) {
+  if (method === 'smartpost_smartpost' || method === 'itella_smartpost') {
+    showSmartpost();
+  } else {
+    hideSmartpost();
   }
 }

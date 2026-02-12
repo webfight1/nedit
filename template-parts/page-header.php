@@ -25,6 +25,8 @@ if ( $current_template === 'single-product.php' ) {
 $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 $nailedit_header_title = '';
 
+
+
 global $nailedit_header_title_override;
 if ( ! empty( $nailedit_header_title_override ) ) {
 	$nailedit_header_title = $nailedit_header_title_override;

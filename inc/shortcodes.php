@@ -217,7 +217,7 @@ function nailedit_categories_shortcode( $atts ) {
     $output .= '</div>';
     $output .= '</section>';
 
-    $output .= '<script type="text/javascript">window.addEventListener("load",function(){if(typeof Swiper==="undefined"){return;}new Swiper("#' . esc_js( $swiper_id ) . '",{slidesPerView:4,spaceBetween:24,loop:false,watchSlidesProgress:true,slideVisibleClass:"now-visible",navigation:{nextEl:"#' . esc_js( $swiper_id ) . ' .swiper-button-next",prevEl:"#' . esc_js( $swiper_id ) . ' .swiper-button-prev"},pagination:{el:"#' . esc_js( $swiper_id ) . ' .",clickable:true},breakpoints:{0:{slidesPerView:1},640:{slidesPerView:2},1024:{slidesPerView:4}}});});</script>';
+    $output .= '<script type="text/javascript">window.addEventListener("load",function(){if(typeof Swiper==="undefined"){return;}new Swiper("#' . esc_js( $swiper_id ) . '",{slidesPerView:"auto",spaceBetween:24,loop:true,watchSlidesProgress:true,centeredSlides:true,slideVisibleClass:"now-visible",navigation:{nextEl:"#' . esc_js( $swiper_id ) . ' .swiper-button-next",prevEl:"#' . esc_js( $swiper_id ) . ' .swiper-button-prev"},pagination:{el:"#' . esc_js( $swiper_id ) . ' .",clickable:true},breakpoints:{0:{slidesPerView:"auto"},640:{slidesPerView:"auto"},1024:{slidesPerView:"auto"}}});});</script>';
 
     return $output;
 }
@@ -440,9 +440,9 @@ function nailedit_products_by_attribute_shortcode( $atts ) {
                 return;
             }
             new Swiper("#' . esc_js( $swiper_id ) . '", {
-                slidesPerView: 4,
+                slidesPerView: "auto",
                 spaceBetween: 24,
-                loop: false,
+                loop: true,
                 watchSlidesProgress: true,
                 slideVisibleClass: "now-visible",
                 navigation: {
@@ -455,15 +455,15 @@ function nailedit_products_by_attribute_shortcode( $atts ) {
                 },
                 breakpoints: {
                     0: {
-                        slidesPerView: 1,
+                        slidesPerView: "auto",
                         spaceBetween: 16
                     },
                     640: {
-                        slidesPerView: 2,
+                         slidesPerView: "auto",
                         spaceBetween: 20
                     },
                     1024: {
-                        slidesPerView: 4,
+                          slidesPerView: "auto",
                         spaceBetween: 24
                     }
                 }
@@ -594,11 +594,15 @@ function nailedit_popular_products_shortcode( $atts ) {
 				return;
 			}
 			new Swiper("#' . esc_js( $swiper_id ) . '", {
-				slidesPerView: 4,
+				
 				spaceBetween: 24,
-				loop: false,
+                slidesPerView: "auto",
+				loop: true,
+                centeredSlides: false,
 				watchSlidesProgress: true,
 				slideVisibleClass: "now-visible",
+                grabCursor: true,
+                
 				navigation: {
 					nextEl: "#' . esc_js( $swiper_id ) . ' .swiper-button-next",
 					prevEl: "#' . esc_js( $swiper_id ) . ' .swiper-button-prev"
@@ -609,15 +613,15 @@ function nailedit_popular_products_shortcode( $atts ) {
 				},
 				breakpoints: {
 					0: {
-						slidesPerView: 1,
+						 slidesPerView: "auto",
 						spaceBetween: 16
 					},
 					640: {
-						slidesPerView: 2,
+						 slidesPerView: "auto",
 						spaceBetween: 20
 					},
 					1024: {
-						slidesPerView: 4,
+						 slidesPerView: "auto",
 						spaceBetween: 24
 					}
 				}

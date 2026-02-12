@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php wp_head(); ?>
 </head>
 <body id="page-<?php the_ID(); ?>" <?php body_class(); ?>>
+
 <header class="nailedit-site-header sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
     <div class="nailedit-header-inner max-w-6xl mx-auto flex items-center justify-between gap-6 px-4 py-3 md:py-4">
         <div class="nailedit-header-left flex items-center gap-3">
@@ -56,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     class="-btn w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-primary hover:text-primary transition"
                     aria-label="Otsing"
                 >
-                    <span class="nailedit-icon text-sm">🔍</span>
+                    <span class="nailedit-icon text-sm"><svg data-v-a8bed08b="" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_39_3192)"><path d="M17.4249 16.3951L13.1409 11.9395C14.2424 10.6301 14.8459 8.98262 14.8459 7.26749C14.8459 3.26026 11.5856 0 7.57841 0C3.57117 0 0.310913 3.26026 0.310913 7.26749C0.310913 11.2747 3.57117 14.535 7.57841 14.535C9.08278 14.535 10.5164 14.0812 11.742 13.2199L16.0586 17.7093C16.239 17.8967 16.4817 18 16.7418 18C16.9879 18 17.2214 17.9062 17.3987 17.7355C17.7753 17.3731 17.7873 16.7721 17.4249 16.3951ZM7.57841 1.89587C10.5404 1.89587 12.95 4.30552 12.95 7.26749C12.95 10.2295 10.5404 12.6391 7.57841 12.6391C4.61643 12.6391 2.20678 10.2295 2.20678 7.26749C2.20678 4.30552 4.61643 1.89587 7.57841 1.89587Z" fill="#003B76" style="fill: color(display-p3 0 0.2314 0.4627); fill-opacity: 1;"></path></g><defs><clipPath id="clip0_39_3192"><rect width="18" height="18" fill="white" style="fill: white; fill-opacity: 1;"></rect></clipPath></defs></svg></span>
                 </button>
                 <div id="nailedit-search-panel" class="hidden absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-lg p-3 z-40">
                     <input
@@ -66,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         placeholder="<?php echo esc_attr__( 'Otsi tooteid...', 'nailedit' ); ?>"
                         autocomplete="off"
                     >
-                    <div id="nailedit-search-results" class="mt-2 max-h-80 overflow-y-auto text-sm text-slate-800"></div>
+                    <div id="nailedit-search-results" class=" max-h-80 overflow-y-auto text-sm text-slate-800"></div>
                 </div>
             </div>
 
@@ -76,7 +77,9 @@ if ( ! defined( 'ABSPATH' ) ) {
                 class="nailedit-icon-btn w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-primary hover:text-primary transition"
                 aria-label="Ostukorv"
             >
-                <span class="nailedit-icon text-sm">🛒</span>
+                <span class="nailedit-icon text-sm">
+                    <svg class="nailedit-icon " style="width: 18px; height: 18px;" ><use xlink:href="#cart-svg"></use></svg>
+                </span>
             </a>
 
             <!-- User icon with dropdown -->
@@ -87,8 +90,9 @@ if ( ! defined( 'ABSPATH' ) ) {
                     class="nailedit-icon-btn w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-primary hover:text-primary transition"
                     aria-label="Kasutaja"
                 >
-                    <span class="nailedit-icon text-sm">👤</span>
+                    <span class="nailedit-icon text-sm"><svg   width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_39_3196)"><path d="M15.364 11.636C14.3837 10.6558 13.217 9.93013 11.9439 9.49085C13.3074 8.55179 14.2031 6.9802 14.2031 5.20312C14.2031 2.33413 11.869 0 9 0C6.131 0 3.79688 2.33413 3.79688 5.20312C3.79688 6.9802 4.69262 8.55179 6.05609 9.49085C4.78308 9.93013 3.61631 10.6558 2.63605 11.636C0.936176 13.3359 0 15.596 0 18H1.40625C1.40625 13.8128 4.81279 10.4062 9 10.4062C13.1872 10.4062 16.5938 13.8128 16.5938 18H18C18 15.596 17.0638 13.3359 15.364 11.636ZM9 9C6.90641 9 5.20312 7.29675 5.20312 5.20312C5.20312 3.1095 6.90641 1.40625 9 1.40625C11.0936 1.40625 12.7969 3.1095 12.7969 5.20312C12.7969 7.29675 11.0936 9 9 9Z" fill="#003B76" style="fill: color(display-p3 0 0.2314 0.4627); fill-opacity: 1;"></path></g><defs><clipPath id="clip0_39_3196"><rect width="18" height="18" fill="white" style="fill: white; fill-opacity: 1;"></rect></clipPath></defs></svg></span>
                 </button>
+                
 
                 <div id="nailedit-user-dropdown" class="nailedit-user-dropdown-panel hidden absolute right-0 mt-2 w-72 bg-white border shadow-lg rounded-md p-4 z-50">
                     <div id="nailedit-user-menu-wrap" class="nailedit-user-menu-wrap hidden">

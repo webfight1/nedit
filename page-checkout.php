@@ -16,6 +16,7 @@ get_header();
 <main class="site-main nailedit-checkout-page py-10">
     <div class="max-w-[1200px] mx-auto px-4">
        
+    
 
         <div id="nailedit-checkout-require-cart" class="hidden mb-4 text-center text-sm text-red-600"></div>
 
@@ -25,7 +26,8 @@ get_header();
                 <p class="text-sm font-medium text-slate-700"><?php esc_html_e( 'Laen...', 'nailedit' ); ?></p>
             </div>
         </div>
-
+        
+        
         <div id="nailedit-checkout-wrapper" class="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-start">
             <section id="nailedit-checkout-form-section" class="space-y-6">
                 <div class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8 flex flex-col gap-6" data-checkout-step="address">
@@ -157,6 +159,18 @@ get_header();
                             <input id="nailedit-omniva-search" type="text" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="<?php echo esc_attr( __( 'Otsi automaati...', 'nailedit' ) ); ?>" />
                             <select id="nailedit-omniva-location" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary border border-third focus:outline-none focus:ring-2 focus:ring-secondary"></select>
                             <div id="nailedit-omniva-note" class="text-xs text-slate-600"></div>
+                        </div>
+                        <div id="nailedit-smartpost-pickup" class="hidden mt-3 space-y-2">
+                            <div class="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase"><?php esc_html_e( 'Pakiautomaat', 'nailedit' ); ?></div>
+                            <input id="nailedit-smartpost-search" type="text" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="<?php echo esc_attr( __( 'Otsi automaati...', 'nailedit' ) ); ?>" />
+                            <select id="nailedit-smartpost-location" class="w-full rounded-full px-4 min-h-[44px] bg-white/20 text-primary border border-third focus:outline-none focus:ring-2 focus:ring-secondary"></select>
+                            <div id="nailedit-smartpost-note" class="text-xs text-slate-600"></div>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <button type="button" id="nailedit-confirm-shipping" class="w-full rounded-full min-h-[51px] px-4 bg-secondary text-primary font-semibold hover:bg-fourth transition">
+                                <?php esc_html_e( 'Kinnita tarneviis', 'nailedit' ); ?>
+                            </button>
                         </div>
                     </div>
                 </div>

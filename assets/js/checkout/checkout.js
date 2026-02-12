@@ -144,6 +144,78 @@ function advanceStep(step) {
   openStep(next);
 }
 
+function updateShippingSummary() {
+  const shippingLabel = getSelectedShippingLabel();
+  
+  if (isOmnivaShipping(deps.State.shipping) && deps.State.omnivaLocation) {
+    const select = deps.document?.getElementById('nailedit-omniva-location');
+    const locationLabel = select?.options?.[select.selectedIndex]?.textContent?.trim() || '';
+    if (locationLabel) {
+      setStepSummary('shipping', [shippingLabel, locationLabel].filter(Boolean).join(' · '));
+      return;
+    }
+  }
+  
+  if (isSmartpostShipping(deps.State.shipping) && deps.State.smartpostLocation) {
+    const select = deps.document?.getElementById('nailedit-smartpost-location');
+    const locationLabel = select?.options?.[select.selectedIndex]?.textContent?.trim() || '';
+    if (locationLabel) {
+      setStepSummary('shipping', [shippingLabel, locationLabel].filter(Boolean).join(' · '));
+      return;
+    }
+  }
+  
+  if (shippingLabel) {
+    setStepSummary('shipping', shippingLabel);
+  }
+}
+
+async function handleConfirmShipping() {
+  console.log('handleConfirmShipping called');
+  console.log('Selected shipping:', deps.State.shipping);
+  console.log('Omniva location:', deps.State.omnivaLocation);
+  console.log('Smartpost location:', deps.State.smartpostLocation);
+  
+  try {
+    const button = deps.document?.getElementById('nailedit-confirm-shipping');
+    if (button) button.disabled = true;
+    
+    // Update summary with selected shipping method and location
+    updateShippingSummary();
+    
+    console.log('Calling shippingFlow...');
+    await shippingFlow({
+      ui: deps.ui,
+      saveShipping: deps.saveShipping,
+      updateSummaryFromResult,
+      refreshPaymentMethods,
+      updatePaymentUI: (response) => {
+        return deps.updatePaymentUI(response, {
+          onSelect: (paymentMethod) => {
+            if (paymentMethod?.label) {
+              setStepSummary('payment', paymentMethod.label);
+            }
+          },
+        });
+      },
+      isOmnivaShipping,
+      isSmartpostShipping,
+      markStepComplete,
+      advanceStep,
+      autoPaymentFlow: autoRunPaymentFlow,
+      State: deps.State,
+    }, deps.State.shipping);
+    console.log('shippingFlow completed');
+  } catch (error) {
+    console.error('handleConfirmShipping error:', error);
+    deps.ui.error(error.message || 'Midagi läks valesti!');
+  } finally {
+    const button = deps.document?.getElementById('nailedit-confirm-shipping');
+    if (button) button.disabled = false;
+  }
+}
+
+
 async function handleAddressSubmit(form) {
   try {
     const button = deps.document?.getElementById('nailedit-checkout-address-submit');
@@ -156,21 +228,8 @@ async function handleAddressSubmit(form) {
         updateShippingUI: (response) => {
           return deps.updateShippingUI(response, {
             onSelect: (method) => {
-              if (method?.label) {
-                const locationLabel = deps.document
-                  ?.getElementById('nailedit-omniva-location')
-                  ?.options?.[
-                    deps.document?.getElementById('nailedit-omniva-location')?.selectedIndex || 0
-                  ]
-                  ?.textContent
-                  ?.trim();
-                if (method.code === 'omniva_omniva' && deps.State.omnivaLocation && locationLabel) {
-                  setStepSummary('shipping', `${method.label} · ${locationLabel}`);
-                } else {
-                  setStepSummary('shipping', method.label);
-                }
-              }
-              handleShippingSelection(method);
+              // Don't auto-trigger shipping flow - wait for confirm button
+              // Just update state, toggle pickup UI is handled in shipping-ui.js
             },
           });
         },
@@ -195,6 +254,7 @@ function initStepUI() {
     setStepCompleted(step, false);
   });
 
+  
   deps.document?.querySelectorAll('[data-step-toggle]').forEach((toggle) => {
     toggle.addEventListener('click', () => {
       const target = toggle.getAttribute('data-step-target');
@@ -214,6 +274,17 @@ function initStepUI() {
       resetLaterSteps(target);
     });
   });
+
+  const confirmShippingBtn = deps.document?.getElementById('nailedit-confirm-shipping');
+  if (confirmShippingBtn) {
+    console.log('Confirm shipping button found and click listener attached');
+    confirmShippingBtn.addEventListener('click', async () => {
+      console.log('Confirm shipping button clicked');
+      await handleConfirmShipping();
+    });
+  } else {
+    console.warn('Confirm shipping button NOT found');
+  }
 }
 
 async function handleChange(event) {
@@ -222,6 +293,7 @@ async function handleChange(event) {
 
   if (target.name === 'nailedit_shipping_method') {
     deps.State.shipping = target.value || '';
+    // Don't auto-save - wait for confirm button
   } else if (target.name === 'nailedit_payment_method') {
     deps.State.payment = target.value || '';
     const label = target.parentElement?.querySelector('span')?.textContent?.trim() || '';
@@ -232,18 +304,11 @@ async function handleChange(event) {
       advanceStep,
     });
   } else if (target.id === 'nailedit-omniva-location') {
-    deps.State.omnivaLocation = target.value || '';
-    const shippingLabel = getSelectedShippingLabel();
-    const locationLabel = target.options?.[target.selectedIndex]?.textContent?.trim() || '';
-    if (deps.State.omnivaLocation && locationLabel) {
-      setStepSummary('shipping', [shippingLabel, locationLabel].filter(Boolean).join(' · '));
-    } else if (shippingLabel) {
-      setStepSummary('shipping', shippingLabel);
-    }
-    if (deps.State.shipping && isOmnivaShipping(deps.State.shipping) && deps.State.omnivaLocation) {
-      markStepComplete('shipping');
-      advanceStep('shipping');
-    }
+    // State.omnivaLocation is already set by omniva.js
+    // Don't auto-save - wait for confirm button
+  } else if (target.id === 'nailedit-smartpost-location') {
+    // State.smartpostLocation is already set by smartpost.js
+    // Don't auto-save - wait for confirm button
   }
 }
 
@@ -335,21 +400,8 @@ async function refreshShippingMethods() {
     const response = await deps.loadShippingMethods();
     const methods = deps.updateShippingUI(response, {
       onSelect: (method) => {
-        if (method?.label) {
-          const locationLabel = deps.document
-            ?.getElementById('nailedit-omniva-location')
-            ?.options?.[
-              deps.document?.getElementById('nailedit-omniva-location')?.selectedIndex || 0
-            ]
-            ?.textContent
-            ?.trim();
-          if (method.code === 'omniva_omniva' && deps.State.omnivaLocation && locationLabel) {
-            setStepSummary('shipping', `${method.label} · ${locationLabel}`);
-          } else {
-            setStepSummary('shipping', method.label);
-          }
-        }
-        handleShippingSelection(method);
+        // Don't auto-trigger shipping flow - wait for confirm button
+        // Just update state, toggle pickup UI is handled in shipping-ui.js
       },
     });
     return methods;
@@ -365,14 +417,14 @@ async function refreshPaymentMethods() {
   deps.ui.showLoader();
   try {
     const response = await deps.loadPaymentMethods();
-    deps.updatePaymentUI(response, {
+    const methods = deps.updatePaymentUI(response, {
       onSelect: (method) => {
         if (method?.label) {
           setStepSummary('payment', method.label);
         }
       },
     });
-    return response;
+    return methods || [];
   } catch (error) {
     console.error('Load payment methods failed:', error);
     throw error;
@@ -399,15 +451,34 @@ async function handleShippingSelection(method) {
       },
       markStepComplete,
       advanceStep,
+      autoPaymentFlow: autoRunPaymentFlow,
       isOmnivaShipping,
+      isSmartpostShipping,
       State: deps.State,
     },
     method,
   );
 }
 
+async function autoRunPaymentFlow() {
+  try {
+    await paymentFlow({
+      savePayment: deps.savePayment,
+      markStepComplete,
+      advanceStep,
+    });
+  } catch (error) {
+    console.error('Auto payment flow failed:', error);
+    advanceStep('shipping');
+  }
+}
+
 function isOmnivaShipping(method) {
   return method === 'omniva_omniva';
+}
+
+function isSmartpostShipping(method) {
+  return method === 'smartpost_smartpost' || method === 'itella_smartpost';
 }
 
 function updateSummaryFromResult(result) {

@@ -80,6 +80,12 @@ export async function saveAddress(formOrData) {
   ensureRequiredBillingFields(payload);
   ensureRequiredShippingFields(payload);
 
+  // Add pickup location if Omniva or Smartpost is selected
+  const pickupLocation = State.omnivaLocation || State.smartpostLocation;
+  if (pickupLocation) {
+    payload.set('pickup_location', JSON.stringify(pickupLocation));
+  }
+
   return api('nailedit_checkout_save_address', payload, { State });
 }
 
@@ -89,6 +95,7 @@ function setField(prefix, key, value) {
     el.value = value;
   }
 }
+
 
 function fillAddress(prefix, addr) {
   if (!addr) return;

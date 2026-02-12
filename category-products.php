@@ -10,6 +10,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+// Allow cache clearing via URL parameter (for logged-in users only)
+if ( isset( $_GET['clear_cache'] ) && $_GET['clear_cache'] === '1' && current_user_can( 'edit_posts' ) ) {
+	// Clear all nailedit transients
+	global $wpdb;
+	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_nailedit_%' OR option_name LIKE '_transient_timeout_nailedit_%'" );
+	
+	// Show success message
+	echo '<div style="position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:15px 20px;border-radius:8px;z-index:9999;box-shadow:0 4px 6px rgba(0,0,0,0.1);">✅ Vahemälu tühjendatud!</div>';
+}
+
 $category_slug = get_query_var( 'bagisto_category_slug' );
 
 if ( empty( $category_slug ) ) {
@@ -39,6 +49,9 @@ if (strpos($current_host, '45.93.139.96') !== false) {
 $current_page = isset( $_GET['paged'] ) ? max( 1, absint( $_GET['paged'] ) ) : 1;
 $per_page     = 12;
 
+// Disable cache for logged-in users (they always see fresh data)
+$use_cache = ! is_user_logged_in();
+
 $categories_url = add_query_arg(
     array(
         'page'  => 1,
@@ -47,25 +60,34 @@ $categories_url = add_query_arg(
     $base . 'v1/categories'
 );
 
-$cat_response = wp_remote_get(
-    $categories_url,
-    array( 'timeout' => 15 )
-);
+// Cache categories for 5 minutes
+$cat_cache_key = 'nailedit_categories_list';
+$cat_data = $use_cache ? get_transient( $cat_cache_key ) : false;
 
-if ( is_wp_error( $cat_response ) ) {
-    ?>
-    <main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
-        <div class="nailedit-error">
-            <?php echo esc_html( $cat_response->get_error_message() ); ?>
-        </div>
-    </main>
-    <?php
-    get_footer();
-    exit;
+if ( $cat_data === false ) {
+    $cat_response = wp_remote_get(
+        $categories_url,
+        array( 'timeout' => 15 )
+    );
+
+    if ( is_wp_error( $cat_response ) ) {
+        ?>
+        <main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
+            <div class="nailedit-error">
+                <?php echo esc_html( $cat_response->get_error_message() ); ?>
+            </div>
+        </main>
+        <?php
+        get_footer();
+        exit;
+    }
+
+    $cat_body = wp_remote_retrieve_body( $cat_response );
+    $cat_data = json_decode( $cat_body, true );
+    
+    // Store in cache for 5 minutes
+    set_transient( $cat_cache_key, $cat_data, 5 * MINUTE_IN_SECONDS );
 }
-
-$cat_body = wp_remote_retrieve_body( $cat_response );
-$cat_data = json_decode( $cat_body, true );
 
 $category_id   = 0;
 $category_name = '';
@@ -112,29 +134,45 @@ if ( isset( $cat_data['data'] ) && is_array( $cat_data['data'] ) ) {
 	}
 }
 
+
 if ( ! empty( $child_categories ) ) {
 	$has_children = true;
 }
 if ( ! $has_children ) {
 	// Fetch price range from Bagisto API for this category
-	$price_range_url      = rtrim( $base, '/' ) . '/v1/catalog/price-range?' . http_build_query( array( 'category_id' => $category_id ) );
-	$price_range_response = wp_remote_get( $price_range_url );
-	$slider_min           = 1;
-	$slider_max           = 3000;
+	$price_range_url = rtrim( $base, '/' ) . '/v1/catalog/price-range?' . http_build_query( array( 'category_id' => $category_id ) );
+	$slider_min      = 1;
+	$slider_max      = 3000;
+	
+	// Cache price range for 3 minutes
+	$price_cache_key = 'nailedit_price_range_' . $category_id;
+	$price_range_data = $use_cache ? get_transient( $price_cache_key ) : false;
+	
+	if ( $price_range_data === false ) {
+		$price_range_response = wp_remote_get( $price_range_url );
+		
+		// DEBUG: Visible output (remove after testing)
+		$debug_info = array(
+			'url'         => $price_range_url,
+			'is_error'    => is_wp_error( $price_range_response ),
+			'status_code' => is_wp_error( $price_range_response ) ? 'ERROR' : wp_remote_retrieve_response_code( $price_range_response ),
+		);
 
-	// DEBUG: Visible output (remove after testing)
-	$debug_info = array(
-		'url'         => $price_range_url,
-		'is_error'    => is_wp_error( $price_range_response ),
-		'status_code' => is_wp_error( $price_range_response ) ? 'ERROR' : wp_remote_retrieve_response_code( $price_range_response ),
-	);
+		if ( ! is_wp_error( $price_range_response ) && wp_remote_retrieve_response_code( $price_range_response ) === 200 ) {
+			$price_range_body = wp_remote_retrieve_body( $price_range_response );
+			$price_range_data = json_decode( $price_range_body, true );
+			
+			// Store in cache for 3 minutes
+			set_transient( $price_cache_key, $price_range_data, 3 * MINUTE_IN_SECONDS );
+		} else {
+			$price_range_data = null;
+		}
+	}
+	
+	if ( $price_range_data ) {
+		$debug_info = $debug_info ?? array();
 
-	if ( ! is_wp_error( $price_range_response ) && wp_remote_retrieve_response_code( $price_range_response ) === 200 ) {
-		$price_range_body = wp_remote_retrieve_body( $price_range_response );
-		$price_range_data = json_decode( $price_range_body, true );
-
-		$debug_info['response_body'] = $price_range_body;
-		$debug_info['parsed_data']   = $price_range_data;
+		$debug_info['parsed_data'] = $price_range_data;
 
 		// Try direct min/max first
 		if ( isset( $price_range_data['min'] ) && isset( $price_range_data['max'] ) ) {
@@ -212,27 +250,36 @@ if ( ! $has_children ) {
 		$category_endpoint
 	);
 
-	$response = wp_remote_get(
-		$api_url,
-		array( 'timeout' => 15 )
-	);
+	// Cache products for 2 minutes (per category)
+	$products_cache_key = 'nailedit_products_' . $category_slug . '_p' . $current_page;
+	$data = $use_cache ? get_transient( $products_cache_key ) : false;
+	
+	if ( $data === false ) {
+		$response = wp_remote_get(
+			$api_url,
+			array( 'timeout' => 15 )
+		);
 
+		if ( is_wp_error( $response ) ) {
+			?>
+			<main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
+				<div class="nailedit-error">
+					<?php echo esc_html( $response->get_error_message() ); ?>
+				</div>
+			</main>
+			<?php
+			get_footer();
+			exit;
+		}
 
-    
-	if ( is_wp_error( $response ) ) {
-		?>
-		<main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
-			<div class="nailedit-error">
-				<?php echo esc_html( $response->get_error_message() ); ?>
-			</div>
-		</main>
-		<?php
-		get_footer();
-		exit;
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body, true );
+		
+		// Store in cache for 2 minutes
+		if ( is_array( $data ) ) {
+			set_transient( $products_cache_key, $data, 2 * MINUTE_IN_SECONDS );
+		}
 	}
-
-	$body = wp_remote_retrieve_body( $response );
-	$data = json_decode( $body, true );
 
 	if ( ! is_array( $data ) ) {
 		?>
@@ -255,6 +302,19 @@ if ( ! $has_children ) {
 		// New lightweight structure: [ { id, name, price, image, ... }, ... ]
 		$products = $data;
 	}
+	
+	// Filter out variant products (products without names or with parent_id)
+	$products = array_filter( $products, function( $product ) {
+		// Skip products without a name (likely variants)
+		if ( empty( $product['name'] ) ) {
+			return false;
+		}
+		// Skip simple products that have a parent_id (they are variants of configurable products)
+		if ( isset( $product['type'] ) && $product['type'] === 'simple' && ! empty( $product['parent_id'] ) ) {
+			return false;
+		}
+		return true;
+	} );
 
 	// Pagination meta is only available on the legacy structure.
 	$total_pages = 1;
@@ -267,16 +327,29 @@ if ( ! $has_children ) {
 	// Sidebar categories: fixed parent category ID 111
 	$sidebar_categories = array();
 	$sidebar_endpoint   = 'v1/descendant-categories?parent_id=111';
-	$sidebar_response   = wp_remote_get(
-		$base . $sidebar_endpoint,
-		array( 'timeout' => 10 )
-	);
-	if ( ! is_wp_error( $sidebar_response ) ) {
-		$sidebar_body = wp_remote_retrieve_body( $sidebar_response );
-		$sidebar_data = json_decode( $sidebar_body, true );
-		if ( is_array( $sidebar_data ) && isset( $sidebar_data['data'] ) && is_array( $sidebar_data['data'] ) ) {
-			$sidebar_categories = $sidebar_data['data'];
+	
+	// Cache sidebar categories for 5 minutes
+	$sidebar_cache_key = 'nailedit_sidebar_categories_111';
+	$sidebar_data = $use_cache ? get_transient( $sidebar_cache_key ) : false;
+	
+	if ( $sidebar_data === false ) {
+		$sidebar_response = wp_remote_get(
+			$base . $sidebar_endpoint,
+			array( 'timeout' => 10 )
+		);
+		if ( ! is_wp_error( $sidebar_response ) ) {
+			$sidebar_body = wp_remote_retrieve_body( $sidebar_response );
+			$sidebar_data = json_decode( $sidebar_body, true );
+			
+			// Store in cache for 5 minutes
+			if ( is_array( $sidebar_data ) ) {
+				set_transient( $sidebar_cache_key, $sidebar_data, 5 * MINUTE_IN_SECONDS );
+			}
 		}
+	}
+	
+	if ( is_array( $sidebar_data ) && isset( $sidebar_data['data'] ) && is_array( $sidebar_data['data'] ) ) {
+		$sidebar_categories = $sidebar_data['data'];
 	}
 }
 ?>
@@ -466,6 +539,4 @@ if ( ! $has_children ) {
 		</div>
 	<?php endif; ?>
 </main>
-
-<?php
-get_footer();
+<?php get_footer();

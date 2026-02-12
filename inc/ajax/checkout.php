@@ -10,12 +10,15 @@ function nailedit_checkout_save_address() {
     } else {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
+    
+    
 
     $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
     if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
         $base = 'http://45.93.139.96:8088/api/';
     }
 
+    
     $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
     $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
 
@@ -94,6 +97,24 @@ function nailedit_checkout_save_address() {
         'postcode'        => is_numeric( $shipping_postcode ) ? intval( $shipping_postcode ) : $shipping_postcode,
         'phone'           => is_numeric( $shipping_phone ) ? intval( $shipping_phone ) : $shipping_phone,
     );
+
+    // Add parcel locker data if present (Omniva or Smartpost)
+    $pickup_location = isset( $_POST['pickup_location'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_location'] ) ) : '';
+    if ( $pickup_location ) {
+        $location_data = json_decode( stripslashes( $pickup_location ), true );
+        if ( $location_data && isset( $location_data['locker_id'] ) && isset( $location_data['locker_name'] ) ) {
+            $shipping['additional'] = array(
+                'parcel_locker' => array(
+                    'locker_id'       => $location_data['locker_id'],
+                    'locker_name'     => $location_data['locker_name'],
+                    'locker_address'  => isset( $location_data['locker_address'] ) ? $location_data['locker_address'] : '',
+                    'locker_city'     => isset( $location_data['locker_city'] ) ? $location_data['locker_city'] : '',
+                    'locker_postcode' => isset( $location_data['locker_postcode'] ) ? $location_data['locker_postcode'] : '',
+                    'locker_country'  => isset( $location_data['locker_country'] ) ? $location_data['locker_country'] : 'EE',
+                ),
+            );
+        }
+    }
 
     $body = array(
         'billing'  => $billing,
@@ -291,6 +312,22 @@ function nailedit_checkout_save_shipping() {
     $body = array(
         'shipping_method' => $shipping_method,
     );
+
+    // Add parcel locker data if present (Omniva or Smartpost)
+    $pickup_location = isset( $_POST['pickup_location'] ) ? sanitize_text_field( wp_unslash( $_POST['pickup_location'] ) ) : '';
+    if ( $pickup_location ) {
+        $location_data = json_decode( stripslashes( $pickup_location ), true );
+        if ( $location_data && isset( $location_data['locker_id'] ) && isset( $location_data['locker_name'] ) ) {
+            $body['parcel_locker'] = array(
+                'locker_id'       => $location_data['locker_id'],
+                'locker_name'     => $location_data['locker_name'],
+                'locker_address'  => isset( $location_data['locker_address'] ) ? $location_data['locker_address'] : '',
+                'locker_city'     => isset( $location_data['locker_city'] ) ? $location_data['locker_city'] : '',
+                'locker_postcode' => isset( $location_data['locker_postcode'] ) ? $location_data['locker_postcode'] : '',
+                'locker_country'  => isset( $location_data['locker_country'] ) ? $location_data['locker_country'] : 'EE',
+            );
+        }
+    }
 
     $args = array(
         'method'  => 'POST',
@@ -730,3 +767,111 @@ function nailedit_omniva_locations() {
 }
 add_action( 'wp_ajax_nailedit_omniva_locations', 'nailedit_omniva_locations' );
 add_action( 'wp_ajax_nopriv_nailedit_omniva_locations', 'nailedit_omniva_locations' );
+
+// AJAX handler for Smartpost locations list (proxy to Bagisto /v1/smartpost/locations)
+function nailedit_smartpost_locations() {
+    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
+        $base = nailedit_get_local_api_base();
+    } else {
+        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
+    }
+
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $url = rtrim( $base, '/' ) . '/v1/smartpost/locations';
+
+    $headers = array(
+        'Accept' => 'application/json',
+    );
+
+    $response = wp_remote_get(
+        $url,
+        array(
+            'timeout' => 20,
+            'headers' => $headers,
+        )
+    );
+
+    if ( is_wp_error( $response ) ) {
+        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
+    }
+
+    $status_code = wp_remote_retrieve_response_code( $response );
+    $body_raw    = wp_remote_retrieve_body( $response );
+    $data        = json_decode( $body_raw, true );
+
+    $payload = array(
+        'data'   => $data,
+        'status' => $status_code,
+        'success' => $status_code >= 200 && $status_code < 300,
+    );
+
+    if ( ! $payload['success'] && is_array( $data ) && isset( $data['message'] ) && is_string( $data['message'] ) ) {
+        $payload['message'] = $data['message'];
+    }
+
+    wp_send_json( $payload, $status_code );
+}
+add_action( 'wp_ajax_nailedit_smartpost_locations', 'nailedit_smartpost_locations' );
+add_action( 'wp_ajax_nopriv_nailedit_smartpost_locations', 'nailedit_smartpost_locations' );
+
+// AJAX handler to get order by reference (for Esto callback)
+function nailedit_get_order_by_reference() {
+    if ( function_exists( 'nailedit_get_local_api_base' ) ) {
+        $base = nailedit_get_local_api_base();
+    } else {
+        $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
+    }
+
+    $current_host = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+    if ( $current_host && strpos( $current_host, '45.93.139.96' ) !== false ) {
+        $base = 'http://45.93.139.96:8088/api/';
+    }
+
+    $reference = isset( $_POST['reference'] ) ? sanitize_text_field( wp_unslash( $_POST['reference'] ) ) : '';
+
+    if ( ! $reference ) {
+        wp_send_json_error( array( 'message' => 'Reference is required' ), 400 );
+    }
+
+    $endpoint = rtrim( $base, '/' ) . '/esto/order-by-reference/' . rawurlencode( $reference );
+
+    $args = array(
+        'method'  => 'GET',
+        'timeout' => 30,
+        'headers' => array(
+            'Accept' => 'application/json',
+        ),
+    );
+
+    $response = wp_remote_get( $endpoint, $args );
+
+    if ( is_wp_error( $response ) ) {
+        wp_send_json_error( array( 'message' => $response->get_error_message() ), 500 );
+    }
+
+    $status_code = wp_remote_retrieve_response_code( $response );
+    $body_raw    = wp_remote_retrieve_body( $response );
+    $data        = json_decode( $body_raw, true );
+
+    if ( $status_code >= 200 && $status_code < 300 && ! empty( $data ) ) {
+        $normalized = isset( $data['data'] ) ? $data['data'] : $data;
+        wp_send_json( array(
+            'success' => true,
+            'data'    => array( 'order' => $normalized ),
+            'status'  => $status_code,
+        ), $status_code );
+    }
+
+    $message = 'Order not found for reference: ' . $reference;
+    if ( isset( $data['message'] ) && is_string( $data['message'] ) ) {
+        $message = $data['message'];
+    }
+
+    wp_send_json_error( array( 'message' => $message ), $status_code ?: 404 );
+}
+add_action( 'wp_ajax_nailedit_get_order_by_reference', 'nailedit_get_order_by_reference' );
+add_action( 'wp_ajax_nopriv_nailedit_get_order_by_reference', 'nailedit_get_order_by_reference' );

@@ -5,7 +5,7 @@ import { State } from './state.js';
 const container = document.getElementById('nailedit-payment-methods');
 
 export function updatePaymentUI(payload, { onSelect } = {}) {
-  if (!container) return;
+  if (!container) return [];
 
   const methods = normalizePayment(payload);
   container.innerHTML = renderPaymentMethods(methods, State.payment);
@@ -21,4 +21,16 @@ export function updatePaymentUI(payload, { onSelect } = {}) {
         }
       });
     });
+
+  if (methods.length === 1) {
+    const single = methods[0];
+    State.payment = single.code;
+    const radio = container.querySelector('input[name="nailedit_payment_method"]');
+    if (radio) radio.checked = true;
+    if (typeof onSelect === 'function') {
+      onSelect({ code: single.code, label: single.label });
+    }
+  }
+
+  return methods;
 }

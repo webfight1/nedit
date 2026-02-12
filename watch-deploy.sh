@@ -4,9 +4,9 @@
 # Monitors file changes and automatically syncs to VPS
 
 # Configuration
-REMOTE_USER="root"
-REMOTE_HOST="45.93.139.96"
-REMOTE_PATH="/var/www/html/nailedit/wp-content/themes/nailedit"
+REMOTE_USER="nailedit"
+REMOTE_HOST="nailedit.ee"
+REMOTE_PATH="/home/nailedit/www/wp-content/themes/nailedit"
 LOCAL_PATH="$(cd "$(dirname "$0")" && pwd)"
 
 # Colors
@@ -25,18 +25,9 @@ echo ""
 deploy() {
   echo -e "${YELLOW}📦 Deploying changes...${NC}"
   
-  rsync -azh \
-    --delete \
-    --exclude 'node_modules/' \
-    --exclude '.git/' \
-    --exclude '.DS_Store' \
-    --exclude 'deploy.sh' \
-    --exclude 'watch-deploy.sh' \
-    --exclude '.gitignore' \
-    --exclude '*.log' \
+  scp -P 1022 -r \
     "$LOCAL_PATH/" \
-    "$REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/" \
-    2>&1 | grep -v "building file list"
+    "$REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/"
   
   if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Deployed at $(date '+%H:%M:%S')${NC}"

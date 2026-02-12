@@ -482,7 +482,7 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 						<?php endif; ?>
 						aria-label="<?php esc_attr_e('Lisa soovinimekirja', 'nailedit'); ?>"
 					>
-						<span>❤️</span>
+						<span><svg class="nailedit-icon" style="width: 18px; height: 18px;"><use xlink:href="#heart-thick-svg"></use></svg></span>
 					</button>
 				</div>
 				<div id="wishlist-message" class="nailedit-wishlist-message text-xs text-green-600"></div>
@@ -496,7 +496,6 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 
 				
 
-
 				<?php if ($is_configurable): ?>
 					<?php
 						$variant_map = array();
@@ -505,6 +504,23 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 						$variant_images_map = array();
 						$variant_swatch_map = array();
 						$variant_select_options = array();
+						
+						// Sort super_attributes to show color/color2 first
+						usort($super_attributes, function($a, $b) {
+							$code_a = isset($a['code']) ? (string) $a['code'] : '';
+							$code_b = isset($b['code']) ? (string) $b['code'] : '';
+							
+							$is_color_a = ($code_a === 'color' || $code_a === 'color2');
+							$is_color_b = ($code_b === 'color' || $code_b === 'color2');
+							
+							if ($is_color_a && !$is_color_b) {
+								return -1;
+							}
+							if (!$is_color_a && $is_color_b) {
+								return 1;
+							}
+							return 0;
+						});
 						
 						foreach ($super_attributes as $attr) {
 							$code = isset($attr['code']) ? (string) $attr['code'] : '';
@@ -519,9 +535,8 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
             $variant_id = (int) $v['id'];
             $variant_name = isset($v['name']) ? (string) $v['name'] : '';
             
-            // Extract color/size from attributes array
-            $color_val = '';
-            $size_val = '';
+            // Extract all super attribute values dynamically
+            $attr_values = array();
             
             if (!empty($v['attributes']) && is_array($v['attributes'])) {
                 foreach ($v['attributes'] as $attr) {
@@ -529,45 +544,41 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
                         $code = $attr['code'];
                         $val = (string) $attr['value'];
                         
-                        // Track used option IDs
+                        // Track used option IDs for all super attributes
                         if (in_array($code, $super_attr_codes) && $val !== '') {
                             $used_option_ids_by_code[$code][$val] = true;
-                        }
-                        
-                        // Only set color/size if value is not empty (skip duplicate empty attributes)
-                        if ($code === 'color' && $val !== '') {
-                            $color_val = $val;
-                        } elseif ($code === 'size' && $val !== '') {
-                            $size_val = $val;
+                            // Store first non-empty value for each super attribute
+                            if (!isset($attr_values[$code])) {
+                                $attr_values[$code] = $val;
+                            }
                         }
                     }
                 }
             }
             
             // Fallback to direct properties (for old API format)
-            if (empty($color_val) && isset($v['color'])) {
-                $color_val = (string) $v['color'];
+            if (empty($attr_values['color']) && isset($v['color'])) {
+                $attr_values['color'] = (string) $v['color'];
             }
-            if (empty($size_val) && isset($v['size'])) {
-                $size_val = (string) $v['size'];
+            if (empty($attr_values['size']) && isset($v['size'])) {
+                $attr_values['size'] = (string) $v['size'];
             }
             
-            if ($color_val !== '') {
-                $variant_select_options[] = array(
-                    'id' => $variant_id,
-                    'name' => $variant_name,
-                    'color' => $color_val,
-                    'size' => $size_val
+            // Build variant key from all super attribute values in order
+            $key_parts = array();
+            foreach ($super_attr_codes as $code) {
+                if (!empty($attr_values[$code])) {
+                    $key_parts[] = $attr_values[$code];
+                }
+            }
+            $key = implode('-', $key_parts);
+            
+            if ($key !== '') {
+                $variant_map[$key] = $variant_id;
+                $variant_select_options[] = array_merge(
+                    array('id' => $variant_id, 'name' => $variant_name),
+                    $attr_values
                 );
-            }
-            
-            $key = '';
-            if ($color_val !== '' && $size_val !== '') {
-                $key = $color_val . '-' . $size_val;
-                $variant_map[$key] = $variant_id;
-            } elseif ($color_val !== '') {
-                $key = $color_val;
-                $variant_map[$key] = $variant_id;
             }
 
             $variant_images = array();
@@ -646,15 +657,19 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
             }
 
             $variant_images = array_values(array_unique(array_filter($variant_images)));
-            if (!empty($variant_images) && $key !== '') {
-                $variant_images_map[$key] = $variant_images;
+            if (!empty($variant_images)) {
+                $variant_images_map[$variant_id] = $variant_images;
             }
-            if ($swatch_url !== '' && $key !== '') {
-                $variant_swatch_map[$key] = $swatch_url;
+            
+            // Store swatch by each super attribute value (for color/color2)
+            foreach ($super_attr_codes as $code) {
+                if (!empty($attr_values[$code]) && $swatch_url !== '') {
+                    $variant_swatch_map[$attr_values[$code]] = $swatch_url;
+                }
             }
 						}
 					?>
-					<div class="mt-3 flex flex-wrap gap-3 text-[12px]">
+					<div class="mt-3 flex flex-wrap gap-3 text-[12px] flex-col">
 						<?php foreach ($super_attributes as $attr): ?>
 							<?php
 								$code    = isset($attr['code']) ? (string) $attr['code'] : '';
@@ -669,7 +684,7 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 							?>
 							<div class="flex flex-col gap-1">
 								<span class="text-slate-700 text-[12px] font-medium"><?php echo esc_html($label); ?></span>
-								<?php if ($code === 'color'): ?>
+								<?php if ($code === 'color' || $code === 'color2'): ?>
 									<div class="nailedit-variant-swatches flex flex-wrap gap-2" data-attr-code="<?php echo esc_attr($code); ?>">
 										<?php foreach ($options as $opt): ?>
 											<?php
@@ -692,7 +707,8 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 											</button>
 										<?php endforeach; ?>
 									</div>
-									<select class="nailedit-variant-select border border-slate-300 rounded-full px-3 py-1 text-[12px] text-slate-800 bg-white hidden" data-attr-code="<?php echo esc_attr($code); ?>">
+
+									<select class="nailedit-variant-select  max-w-[200px]  border border-slate-300 rounded-full px-3 py-1 text-[12px] text-slate-800 bg-white hidden" data-attr-code="<?php echo esc_attr($code); ?>">
 										<option value=""><?php esc_html_e('Vali', 'nailedit'); ?></option>
 										<?php foreach ($options as $opt): ?>
 											<?php
@@ -709,7 +725,7 @@ $nailedit_header_image = get_theme_mod( 'nailedit_global_header_image' );
 										<?php endforeach; ?>
 									</select>
 								<?php else: ?>
-									<select class="nailedit-variant-select border border-slate-300 rounded-full px-3 py-1 text-[12px] text-slate-800 bg-white" data-attr-code="<?php echo esc_attr($code); ?>">
+									<select class="nailedit-variant-select max-w-[200px] border border-slate-300 rounded-full px-3 py-1 text-[12px] text-slate-800 bg-white" data-attr-code="<?php echo esc_attr($code); ?>">
 										<option value=""><?php esc_html_e('Vali', 'nailedit'); ?></option>
 										<?php foreach ($options as $opt): ?>
 											<?php
@@ -1065,34 +1081,29 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!variantSelects.length) {
             return;
         }
-        let color = '';
-        let size  = '';
+        
+        // Build variant key from all selected attribute values
+        const attrValues = [];
         variantSelects.forEach(function(sel) {
-            const code = sel.getAttribute('data-attr-code') || '';
             const val = sel.value || '';
-            if (code === 'color') {
-                color = val;
-            } else if (code === 'size') {
-                size = val;
+            if (val) {
+                attrValues.push(val);
             }
         });
 
-        if (color) {
-            let key = '';
-            if (size) {
-                key = String(color) + '-' + String(size);
-            } else {
-                key = String(color);
-            }
+        if (attrValues.length > 0) {
+            const key = attrValues.join('-');
+            
+            // Get variant ID from key
+            const variantId = (variantIdMap && variantIdMap[key]) ? variantIdMap[key] : null;
             
             // First try to use variantImagesMap from PHP (has correct URLs)
-            if (variantImagesMap && variantImagesMap[key] && Array.isArray(variantImagesMap[key]) && variantImagesMap[key].length) {
-                setGalleryImages(variantImagesMap[key]);
+            if (variantId && variantImagesMap && variantImagesMap[variantId] && Array.isArray(variantImagesMap[variantId]) && variantImagesMap[variantId].length) {
+                setGalleryImages(variantImagesMap[variantId]);
                 return;
             }
             
             // Fallback: fetch from API if not in map
-            const variantId = (variantIdMap && variantIdMap[key]) ? variantIdMap[key] : null;
             if (variantId) {
                 fetchVariantImagesById(variantId).then(function(urls) {
                     if (Array.isArray(urls) && urls.length) {
@@ -1115,7 +1126,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (variantSelects.length) {
         variantSelects.forEach(function(sel) {
-            sel.addEventListener('change', updateVariantGallery);
+            sel.addEventListener('change', function() {
+                updateVariantGallery();
+                
+                // Remove error styling when value is selected
+                if (this.value) {
+                    const container = this.closest('.flex.flex-col.gap-1');
+                    if (container) {
+                        container.classList.remove('border', 'border-red-500', 'rounded-lg', 'p-2', '-m-2');
+                    }
+                }
+            });
         });
     }
 
@@ -1135,33 +1156,32 @@ document.addEventListener('DOMContentLoaded', function () {
 			// Handle configurable products: resolve selected variant ID
 			if (this.dataset.configurable === '1') {
                 var selects = document.querySelectorAll('.nailedit-variant-select');
-                var color = '';
-                var size  = '';
-                var hasColorSelect = false;
-                var hasSizeSelect = false;
+                var attrValues = [];
                 var allSelected = true;
 
                 selects.forEach(function(select) {
-                    const attrCode = select.dataset.attrCode || select.getAttribute('data-attr-code');
-                    if (attrCode === 'color') {
-                        hasColorSelect = true;
-                        if (select.value) {
-                            color = select.value;
-                        } else {
-                            allSelected = false;
-                        }
-                    } else if (attrCode === 'size') {
-                        hasSizeSelect = true;
-                        if (select.value) {
-                            size = select.value;
-                        } else {
-                            allSelected = false;
-                        }
+                    const val = select.value || '';
+                    if (val) {
+                        attrValues.push(val);
+                    } else {
+                        allSelected = false;
                     }
                 });
 
                 // If not all required variants are selected, show message
                 if (!allSelected) {
+                    // Add visual error feedback to unselected fields
+                    selects.forEach(function(select) {
+                        const container = select.closest('.flex.flex-col.gap-1');
+                        if (container) {
+                            if (!select.value) {
+                                container.classList.add('border', 'border-red-500', 'rounded-lg', 'p-2', '-m-2');
+                            } else {
+                                container.classList.remove('border', 'border-red-500', 'rounded-lg', 'p-2', '-m-2');
+                            }
+                        }
+                    });
+                    
                     var msgSel = '<?php echo esc_js(__('Palun vali esmalt variatsioonid (värv, suurus jne)', 'nailedit')); ?>';
                     if (typeof window.naileditShowToast === 'function') {
                         window.naileditShowToast(msgSel, 'error');
@@ -1171,20 +1191,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return;
                 }
+                
+                // Remove error styling when all selected
+                selects.forEach(function(select) {
+                    const container = select.closest('.flex.flex-col.gap-1');
+                    if (container) {
+                        container.classList.remove('border', 'border-red-500', 'rounded-lg', 'p-2', '-m-2');
+                    }
+                });
 
                 // Resolve variant ID using variant map
                 if (this.dataset && this.dataset.variantMap) {
                     try {
                         var variantIdMap = JSON.parse(this.dataset.variantMap || '{}') || {};
-                        var variantKey = '';
-                        
-                        if (hasColorSelect && hasSizeSelect && color && size) {
-                            variantKey = color + '-' + size;
-                        } else if (hasColorSelect && color) {
-                            variantKey = color;
-                        } else if (hasSizeSelect && size) {
-                            variantKey = size;
-                        }
+                        var variantKey = attrValues.join('-');
                         
                         if (variantKey && variantIdMap[variantKey]) {
                             productId = variantIdMap[variantKey];
@@ -1278,36 +1298,22 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle configurable products: resolve selected variant ID
             if (isConfigurable) {
                 var selects = document.querySelectorAll('.nailedit-variant-select');
-                var color = '';
-                var size  = '';
-                var hasColorSelect = false;
-                var hasSizeSelect = false;
+                var attrValues = [];
                 var allSelected = true;
 
                 console.log('Found variant selects:', selects.length);
 
                 selects.forEach(function(select) {
-                    const attrCode = select.dataset.attrCode || select.getAttribute('data-attr-code');
-                    console.log('Select code:', attrCode, 'Value:', select.value);
-                    if (attrCode === 'color') {
-                        hasColorSelect = true;
-                        if (select.value) {
-                            color = select.value;
-                        } else {
-                            allSelected = false;
-                        }
-                    } else if (attrCode === 'size') {
-                        hasSizeSelect = true;
-                        if (select.value) {
-                            size = select.value;
-                        } else {
-                            allSelected = false;
-                        }
+                    const val = select.value || '';
+                    console.log('Select value:', val);
+                    if (val) {
+                        attrValues.push(val);
+                    } else {
+                        allSelected = false;
                     }
                 });
 
-                console.log('Has color select:', hasColorSelect, 'Color:', color);
-                console.log('Has size select:', hasSizeSelect, 'Size:', size);
+                console.log('Attribute values:', attrValues);
                 console.log('All selected:', allSelected);
 
                 // If not all required variants are selected, show message
@@ -1328,15 +1334,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.dataset && this.dataset.variantMap) {
                     try {
                         var variantIdMap = JSON.parse(this.dataset.variantMap || '{}') || {};
-                        var variantKey = '';
-                        
-                        if (hasColorSelect && hasSizeSelect && color && size) {
-                            variantKey = color + '-' + size;
-                        } else if (hasColorSelect && color) {
-                            variantKey = color;
-                        } else if (hasSizeSelect && size) {
-                            variantKey = size;
-                        }
+                        var variantKey = attrValues.join('-');
                         
                         if (variantKey && variantIdMap[variantKey]) {
                             productId = variantIdMap[variantKey];

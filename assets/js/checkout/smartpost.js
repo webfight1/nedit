@@ -5,11 +5,13 @@ const config = window.NaileditCheckoutConfig || {};
 const strings = config.strings || {};
 
 const SELECTORS = {
-  wrap: 'nailedit-omniva-pickup',
-  select: 'nailedit-omniva-location',
-  note: 'nailedit-omniva-note',
-  search: 'nailedit-omniva-search',
+  wrap: 'nailedit-smartpost-pickup',
+  select: 'nailedit-smartpost-location',
+  note: 'nailedit-smartpost-note',
+  search: 'nailedit-smartpost-search',
 };
+
+
 
 let locationsCache = null;
 let filteredLocations = null;
@@ -59,23 +61,25 @@ function renderLocations(list) {
   const select = byId(SELECTORS.select);
   if (!select) return;
 
-  const current = State.omnivaLocation;
+  const current = State.smartpostLocation;
   const currentId = typeof current === 'object' && current ? current.locker_id : current;
   
-  const options = (list || []).map((loc, idx) => {
-    if (!loc) return null;
-    const id = loc.id != null ? String(loc.id) : `${loc.zip || loc.postcode || 'loc'}_${idx}`;
-    // Store the generated ID back to location for matching in change handler
-    loc._generatedId = id;
-    return {
-      id,
-      label: optionLabel(loc),
-    };
-  }).filter(Boolean);
+  const options = (list || [])
+    .map((loc, idx) => {
+      if (!loc) return null;
+      const id = loc.id != null ? String(loc.id) : `${loc.zip || loc.postcode || 'loc'}_${idx}`;
+      // Store the generated ID back to location for matching in change handler
+      loc._generatedId = id;
+      return {
+        id,
+        label: optionLabel(loc),
+      };
+    })
+    .filter(Boolean);
 
   options.unshift({
     id: '',
-    label: str('omnivaSelect', 'Vali pakiautomaat'),
+    label: str('smartpostSelect', 'Vali pakiautomaat'),
   });
 
   select.innerHTML = options.map((opt) => `<option value="${opt.id}">${opt.label}</option>`).join('');
@@ -88,27 +92,26 @@ function renderLocations(list) {
 }
 
 async function fetchLocations() {
-  setNote(str('omnivaLoading', 'Laen automaate...'));
+  setNote(str('smartpostLoading', 'Laen automaate...'));
   try {
-    const response = await api('nailedit_omniva_locations', {}, { State });
+    const response = await api('nailedit_smartpost_locations', {}, { State });
     const list = normalizeLocations(response);
     locationsCache = list;
     filteredLocations = list;
     renderLocations(list);
     setNote('');
   } catch (error) {
-    setNote(str('omnivaLoadError', 'Automaate ei õnnestunud laadida.'));
-    console.error('Omniva load failed:', error);
+    setNote(str('smartpostLoadError', 'Automaate ei õnnestunud laadida.'));
+    console.error('Smartpost load failed:', error);
   }
 }
-
 
 export async function show() {
   const wrap = byId(SELECTORS.wrap);
   if (wrap) {
     wrap.classList.remove('hidden');
   }
-  initOmnivaUI();
+  initSmartpostUI();
   if (!locationsCache) {
     await fetchLocations();
   } else {
@@ -130,7 +133,6 @@ export function filterLocations(query) {
   const q = (query || '').toLowerCase();
   if (!q) {
     filteredLocations = locationsCache;
-    renderLocations(filterLocations);
     renderLocations(locationsCache);
     return;
   }
@@ -146,21 +148,21 @@ export function filterLocations(query) {
   renderLocations(filteredLocations);
 }
 
-export function initOmnivaUI() {
-  console.log('initOmnivaUI called, uiInitialized:', uiInitialized);
+export function initSmartpostUI() {
+  console.log('initSmartpostUI called, uiInitialized:', uiInitialized);
   if (uiInitialized) return;
   uiInitialized = true;
 
   const select = byId(SELECTORS.select);
-  console.log('Omniva select element found:', !!select, 'ID:', SELECTORS.select);
+  console.log('Smartpost select element found:', !!select, 'ID:', SELECTORS.select);
   
   if (select) {
     select.addEventListener('change', (event) => {
-      console.log('Omniva select changed, value:', event.target.value);
+      console.log('Smartpost select changed, value:', event.target.value);
       const selectedId = event.target.value || '';
       if (!selectedId) {
-        State.omnivaLocation = '';
-        console.log('Omniva location cleared (no selection)');
+        State.smartpostLocation = '';
+        console.log('Smartpost location cleared (no selection)');
         return;
       }
       
@@ -180,16 +182,16 @@ export function initOmnivaUI() {
           locker_postcode: location.postal_code || location.postcode || location.zip || '',
           locker_country: location.country || 'EE',
         };
-        State.omnivaLocation = locationObj;
-        console.log('Omniva location saved to State:', JSON.stringify(locationObj, null, 2));
+        State.smartpostLocation = locationObj;
+        console.log('Smartpost location saved to State:', JSON.stringify(locationObj, null, 2));
       } else {
-        State.omnivaLocation = '';
-        console.log('Omniva location cleared (not found in cache)');
+        State.smartpostLocation = '';
+        console.log('Smartpost location cleared (not found in cache)');
       }
     });
-    console.log('Omniva change event listener attached');
+    console.log('Smartpost change event listener attached');
   } else {
-    console.error('Omniva select element NOT FOUND!');
+    console.error('Smartpost select element NOT FOUND!');
   }
 
   const search = byId(SELECTORS.search);

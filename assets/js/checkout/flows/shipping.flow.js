@@ -7,6 +7,8 @@ export async function shippingFlow({
   markStepComplete,
   advanceStep,
   isOmnivaShipping,
+  isSmartpostShipping,
+  autoPaymentFlow,
   State,
 }, method) {
   if (!method) {
@@ -23,19 +25,27 @@ export async function shippingFlow({
     const result = await saveShipping();
     updateSummaryFromResult(result);
     
+    let methods = [];
     let paymentMethodsLoaded = false;
     if (result?.data?.methods || result?.data?.data?.methods) {
-      updatePaymentUI?.(result);
+      methods = updatePaymentUI?.(result) || [];
       paymentMethodsLoaded = true;
     }
     
     if (!paymentMethodsLoaded) {
-      await refreshPaymentMethods();
+      methods = await refreshPaymentMethods() || [];
     }
     
-    if (!isOmnivaShipping(code) || State.omnivaLocation) {
+    const needsOmniva = isOmnivaShipping(code) && !State.omnivaLocation;
+    const needsSmartpost = isSmartpostShipping?.(code) && !State.smartpostLocation;
+    if (!needsOmniva && !needsSmartpost) {
       markStepComplete('shipping');
-      advanceStep('shipping');
+
+      if (methods.length === 1 && typeof autoPaymentFlow === 'function') {
+        await autoPaymentFlow();
+      } else {
+        advanceStep('shipping');
+      }
     }
   } catch (error) {
     console.error('Save shipping failed:', error);

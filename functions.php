@@ -117,6 +117,194 @@ function nailedit_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'nailedit_assets' );
 
+function nailedit_register_site_settings() {
+    if ( ! function_exists( 'acf_add_options_page' ) || ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    acf_add_options_page(
+        array(
+            'page_title' => __( 'Lehe seaded', 'nailedit' ),
+            'menu_title' => __( 'Lehe seaded', 'nailedit' ),
+            'menu_slug'  => 'nailedit-site-settings',
+            'capability' => 'manage_options',
+            'redirect'   => false,
+            'icon_url'   => 'dashicons-admin-generic',
+            'position'   => 59,
+        )
+    );
+
+    acf_add_local_field_group(
+        array(
+            'key'                   => 'group_nailedit_footer_settings',
+            'title'                 => __( 'Jalus', 'nailedit' ),
+            'fields'                => array(
+                // ── Info lingid ──
+                array(
+                    'key'   => 'field_nailedit_footer_tab_info',
+                    'label' => __( 'Info lingid', 'nailedit' ),
+                    'type'  => 'tab',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_title',
+                    'label' => __( 'Info veeru pealkiri', 'nailedit' ),
+                    'name'  => 'footer_info_title',
+                    'type'  => 'text',
+                    'placeholder' => 'Info',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_1_label',
+                    'label' => __( 'Info link 1 – pealkiri', 'nailedit' ),
+                    'name'  => 'footer_info_link_1_label',
+                    'type'  => 'text',
+                    'placeholder' => 'Tarne',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_1_url',
+                    'label' => __( 'Info link 1 – URL', 'nailedit' ),
+                    'name'  => 'footer_info_link_1_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_2_label',
+                    'label' => __( 'Info link 2 – pealkiri', 'nailedit' ),
+                    'name'  => 'footer_info_link_2_label',
+                    'type'  => 'text',
+                    'placeholder' => 'Tagastused',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_2_url',
+                    'label' => __( 'Info link 2 – URL', 'nailedit' ),
+                    'name'  => 'footer_info_link_2_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_3_label',
+                    'label' => __( 'Info link 3 – pealkiri', 'nailedit' ),
+                    'name'  => 'footer_info_link_3_label',
+                    'type'  => 'text',
+                    'placeholder' => 'Klienditugi',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_info_link_3_url',
+                    'label' => __( 'Info link 3 – URL', 'nailedit' ),
+                    'name'  => 'footer_info_link_3_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://',
+                ),
+
+                // ── Kontaktid ──
+                array(
+                    'key'   => 'field_nailedit_footer_tab_contact',
+                    'label' => __( 'Kontaktid', 'nailedit' ),
+                    'type'  => 'tab',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_contact_title',
+                    'label' => __( 'Kontaktide pealkiri', 'nailedit' ),
+                    'name'  => 'footer_contact_title',
+                    'type'  => 'text',
+                    'placeholder' => 'Kontaktid',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_phone',
+                    'label' => __( 'Telefon', 'nailedit' ),
+                    'name'  => 'footer_phone',
+                    'type'  => 'text',
+                    'placeholder' => '+372 5555 5555',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_email',
+                    'label' => __( 'E-post', 'nailedit' ),
+                    'name'  => 'footer_email',
+                    'type'  => 'email',
+                    'placeholder' => 'info@nailedit.ee',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_hours',
+                    'label' => __( 'Lahtiolekuajad', 'nailedit' ),
+                    'name'  => 'footer_hours',
+                    'type'  => 'text',
+                    'placeholder' => 'E–R 09:00 – 19:00',
+                ),
+
+                // ── Sotsiaalmeedia ──
+                array(
+                    'key'   => 'field_nailedit_footer_tab_social',
+                    'label' => __( 'Sotsiaalmeedia', 'nailedit' ),
+                    'type'  => 'tab',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_instagram',
+                    'label' => __( 'Instagram URL', 'nailedit' ),
+                    'name'  => 'footer_instagram_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://instagram.com/...',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_tiktok',
+                    'label' => __( 'TikTok URL', 'nailedit' ),
+                    'name'  => 'footer_tiktok_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://tiktok.com/@...',
+                ),
+
+                // ── Juriidika ──
+                array(
+                    'key'   => 'field_nailedit_footer_tab_legal',
+                    'label' => __( 'Juriidika', 'nailedit' ),
+                    'type'  => 'tab',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_privacy_label',
+                    'label' => __( 'Privaatsuspoliitika – pealkiri', 'nailedit' ),
+                    'name'  => 'footer_privacy_label',
+                    'type'  => 'text',
+                    'placeholder' => 'Privaatsuspoliitika',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_privacy_url',
+                    'label' => __( 'Privaatsuspoliitika – URL', 'nailedit' ),
+                    'name'  => 'footer_privacy_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_terms_label',
+                    'label' => __( 'Müügitingimused – pealkiri', 'nailedit' ),
+                    'name'  => 'footer_terms_label',
+                    'type'  => 'text',
+                    'placeholder' => 'Müügi tingimused',
+                ),
+                array(
+                    'key'   => 'field_nailedit_footer_terms_url',
+                    'label' => __( 'Müügitingimused – URL', 'nailedit' ),
+                    'name'  => 'footer_terms_url',
+                    'type'  => 'url',
+                    'placeholder' => 'https://',
+                ),
+            ),
+            'location'              => array(
+                array(
+                    array(
+                        'param'    => 'options_page',
+                        'operator' => '==',
+                        'value'    => 'nailedit-site-settings',
+                    ),
+                ),
+            ),
+            'style'                 => 'default',
+            'position'              => 'normal',
+            'label_placement'       => 'left',
+            'instruction_placement' => 'label',
+            'active'                => true,
+        )
+    );
+}
+add_action( 'acf/init', 'nailedit_register_site_settings' );
+
 /**
  * Enqueue modular checkout bundle only on the custom checkout template.
  */
@@ -1006,12 +1194,24 @@ function nailedit_customer_review() {
         $title = 'Arvustus';
     }
 
+    $customer_id = isset( $_POST['customer_id'] ) ? sanitize_text_field( wp_unslash( $_POST['customer_id'] ) ) : '';
+    $name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+    
+    // Fallback name if not provided
+    if ( empty( $name ) ) {
+        $name = 'Klient';
+    }
+
     $body = array(
-        'title'   => $title,
-        'comment' => $review,
-        'rating'  => $rating,
+        'title'       => $title,
+        'comment'     => $review,
+        'rating'      => $rating,
+        'name'        => $name,
+        'customer_id' => $customer_id,
     );
 
+    error_log( 'Customer ID: ' . $customer_id );
+    error_log( 'Customer name: ' . $name );
     error_log( 'Request body: ' . wp_json_encode( $body ) );
     error_log( 'Request headers: ' . print_r( $headers, true ) );
 

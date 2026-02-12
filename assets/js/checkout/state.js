@@ -6,6 +6,7 @@ const STORAGE_KEYS = {
   selectedShipping: 'nailedit_selected_shipping_method',
   selectedPayment: 'nailedit_selected_payment_method',
   omnivaLocation: 'nailedit_omniva_location_id',
+  smartpostLocation: 'nailedit_smartpost_location_id',
   lastOrder: 'nailedit_last_order',
 };
 
@@ -110,12 +111,40 @@ export const State = {
   },
 
   get omnivaLocation() {
-    return safeGet(STORAGE_KEYS.omnivaLocation) || '';
+    const stored = safeGet(STORAGE_KEYS.omnivaLocation);
+    if (!stored) return '';
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return stored;
+    }
   },
   set omnivaLocation(value) {
-    safeSet(STORAGE_KEYS.omnivaLocation, value);
+    if (typeof value === 'object' && value !== null) {
+      safeSet(STORAGE_KEYS.omnivaLocation, JSON.stringify(value));
+    } else {
+      safeSet(STORAGE_KEYS.omnivaLocation, value);
+    }
   },
 
+  get smartpostLocation() {
+    const stored = safeGet(STORAGE_KEYS.smartpostLocation);
+    if (!stored) return '';
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return stored;
+    }
+  },
+  set smartpostLocation(value) {
+    if (typeof value === 'object' && value !== null) {
+      safeSet(STORAGE_KEYS.smartpostLocation, JSON.stringify(value));
+    } else {
+      safeSet(STORAGE_KEYS.smartpostLocation, value);
+    }
+  },
+
+  
   saveLastOrder(order) {
     try {
       if (order) {
@@ -130,6 +159,7 @@ export const State = {
     safeSet(STORAGE_KEYS.selectedShipping, '');
     safeSet(STORAGE_KEYS.selectedPayment, '');
     safeSet(STORAGE_KEYS.omnivaLocation, '');
+    safeSet(STORAGE_KEYS.smartpostLocation, '');
   },
 
   clearCart() {

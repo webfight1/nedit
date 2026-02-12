@@ -35,11 +35,7 @@ if ( isset( $_POST['move_to_cart'] ) && isset( $_POST['wishlist_id'] ) && wp_ver
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    // Override API base for VPS deployment
-    $current_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-    if (strpos($current_host, '45.93.139.96') !== false) {
-        $base = 'http://45.93.139.96:8088/api/';
-    }
+
 
     // Bagisto expects WISHLIST ROW id in the path
     $url = rtrim( $base, '/' ) . '/v1/customer/wishlist/' . $wishlist_id . '/move-to-cart';
