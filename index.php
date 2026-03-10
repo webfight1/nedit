@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main class="site-main max-w-[1200px] mx-auto">
+<main class="px-[30px] site-main max-w-[1200px] mx-auto mt-20">
     <?php if ( have_posts() ) : ?>
         <?php while ( have_posts() ) : the_post(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class( 'post' ); ?>>

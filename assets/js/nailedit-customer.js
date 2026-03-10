@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				container = document.createElement('div');
 				container.id = 'nailedit-toast-container';
 				container.style.position = 'fixed';
-				container.style.top = '1rem';
+				container.style.bottom = '1rem';
 				container.style.right = '1rem';
 				container.style.zIndex = '9999';
 				container.style.display = 'flex';
@@ -798,7 +798,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 				if (!items.length) {
 					starsEl.textContent = '☆☆☆☆☆';
-					textEl.textContent = 'Pole veel hinnanguid';
+					textEl.textContent = (typeof NaileditSettings !== 'undefined' && NaileditSettings.translations && NaileditSettings.translations.no_ratings_yet) 
+						? NaileditSettings.translations.no_ratings_yet 
+						: 'Pole veel hinnanguid';
 					return;
 				}
 
@@ -830,7 +832,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			})();
 
 			if (!items.length) {
-				reviewList.innerHTML = '<p class="text-slate-500">Hetkel pole sellel tootel veel arvustusi.</p>';
+				var noReviewsText = (typeof NaileditSettings !== 'undefined' && NaileditSettings.translations && NaileditSettings.translations.no_reviews_yet) 
+					? NaileditSettings.translations.no_reviews_yet 
+					: 'Hetkel pole sellel tootel veel arvustusi.';
+				reviewList.innerHTML = '<p>' + noReviewsText + '</p>';
 				return;
 			}
 
@@ -877,7 +882,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				storedCookie = localStorage.getItem('bagisto_auth_cookie') || '';
 			} catch (e) {}
 
-			reviewList.innerHTML = '<p class="text-slate-500">Arvustusi laaditakse...</p>';
+			reviewList.innerHTML = '<p class="text-primary">Arvustusi laaditakse...</p>';
 			console.log('REVIEW LIST DEBUG: fetchReviews() start', {
 				productId: productId,
 				ajaxUrl: ajaxUrl,

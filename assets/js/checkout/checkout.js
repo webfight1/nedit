@@ -93,6 +93,12 @@ function setStepEnabled(step, enabled) {
   el.classList.toggle('pointer-events-none', !enabled);
 }
 
+function setStepHidden(step, hidden) {
+  const el = getStepEl(step);
+  if (!el) return;
+  el.classList.toggle('hidden', hidden);
+}
+
 function setStepOpen(step, open) {
   const body = getStepBody(step);
   if (!body) return;
@@ -121,6 +127,7 @@ function resetLaterSteps(fromStep) {
     setStepEnabled(step, false);
     setStepOpen(step, false);
     setStepCompleted(step, false);
+    setStepHidden(step, false);
   });
 }
 
@@ -138,7 +145,11 @@ function markStepComplete(step) {
 function advanceStep(step) {
   const index = STEP_ORDER.indexOf(step);
   if (index === -1) return;
-  const next = STEP_ORDER[index + 1];
+  let next = STEP_ORDER[index + 1];
+  while (next && getStepEl(next)?.classList.contains('hidden')) {
+    const ni = STEP_ORDER.indexOf(next);
+    next = STEP_ORDER[ni + 1];
+  }
   if (!next) return;
   setStepEnabled(next, true);
   openStep(next);
@@ -337,9 +348,18 @@ export function bootstrap() {
     handleAddressSubmit(e.target);
   });
 
-  deps.document.getElementById('nailedit-checkout-submit')?.addEventListener('click', () => {
-    submitCheckout(form);
-  });
+  const submitBtn = deps.document.getElementById('nailedit-checkout-submit');
+  const agreeBox = deps.document.getElementById('nailedit-agree-terms');
+
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => submitCheckout(form));
+  }
+
+  if (agreeBox && submitBtn) {
+    agreeBox.addEventListener('change', () => {
+      submitBtn.disabled = !agreeBox.checked;
+    });
+  }
 
   deps.document.addEventListener('change', handleChange);
   deps.document.addEventListener('input', handleInput);
@@ -367,7 +387,10 @@ async function loadCartData() {
   deps.ui.showLoader();
   try {
     const response = await deps.api('nailedit_get_cart', {}, { State: deps.State });
-    deps.updateSummary({ cart: resolveCartPayload(response) });
+    console.log('[loadCartData] raw response:', response);
+    const resolved = resolveCartPayload(response);
+    console.log('[loadCartData] resolvedCart:', resolved);
+    deps.updateSummary({ cart: resolved });
     deps.hideCartError();
   } catch (error) {
     deps.showCartError(getString('cartRequired', 'Ostukorv on tühi või seda ei õnnestunud laadida.'));
@@ -433,6 +456,7 @@ async function refreshPaymentMethods() {
   }
 }
 
+
 async function handleShippingSelection(method) {
   await shippingFlow(
     {
@@ -462,6 +486,7 @@ async function handleShippingSelection(method) {
 
 async function autoRunPaymentFlow() {
   try {
+    setStepHidden('payment', true);
     await paymentFlow({
       savePayment: deps.savePayment,
       markStepComplete,
@@ -469,6 +494,7 @@ async function autoRunPaymentFlow() {
     });
   } catch (error) {
     console.error('Auto payment flow failed:', error);
+    setStepHidden('payment', false);
     advanceStep('shipping');
   }
 }
@@ -487,6 +513,7 @@ function updateSummaryFromResult(result) {
   deps.updateSummary(payload);
 }
 
+
 function resolveCartPayload(response) {
   const data = response?.data;
   return data?.cart || data?.data?.cart || data;
@@ -495,3 +522,4 @@ function resolveCartPayload(response) {
 function getString(key, fallback) {
   return (window.NaileditCheckoutConfig?.strings || {})[key] || fallback;
 }
+

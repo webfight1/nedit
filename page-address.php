@@ -18,69 +18,69 @@ get_header();
       
 
         <div id="nailedit-address-require-login" class="mb-6 hidden text-center text-sm text-red-600">
-            <p><?php esc_html_e( 'Palun logi sisse, et lisada aadress.', 'nailedit' ); ?></p>
+            <p><?php nailedit_t( 'address_login_required' ); ?></p>
         </div>
 
         <div class="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] items-start">
             <section class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
-                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Lisa uus aadress', 'nailedit' ); ?></h2>
+                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php nailedit_t( 'add_new_address' ); ?></h2>
 
                 <form id="nailedit-address-form" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex flex-col gap-1">
-                            <label for="company_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Ettevõte', 'nailedit' ); ?></label>
+                            <label for="company_name" class="text-sm font-medium text-primary"><?php nailedit_t( 'company' ); ?></label>
                             <input type="text" id="company_name" name="company_name" class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="first_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Eesnimi', 'nailedit' ); ?> *</label>
+                            <label for="first_name" class="text-sm font-medium text-primary"><?php nailedit_t( 'first_name' ); ?> *</label>
                             <input type="text" id="first_name" name="first_name" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="last_name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Perenimi', 'nailedit' ); ?> *</label>
+                            <label for="last_name" class="text-sm font-medium text-primary"><?php nailedit_t( 'last_name' ); ?> *</label>
                             <input type="text" id="last_name" name="last_name" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1 md:col-span-2">
-                            <label for="address1" class="text-sm font-medium text-primary"><?php esc_html_e( 'Aadress', 'nailedit' ); ?> *</label>
+                            <label for="address1" class="text-sm font-medium text-primary"><?php nailedit_t( 'street_address' ); ?> *</label>
                             <input type="text" id="address1" name="address[]" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="country" class="text-sm font-medium text-primary"><?php esc_html_e( 'Riik', 'nailedit' ); ?> *</label>
+                            <label for="country" class="text-sm font-medium text-primary"><?php nailedit_t( 'country' ); ?> *</label>
                             <input type="text" id="country" name="country" placeholder="US" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="state" class="text-sm font-medium text-primary"><?php esc_html_e( 'Osariik / Maakond', 'nailedit' ); ?> *</label>
+                            <label for="state" class="text-sm font-medium text-primary"><?php nailedit_t( 'state' ); ?> *</label>
                             <input type="text" id="state" name="state" placeholder="CA" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="city" class="text-sm font-medium text-primary"><?php esc_html_e( 'Linn', 'nailedit' ); ?> *</label>
+                            <label for="city" class="text-sm font-medium text-primary"><?php nailedit_t( 'city' ); ?> *</label>
                             <input type="text" id="city" name="city" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="postcode" class="text-sm font-medium text-primary"><?php esc_html_e( 'Postiindeks', 'nailedit' ); ?> *</label>
+                            <label for="postcode" class="text-sm font-medium text-primary"><?php nailedit_t( 'postcode' ); ?> *</label>
                             <input type="text" id="postcode" name="postcode" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="phone" class="text-sm font-medium text-primary"><?php esc_html_e( 'Telefon', 'nailedit' ); ?> *</label>
+                            <label for="phone" class="text-sm font-medium text-primary"><?php nailedit_t( 'phone' ); ?> *</label>
                             <input type="text" id="phone" name="phone" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1">
-                            <label for="email" class="text-sm font-medium text-primary"><?php esc_html_e( 'Email', 'nailedit' ); ?> *</label>
+                            <label for="email" class="text-sm font-medium text-primary"><?php nailedit_t( 'email' ); ?> *</label>
                             <input type="email" id="email" name="email" required class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                         <div class="flex flex-col gap-1 md:col-span-2">
-                            <label for="vat_id" class="text-sm font-medium text-primary"><?php esc_html_e( 'KMKR / VAT ID', 'nailedit' ); ?></label>
+                            <label for="vat_id" class="text-sm font-medium text-primary"><?php nailedit_t( 'vat_id' ); ?></label>
                             <input type="text" id="vat_id" name="vat_id" class="nailedit-input w-full rounded-full px-4 min-h-[48px] bg-white/20 text-primary placeholder-primary/60 border border-third focus:outline-none focus:ring-2 focus:ring-secondary" />
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="default_address" name="default_address" value="1" checked class="h-4 w-4 text-secondary border-slate-300 rounded focus:ring-secondary" />
-                        <label for="default_address" class="text-sm text-slate-700"><?php esc_html_e( 'Määra vaikimisi aadressiks', 'nailedit' ); ?></label>
+                        <label for="default_address" class="text-sm text-slate-700"><?php nailedit_t( 'set_as_default_address' ); ?></label>
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <button type="submit" class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition">
-                            <?php esc_html_e( 'Salvesta aadress', 'nailedit' ); ?>
+                        <button type="submit" class="inline-flex items-center justify-center rounded-full gradient-dark text-secondary px-5 py-2.5 text-sm font-semibold text-secondary hover:text-white shadow-sm hover:bg-primary/90 transition">
+                            <?php nailedit_t( 'save_address' ); ?>
                         </button>
                         <div id="nailedit-address-success" class="text-sm text-emerald-600 min-h-[1.25rem]"></div>
                         <div id="nailedit-address-error" class="text-sm text-red-600 min-h-[1.25rem]"></div>
@@ -89,7 +89,7 @@ get_header();
             </section>
 
             <section class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
-                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Minu aadressid', 'nailedit' ); ?></h2>
+                <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php nailedit_t( 'my_addresses' ); ?></h2>
                 <div id="nailedit-address-list" class="space-y-4"></div>
             </section>
         </div>
@@ -199,14 +199,14 @@ get_header();
             const data = result && result.data ? result.data : {};
 
             if (!ok) {
-                listEl.innerHTML = '<p><?php echo esc_js( __( 'Aadresside laadimine ebaõnnestus.', 'nailedit' ) ); ?></p>';
+                listEl.innerHTML = '<p><?php echo esc_js( nailedit_get_t( 'addresses_load_failed' ) ); ?></p>';
                 return;
             }
 
             const items = data.data || data || [];
             
             if (!items || !items.length) {
-                listEl.innerHTML = '<p><?php echo esc_js( __( 'Aadresse ei ole.', 'nailedit' ) ); ?></p>';
+                listEl.innerHTML = '<p><?php echo esc_js( nailedit_get_t( 'no_addresses' ) ); ?></p>';
                 return;
             }
 
@@ -232,9 +232,9 @@ get_header();
                     + '<div class="text-slate-700">' + address1 + '</div>'
                     + '<div class="text-slate-700">' + cityLine + '</div>'
                     + '<div class="text-slate-700">' + (addr.country_name || addr.country || '') + '</div>'
-                    + '<div class="text-slate-500 text-xs"><?php echo esc_js( __( 'Telefon: ', 'nailedit' ) ); ?>' + (addr.phone || '') + '</div>'
-                    + (isDefault ? '<span class="mt-1 inline-flex items-center self-start rounded-full bg-primary px-2 py-0.5 text-[11px] font-medium text-white"><?php echo esc_js( __( 'Vaikimisi aadress', 'nailedit' ) ); ?></span>' : '')
-                    + '<div class="mt-2 flex flex-wrap gap-2">' + (isDefault ? '' : '<button type="button" class="nailedit-make-default inline-flex items-center rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50" data-id="' + id + '"><?php echo esc_js( __( 'Määra vaikimisi', 'nailedit' ) ); ?></button> ') + '<button type="button" class="nailedit-delete-address inline-flex items-center rounded-full border border-red-200 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-50" data-id="' + id + '"><?php echo esc_js( __( 'Kustuta', 'nailedit' ) ); ?></button></div>'
+                    + '<div class="text-slate-500 text-xs"><?php echo esc_js( nailedit_get_t( 'phone_prefix' ) ); ?>' + (addr.phone || '') + '</div>'
+                    + (isDefault ? '<span class="mt-1 inline-flex items-center self-start rounded-full bg-primary px-2 py-0.5 text-[11px] font-medium text-white"><?php echo esc_js( nailedit_get_t( 'default_address' ) ); ?></span>' : '')
+                    + '<div class="mt-2 flex flex-wrap gap-2">' + (isDefault ? '' : '<button type="button" class="nailedit-make-default inline-flex items-center rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50" data-id="' + id + '"><?php echo esc_js( nailedit_get_t( 'make_default' ) ); ?></button> ') + '<button type="button" class="nailedit-delete-address inline-flex items-center rounded-full border border-red-200 px-3 py-1 text-xs font-medium text-red-700 hover:bg-red-50" data-id="' + id + '"><?php echo esc_js( nailedit_get_t( 'delete' ) ); ?></button></div>'
                     + '</div>';
             }).join('');
 
@@ -246,7 +246,7 @@ get_header();
 
                     const originalText = this.textContent;
                     this.disabled = true;
-                    this.textContent = '<?php echo esc_js( __( 'Määran...', 'nailedit' ) ); ?>';
+                    this.textContent = '<?php echo esc_js( nailedit_get_t( 'setting' ) ); ?>';
 
                     const fd2 = new FormData();
                     fd2.append('action', 'nailedit_make_default_address');
@@ -281,7 +281,7 @@ get_header();
                     const id = this.getAttribute('data-id');
                     if (!id) return;
 
-                    if (!confirm('<?php echo esc_js( __( 'Kas oled kindel, et soovid selle aadressi kustutada?', 'nailedit' ) ); ?>')) {
+                    if (!confirm('<?php echo esc_js( nailedit_get_t( 'confirm_delete_address' ) ); ?>')) {
                         return;
                     }
 
@@ -309,7 +309,7 @@ get_header();
         .catch(err => {
             console.error('List addresses error:', err);
             if (listEl) {
-                listEl.innerHTML = '<p><?php echo esc_js( __( 'Aadresside laadimine ebaõnnestus.', 'nailedit' ) ); ?></p>';
+                listEl.innerHTML = '<p><?php echo esc_js( nailedit_get_t( 'addresses_load_failed' ) ); ?></p>';
             }
         });
     }
@@ -343,7 +343,7 @@ get_header();
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.textContent = '<?php echo esc_js( __( 'Salvestan...', 'nailedit' ) ); ?>';
+            submitBtn.textContent = '<?php echo esc_js( nailedit_get_t( 'saving' ) ); ?>';
         }
 
         fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
@@ -356,7 +356,7 @@ get_header();
             const data = result && result.data ? result.data : {};
 
             if (!ok) {
-                let msg = data.message || result.message || 'Midagi läks valesti.';
+                let msg = data.message || result.message || '<?php echo esc_js( nailedit_get_t( 'something_went_wrong' ) ); ?>';
                 if (data.errors) {
                     const firstField = Object.keys(data.errors)[0];
                     if (firstField && data.errors[firstField] && data.errors[firstField][0]) {
@@ -368,19 +368,19 @@ get_header();
             }
 
             if (successEl) {
-                successEl.textContent = data.message || '<?php echo esc_js( __( 'Aadress on edukalt lisatud.', 'nailedit' ) ); ?>';
+                successEl.textContent = data.message || '<?php echo esc_js( nailedit_get_t( 'address_added_success' ) ); ?>';
             }
 
             form.reset();
         })
         .catch(err => {
             console.error('Address create error:', err);
-            if (errorEl) errorEl.textContent = 'Midagi läks valesti: ' + err.message;
+            if (errorEl) errorEl.textContent = '<?php echo esc_js( nailedit_get_t( 'error_prefix' ) ); ?>' + err.message;
         })
         .finally(() => {
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '<?php echo esc_js( __( 'Salvesta aadress', 'nailedit' ) ); ?>';
+                submitBtn.textContent = '<?php echo esc_js( nailedit_get_t( 'save_address' ) ); ?>';
             }
         });
     });

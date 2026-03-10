@@ -59,7 +59,7 @@ if ( ! is_array( $data ) ) {
     ?>
     <main class="site-main max-w-[1200px] mx-auto">
         <div class="nailedit-error">
-            <?php esc_html_e( 'Unexpected API response.', 'nailedit' ); ?>
+            <?php echo esc_html( nailedit_get_t( 'unexpected_api_response' ) ); ?>
         </div>
     </main>
     <?php
@@ -87,7 +87,7 @@ if ( isset( $data['meta'] ) ) {
 
     <?php if ( empty( $products ) ) : ?>
         <div class="nailedit-no-products">
-            <p><?php esc_html_e( 'No products found.', 'nailedit' ); ?></p>
+            <p><?php echo esc_html( nailedit_get_t( 'no_products_found' ) ); ?></p>
         </div>
     <?php else : ?>
         <?php $nailedit_products_grid_classes = 'nailedit-products-grid'; ?>
@@ -95,7 +95,7 @@ if ( isset( $data['meta'] ) ) {
         <div class="<?php echo esc_attr( $nailedit_products_grid_classes ); ?>">
             <?php foreach ( $products as $product ) : ?>
                 <?php
-                $title = $product['name'] ?? __( 'Unnamed product', 'nailedit' );
+                $title = $product['name'] ?? nailedit_get_t( 'unnamed_product' );
                 // Hind tuleb API-st kujul "price" => "107.0000"; kasuta seda esmalt
                 $raw_price = $product['price'] ?? ( $product['min_price'] ?? ( $product['prices']['final']['price'] ?? '' ) );
                 // Vorminda lihtsamaks kuvatavaks kujuks (eemalda tühjad nullid)
@@ -130,7 +130,7 @@ if ( isset( $data['meta'] ) ) {
                     $product_url = '#';
                 }
                 ?>
-                <article class="rounded-24 bg-white w-full relative mb-[40px] shadow-xl hover:shadow-2xl transition-shadow">
+                <article class="rounded-24  lg:bg-white w-full relative mb-[40px] shadow-xl hover:shadow-2xl transition-shadow">
                     <a href="<?php echo esc_url( $product_url ); ?>" class="nailedit-product-link ">
                         <?php if ( $image ) : ?>
                             <div class="nailedit-product-thumb rounded-24 overflow-hidden" style="border-bottom-left-radius: 0px !important;border-bottom-right-radius: 0px !important;">
@@ -142,7 +142,8 @@ if ( isset( $data['meta'] ) ) {
                             <?php if ( $price ) : ?>
                                 <p class="font-bold text-secondary"><?php echo esc_html( $price ); ?></p>
                             <?php endif; ?>
-                            <button type="button" class="mt-2 absolute bottom-[-20px] left-0 right-0 max-w-[130px] mx-auto inline-flex items-center justify-center rounded-full bg-secondary text-primary font-semibold text-[13px] px-5 py-2 hover:bg-fourth transition"><?php esc_html_e( 'Osta', 'nailedit' ); ?></button>
+                            <button type="button" class="mt-2 absolute bottom-[-20px] left-0 right-0 max-w-[130px] mx-auto inline-flex items-center justify-center rounded-full bg-secondary text-primary font-semibold text-[13px] px-5 py-2 hover:bg-fourth transition">
+                                <?php echo esc_html( nailedit_get_t( 'buy' ) ); ?></button>
                         </div>
                     </a>
                 </article>
@@ -157,7 +158,7 @@ if ( isset( $data['meta'] ) ) {
                 // Previous button
                 if ( $current_page > 1 ) {
                     $prev_url = add_query_arg( 'paged', $current_page - 1, $base_url );
-                    echo '<a href="' . esc_url( $prev_url ) . '" class="nailedit-page-link nailedit-prev">&laquo; ' . esc_html__( 'Previous', 'nailedit' ) . '</a>';
+                    echo '<a href="' . esc_url( $prev_url ) . '" class="nailedit-page-link nailedit-prev">&laquo; ' . esc_html( nailedit_get_t( 'previous' ) ) . '</a>';
                 }
 
                 // Page numbers
@@ -172,7 +173,7 @@ if ( isset( $data['meta'] ) ) {
                 // Next button
                 if ( $current_page < $total_pages ) {
                     $next_url = add_query_arg( 'paged', $current_page + 1, $base_url );
-                    echo '<a href="' . esc_url( $next_url ) . '" class="nailedit-page-link nailedit-next">' . esc_html__( 'Next', 'nailedit' ) . ' &raquo;</a>';
+                    echo '<a href="' . esc_url( $next_url ) . '" class="nailedit-page-link nailedit-next">' . esc_html( nailedit_get_t( 'next' ) ) . ' &raquo;</a>';
                 }
                 ?>
             </nav>

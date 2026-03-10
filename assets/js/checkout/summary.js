@@ -28,11 +28,11 @@ export function renderSummary(cart) {
     .join('');
 
   const rows = [];
-  if (cart?.formatted_sub_total) {
-    rows.push(row(t('subtotal', 'Vahesumma'), cart.formatted_sub_total));
-  }
-  if (cart?.formatted_tax_total) {
-    rows.push(row(t('taxes', 'Maksud'), cart.formatted_tax_total));
+  if (cart?.formatted_shipping_amount) {
+    const shippingLabel = cart.shipping_method
+      ? `${t('shipping', 'Tarne')} (${cart.shipping_method})`
+      : t('shipping', 'Tarne');
+    rows.push(row(shippingLabel, cart.formatted_shipping_amount));
   }
   if (cart?.formatted_discount) {
     rows.push(row(t('discount', 'Allahindlus'), cart.formatted_discount));
@@ -43,18 +43,19 @@ export function renderSummary(cart) {
     <div class="space-y-3">
       ${itemsHtml}
 
-      <div class="border-t pt-3 space-y-1 text-sm">
+      <div class="border-t space-y-1 text-sm" style="padding-top:0.75rem">
         ${rows.join('')}
       </div>
     </div>
   `;
 }
 
+
 function row(label, value, strong = false) {
   return `
     <div class="flex justify-between ${strong ? 'font-semibold' : ''}">
       <span>${label}</span>
-      <span>${value || ''}</span>
+      <span class="whitespace-nowrap">${value || ''}</span>
     </div>
-  `;
+  `;  
 }

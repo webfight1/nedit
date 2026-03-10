@@ -169,6 +169,7 @@ if ( ! $has_children ) {
 		}
 	}
 	
+	
 	if ( $price_range_data ) {
 		$debug_info = $debug_info ?? array();
 
@@ -244,11 +245,12 @@ if ( ! $has_children ) {
 	$api_url          = add_query_arg(
 		array(
 			'width'  => 260,
-			'height' => 220,
+			'height' => 260,
 			'format' => 'webp',
 		),
 		$category_endpoint
 	);
+
 
 	// Cache products for 2 minutes (per category)
 	$products_cache_key = 'nailedit_products_' . $category_slug . '_p' . $current_page;
@@ -316,6 +318,19 @@ if ( ! $has_children ) {
 		return true;
 	} );
 
+	// Remove duplicates by product ID (Bagisto API sometimes returns same product multiple times)
+	$seen_ids = array();
+	$products = array_filter( $products, function( $product ) use ( &$seen_ids ) {
+		$product_id = isset( $product['id'] ) ? (int) $product['id'] : 0;
+		if ( $product_id && in_array( $product_id, $seen_ids, true ) ) {
+			return false; // Duplicate, skip it
+		}
+		if ( $product_id ) {
+			$seen_ids[] = $product_id;
+		}
+		return true;
+	} );
+
 	// Pagination meta is only available on the legacy structure.
 	$total_pages = 1;
 	$total_items = 0;
@@ -350,6 +365,13 @@ if ( ! $has_children ) {
 	
 	if ( is_array( $sidebar_data ) && isset( $sidebar_data['data'] ) && is_array( $sidebar_data['data'] ) ) {
 		$sidebar_categories = $sidebar_data['data'];
+		
+		// Sort categories by position field
+		usort( $sidebar_categories, function( $a, $b ) {
+			$pos_a = isset( $a['position'] ) ? (int) $a['position'] : 999;
+			$pos_b = isset( $b['position'] ) ? (int) $b['position'] : 999;
+			return $pos_a - $pos_b;
+		} );
 	}
 }
 ?>
@@ -357,12 +379,40 @@ if ( ! $has_children ) {
 
 
 
-<?php echo get_template_part( 'template-parts/page-header' ); ?>
+<?php
+// Build breadcrumb for page-header
+global $nailedit_breadcrumb;
+$nailedit_breadcrumb = array(
+	array( 'label' => nailedit_get_t( 'home' ), 'url' => home_url( '/' ) ),
+);
+
+// Find parent category name/slug if this category has a parent
+if ( isset( $cat_data['data'] ) && is_array( $cat_data['data'] ) ) {
+	foreach ( $cat_data['data'] as $cat ) {
+		if ( isset( $cat['slug'] ) && $cat['slug'] === $category_slug && ! empty( $cat['parent_id'] ) ) {
+			// Find parent
+			foreach ( $cat_data['data'] as $parent_cat ) {
+				if ( isset( $parent_cat['id'] ) && (int) $parent_cat['id'] === (int) $cat['parent_id'] && strtolower( $parent_cat['slug'] ?? '' ) !== 'root' ) {
+					$nailedit_breadcrumb[] = array(
+						'label' => $parent_cat['name'] ?? '',
+						'url'   => home_url( '/category/' . sanitize_title( $parent_cat['slug'] ) . '/' ),
+					);
+				}
+			}
+			break;
+		}
+	}
+}
+
+$nailedit_breadcrumb[] = array( 'label' => $category_name, 'url' => '' );
+
+echo get_template_part( 'template-parts/page-header' );
+?>
 <main class="site-main nailedit-products-page max-w-[1200px] mx-auto">
     <?php if ( $has_children ) : ?>
         <section class="w-full">
             <h1 class="text-2xl font-bold text-primary mb-6"><?php echo esc_html( $category_name ); ?></h1>
-            <div class="nailedit-products-grid sm:grid-cols-2 lg:grid-cols-3">
+            <div class="nailedit-products-grid  grid-cols-2 lg:grid-cols-3">
                 <?php foreach ( $child_categories as $child ) : ?>
                     <?php
                     $child_name = isset( $child['name'] ) ? $child['name'] : '';
@@ -374,14 +424,14 @@ if ( ! $has_children ) {
 
                     $child_url = home_url( '/category/' . sanitize_title( $child_slug ) . '/' );
                     ?>
-                    <article class="rounded-24 bg-white w-full relative mb-[40px] shadow-xl hover:shadow-2xl transition-shadow">
+                    <article class="rounded-24 lg:bg-white w-full relative mb-[40px] shadow-xl hover:shadow-2xl transition-shadow">
                         <a href="<?php echo esc_url( $child_url ); ?>" class="block h-full">
                             <?php 
                             $child_banner = isset( $child['banner_url'] ) ? $child['banner_url'] : '';
                             if ( $child_banner ) : 
                             ?>
                                 <div class="rounded-t-24 overflow-hidden h-[200px]">
-                                    <img class="w-full h-full object-cover" src="<?php echo esc_url( $child_banner ); ?>" alt="<?php echo esc_attr( $child_name ); ?>">
+                                    <img class="w-full h-full object-cover p-[10px]" src="<?php echo esc_url( $child_banner ); ?>" alt="<?php echo esc_attr( $child_name ); ?>">
                                 </div>
                             <?php endif; ?>
                             <div class="p-[20px] text-center flex flex-col items-center justify-center gap-3">
@@ -398,7 +448,7 @@ if ( ! $has_children ) {
 			<aside class="w-full md:w-1/4 mb-6 md:mb-0">
 				<?php if ( ! empty( $sidebar_categories ) ) : ?>
 					<nav class="bg-white/80 border border-slate-200 rounded-2xl p-4 text-[13px]">
-						<h2 class="font-semibold text-primary mb-3"><?php esc_html_e( 'Kategooriad', 'nailedit' ); ?></h2>
+						<h2 class="font-semibold text-primary mb-3"><?php echo nailedit_t('categories'); ?></h2>
 						<ul class="space-y-1">
 							<?php foreach ( $sidebar_categories as $side_cat ) : ?>
 								<?php
@@ -411,7 +461,7 @@ if ( ! $has_children ) {
 									$is_current = ( $side_slug === $category_slug );
 								?>
 								<li>
-									<a href="<?php echo esc_url( $side_url ); ?>" class="block px-3 py-1 rounded-full <?php echo $is_current ? 'bg-secondary text-primary font-semibold' : 'text-slate-700 hover:bg-slate-100'; ?>">
+									<a href="<?php echo esc_url( $side_url ); ?>" class="block  px-3 py-2 rounded-full <?php echo $is_current ? 'gradient-secondary  text-primary font-semibold' : 'text-primary hover:bg-slate-100'; ?>">
 										<?php echo esc_html( $side_name ); ?>
 									</a>
 								</li>
@@ -420,25 +470,62 @@ if ( ! $has_children ) {
 					</nav>
 				<?php endif; ?>
 			</aside>
-
-			<section class="w-full md:flex-1">
+ 
+			<section class="w-full md:flex-1 proCont">
 				<?php if ( empty( $products ) ) : ?>
 					<div class="nailedit-no-products">
 						<p><?php esc_html_e( 'No products found in this category.', 'nailedit' ); ?></p>
                     </div>
                 <?php else : ?>
-                    <?php $nailedit_products_grid_classes = 'nailedit-products-grid sm:grid-cols-2 lg:grid-cols-3'; ?>
+                    <?php $nailedit_products_grid_classes = 'nailedit-products-grid grid-cols-2 lg:grid-cols-3'; ?>
                     <div class="<?php echo esc_attr( $nailedit_products_grid_classes ); ?>">
                     <?php foreach ( $products as $product ) : ?>
                         <?php
                         $title       = $product['name'] ?? __( 'Unnamed product', 'nailedit' );
-                        $price       = $product['min_price'] ?? ( $product['prices']['final']['formatted_price'] ?? ( $product['price'] ?? '' ) );
                         $product_id  = $product['id'] ?? 0;
                         $url_key     = $product['url_key'] ?? '';
                         $description = $product['description'] ?? '';
                         $description = wp_strip_all_tags( $description );
                         $description = wp_trim_words( $description, 20 );
+                        
+                        // Handle special price
+                        $price = '';
+                        $regular_price = '';
+                        $has_special = false;
+                        
+                        if ( isset( $product['special_price'] ) && $product['special_price'] !== null && $product['special_price'] !== '' ) {
+                            $has_special = true;
+                            // Use formatted_special_price if available, otherwise format the raw value
+                            if ( isset( $product['formatted_special_price'] ) && $product['formatted_special_price'] !== '' ) {
+                                $price = $product['formatted_special_price'];
+                            } else {
+                                $price = nailedit_format_price( $product['special_price'] );
+                            }
+                            
+                            // Use formatted_price for regular price if available
+                            if ( isset( $product['formatted_price'] ) && $product['formatted_price'] !== '' ) {
+                                $regular_price = $product['formatted_price'];
+                            } elseif ( isset( $product['price'] ) && $product['price'] !== null && $product['price'] !== '' ) {
+                                $regular_price = nailedit_format_price( $product['price'] );
+                            }
+                        } else {
+                            // No special price - use formatted_price if available
+                            if ( isset( $product['formatted_price'] ) && $product['formatted_price'] !== '' ) {
+                                $price = $product['formatted_price'];
+                            } else {
+                                $price = $product['min_price'] ?? ( $product['prices']['final']['formatted_price'] ?? ( $product['price'] ?? '' ) );
+                                // Always format if we have a price value
+                                if ( $price !== '' ) {
+                                    $price = nailedit_format_price( $price );
+                                }
+                            }
+                        }
+                        
+                        // Check if product is configurable (has variants)
+                        $is_configurable = isset( $product['is_configurable'] ) && $product['is_configurable'] === true;
+                        $button_text = $is_configurable ? nailedit_get_t( 'select_options' ) : nailedit_get_t( 'buy' );
 
+						
                         $image = '';
                         if ( ! empty( $product['base_image'] ) && is_array( $product['base_image'] ) ) {
                             $image = $product['base_image']['medium_image_url'] ?? $product['base_image']['small_image_url'] ?? '';
@@ -472,19 +559,33 @@ if ( ! $has_children ) {
 							$product_url = '#';
 						}
                         ?>
-                        <article class="rounded-24 bg-white w-full relative mb-[40px] shadow-xl hover:shadow-2xl transition-shadow">
+                        <article class="rounded-24 lg:bg-white w-full relative mb-[40px] lg:shadow-xl lg:hover:shadow-2xl lg:transition-shadow">
+                            <?php if ( $has_special ) : ?>
+                                <span class="absolute top-3 right-3 z-10 inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold gradient-gold text-primary shadow-md">
+                                    <?php echo esc_html( nailedit_get_t( 'sale' ) ); ?>
+                                </span>
+                            <?php endif; ?>
                             <a href="<?php echo esc_url( $product_url ); ?>" class="nailedit-product-link block h-full">
                                 <?php if ( $image ) : ?>
-                                    <div class="nailedit-product-thumb rounded-24 overflow-hidden" style="border-bottom-left-radius: 0px !important;border-bottom-right-radius: 0px !important;">
+                                    <div class="nailedit-product-thumb rounded-24 bg-white  lg:!rounded-b-none lg:rounded-t-24 overflow-hidden">
                                         <img class="w-full h-full object-cover" src="<?php echo esc_url( nailedit_fix_image_url( $image ) ); ?>" alt="<?php echo esc_attr( $title ); ?>">
                                     </div>
                                 <?php endif; ?>
-                                <div class="p-[15px] pb-[30px] text-center text-[14px] flex flex-wrap flex-col gap-[10px] justify-center">
+
+                                <div class="p-[15px] pb-[15px] text-center  text-[14px] flex flex-wrap flex-col gap-[10px] justify-center">
                                     <h3 class="font-bold text-[14px] text-primary line-clamp-2"><?php echo esc_html( $title ); ?></h3>
                                     <?php if ( $price ) : ?>
-                                        <p class="font-bold text-primary"><?php echo esc_html( nailedit_format_price($price)); ?></p>
+                                        <div class="flex flex-col items-center gap-1">
+                                            <div class="flex items-baseline gap-2">
+                                                <p class="font-bold text-primary"><?php echo esc_html( $price ); ?></p>
+                                                <?php if ( $has_special && $regular_price ) : ?>
+                                                    <p class="text-[12px] text-slate-500 line-through"><?php echo esc_html( $regular_price ); ?></p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
                                     <?php endif; ?>
-                                    <button type="button" class="mt-2 absolute bottom-[-20px] left-0 right-0 max-w-[130px] mx-auto inline-flex items-center justify-center rounded-full bg-secondary text-primary font-semibold text-[13px] px-5 py-2 hover:bg-fourth transition"><?php esc_html_e( 'Osta', 'nailedit' ); ?></button>
+                                    <button type="button" class="mt-2    left-0 right-0  max-w-[130px] mx-auto inline-flex items-center justify-center rounded-full gradient-secondary lg:min-w-[130px] text-primary font-semibold text-[13px] px-5 py-2 hover:bg-fourth transition">
+										<?php echo esc_html( $button_text ); ?></button>
                                 </div>
                             </a>
                         </article>

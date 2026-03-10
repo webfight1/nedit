@@ -22,33 +22,32 @@ $footer_privacy_url   = $_gf ? $_gf( 'footer_privacy_url', 'option' ) : '';
 $footer_terms_label   = $_gf ? $_gf( 'footer_terms_label', 'option' ) : '';
 $footer_terms_url     = $_gf ? $_gf( 'footer_terms_url', 'option' ) : '';
 
-$footer_info_fallbacks = array(
-    __( 'Tarne', 'nailedit' ),
-    __( 'Tagastused', 'nailedit' ),
-    __( 'Klienditugi', 'nailedit' ),
-);
+$footer_info_links = array_filter( $footer_info_links, function( $link ) {
+    return ! empty( $link['label'] ) || ! empty( $link['url'] );
+} );
 
-function nailedit_footer_link( $url, $label, $fallback_label = '' ) {
-    $text = $label ? $label : $fallback_label;
+function nailedit_footer_link( $url, $label ) {
+    if ( empty( $label ) ) {
+        return '';
+    }
     if ( ! $url ) {
-        return $text
-            ? sprintf( '<span class="block text-slate-500">%s</span>', esc_html( $text ) )
-            : '';
+        return sprintf( '<span class="block text-white">%s</span>', esc_html( $label ) );
     }
     return sprintf(
-        '<a href="%s" class="block hover:text-primary">%s</a>',
+        '<a href="%s" class="block text-secondary hover:text-white">%s</a>',
         esc_url( $url ),
-        esc_html( $text )
+        esc_html( $label )
     );
 }
 ?>
-<footer class="site-footer mt-[50px] bg-[#eef1f8] pt-10 pb-6 text-sm text-slate-800">
+<footer class="site-footer mt-[50px]  pt-10 pb-6 text-sm text-slate-800 bg-gradient-to-b  from-[#1c0d25] to-[#56265d] backdrop-blur"  
+">
 	<div class="max-w-[1200px] mx-auto px-4">
-		<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8 border-b border-slate-300 pb-8">
+		<div class="flex flex-col md:flex-row  md:items-start md:justify-between gap-8 border-b border-secondary pb-8">
 			<!-- Logo + payments -->
 			<div class="space-y-4 max-w-xs">
 				  <div class="nailedit-header-left flex items-center gap-3">
-            <div class="nailedit-logo flex items-center gap-2">
+            <div class="nailedit-logo flex items-center gap-2 max-w-[140px]">
                 <?php if ( function_exists( 'has_custom_logo' ) && has_custom_logo() ) : ?>
                     <?php echo get_custom_logo(); ?>
                 <?php else : ?>
@@ -61,8 +60,8 @@ function nailedit_footer_link( $url, $label, $fallback_label = '' ) {
 			
         </div>
 				<div class="space-y-1">
-					<div class="text-[11px] text-slate-500 uppercase"><?php esc_html_e( 'Makseviisid', 'nailedit' ); ?></div>
-					<div class="flex items-center gap-3 text-[12px] font-semibold text-slate-700">
+					<br>
+					<div class="flex items-center gap-3 text-[12px] font-semibold text-primary ">
 						<span class="inline-flex items-center justify-center rounded-[4px] bg-white px-2 py-1 border border-slate-200"><?php esc_html_e( 'VISA', 'nailedit' ); ?></span>
 						<span class="inline-flex items-center justify-center rounded-[4px] bg-white px-2 py-1 border border-slate-200"><?php esc_html_e( 'Mastercard', 'nailedit' ); ?></span>
 						
@@ -70,67 +69,79 @@ function nailedit_footer_link( $url, $label, $fallback_label = '' ) {
 				</div>
 			</div>
 
+			<?php if ( ! empty( $footer_info_links ) || $footer_info_title ) : ?>
 			<!-- Navigation -->
 			<div class="grid grid-cols-2 gap-8 text-[13px] uppercase tracking-[0.08em]">
 				<div class="space-y-2">
-					<div class="font-semibold text-slate-700 mb-1">
-						<?php echo esc_html( $footer_info_title ? $footer_info_title : __( 'Info', 'nailedit' ) ); ?>
-					</div>
+					<?php if ( $footer_info_title ) : ?>
+						<div class="font-semibold text-secondary mb-1">
+							<?php echo esc_html( $footer_info_title ); ?>
+						</div>
+					<?php endif; ?>
 					<?php
-						foreach ( $footer_info_links as $i => $link ) {
-							$fb = isset( $footer_info_fallbacks[ $i ] ) ? $footer_info_fallbacks[ $i ] : '';
-							echo nailedit_footer_link( $link['url'], $link['label'], $fb );
+						foreach ( $footer_info_links as $link ) {
+							echo nailedit_footer_link( $link['url'], $link['label'] );
 						}
 					?>
 				</div>
 			</div>
+			<?php endif; ?>
 
+			<?php $has_contact = $footer_contact_title || $footer_phone || $footer_email || $footer_hours || $footer_instagram || $footer_tiktok; ?>
+			<?php if ( $has_contact ) : ?>
 			<!-- Contacts + social -->
 			<div class="space-y-3 max-w-xs">
-				<div class="font-semibold uppercase tracking-[0.08em] text-slate-700">
-					<?php echo esc_html( $footer_contact_title ? $footer_contact_title : __( 'Kontaktid', 'nailedit' ) ); ?>
-				</div>
-				<div class="flex items-start gap-3">
-					<div class="mt-[2px] text-primary">☎</div>
-					<div class="space-y-1 text-[13px]">
-						<div class="font-semibold text-slate-900">
-							<?php echo esc_html( $footer_phone ? $footer_phone : __( '+372 5555 5555', 'nailedit' ) ); ?>
-						</div>
-						<div class="text-slate-600">
-							<?php echo esc_html( $footer_email ? $footer_email : __( 'info@nailedit.ee', 'nailedit' ) ); ?>
-						</div>
-						<div class="text-slate-500 text-[12px]">
-							<?php echo esc_html( $footer_hours ? $footer_hours : __( 'E–R 09:00 – 19:00', 'nailedit' ) ); ?>
+				<?php if ( $footer_contact_title ) : ?>
+					<div class="font-semibold uppercase tracking-[0.08em] text-secondary">
+						<?php echo esc_html( $footer_contact_title ); ?>
+					</div>
+				<?php endif; ?>
+				<?php if ( $footer_phone || $footer_email || $footer_hours ) : ?>
+					<div class="flex items-start gap-3">
+						<div class="mt-[2px] text-primary">☎</div>
+						<div class="space-y-1 text-[13px]">
+							<?php if ( $footer_phone ) : ?>
+								<div class="font-semibold text-secondary"	><?php echo esc_html( $footer_phone ); ?></div>
+							<?php endif; ?>
+							<?php if ( $footer_email ) : ?>
+								<div class="text-secondary"><?php echo esc_html( $footer_email ); ?></div>
+							<?php endif; ?>
+							<?php if ( $footer_hours ) : ?>
+								<div class="text-slate-500 text-[12px]"><?php echo esc_html( $footer_hours ); ?></div>
+							<?php endif; ?>
 						</div>
 					</div>
-				</div>
-				<div class="flex items-center gap-3 pt-1">
-					<?php if ( $footer_instagram ) : ?>
-						<a href="<?php echo esc_url( $footer_instagram ); ?>" class="w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:border-primary hover:text-primary transition" aria-label="Instagram" target="_blank" rel="noopener">
-							<span class="text-[14px]"><svg class="nailedit-icon"><use xlink:href="#instagram-svg"></use></svg></span>
-						</a>
-					<?php endif; ?>
-					<?php if ( $footer_tiktok ) : ?>
-						<a href="<?php echo esc_url( $footer_tiktok ); ?>" class="w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center text-slate-700 hover:border-primary hover:text-primary transition" aria-label="TikTok" target="_blank" rel="noopener">
-							<span class="text-[14px]"><svg class="nailedit-icon"><use xlink:href="#tiktok-svg"></use></svg></span>
-						</a>
-					<?php endif; ?>
-				</div>
+				<?php endif; ?>
+				<?php if ( $footer_instagram || $footer_tiktok ) : ?>
+					<div class="flex items-center gap-3 pt-1">
+						<?php if ( $footer_instagram ) : ?>
+							<a href="<?php echo esc_url( $footer_instagram ); ?>" class="w-8 h-8 rounded-full border  border-secondary flex items-center justify-center  text-secondary hover:border-secondary hover:text-white  transition" aria-label="Instagram" target="_blank" rel="noopener">
+								<span class="text-[14px]"><svg class="nailedit-icon"><use xlink:href="#instagram-svg"></use></svg></span>
+							</a>
+						<?php endif; ?>
+						<?php if ( $footer_tiktok ) : ?>
+							<a href="<?php echo esc_url( $footer_tiktok ); ?>" class="w-8 h-8 rounded-full border border-secondary flex items-center justify-center text-white  hover:border-secondary hover:text-secondary transition" aria-label="TikTok" target="_blank" rel="noopener">
+								<span class="text-[14px]"><svg class="nailedit-icon"><use xlink:href="#tiktok-svg"></use></svg></span>
+							</a>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 			</div>
+			<?php endif; ?>
 		</div>
 
 		<!-- Bottom bar -->
-		<div class="flex flex-col md:flex-row items-center justify-between gap-3 pt-4 text-[12px] text-slate-600">
+		<div class="flex flex-col md:flex-row items-center justify-between gap-3 pt-4 text-[12px] text-secondary">
 			<?php if ( $footer_privacy_url ) : ?>
-				<a href="<?php echo esc_url( $footer_privacy_url ); ?>" class="underline underline-offset-2 hover:text-primary">
+				<a href="<?php echo esc_url( $footer_privacy_url ); ?>" class="underline underline-offset-2 hover:text-white">
 					<?php echo esc_html( $footer_privacy_label ? $footer_privacy_label : __( 'Privaatsuspoliitika', 'nailedit' ) ); ?>
 				</a>
 			<?php endif; ?>
-			<div class="text-center">
+			<div class="text-center text-secondary">
 				<?php echo esc_html( date_i18n( 'Y' ) ); ?> &copy; <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'Kõik õigused kaitstud.', 'nailedit' ); ?>
 			</div>
 			<?php if ( $footer_terms_url ) : ?>
-				<a href="<?php echo esc_url( $footer_terms_url ); ?>" class="underline underline-offset-2 hover:text-primary">
+				<a href="<?php echo esc_url( $footer_terms_url ); ?>" class="underline underline-offset-2 hover:text-white">
 					<?php echo esc_html( $footer_terms_label ? $footer_terms_label : __( 'Müügi tingimused', 'nailedit' ) ); ?>
 				</a>
 			<?php endif; ?>
@@ -149,6 +160,66 @@ function nailedit_footer_link( $url, $label, $fallback_label = '' ) {
 	</span>
 </button>
 <?php include __DIR__ . '/icons.php'; ?>
+
+<script>
+(function() {
+    function updateCartBadge() {
+        var badge = document.getElementById('nailedit-cart-badge');
+        if (!badge) return;
+
+        var formData = new FormData();
+        formData.append('action', 'nailedit_get_cart');
+
+        var authToken = localStorage.getItem('bagisto_auth_token');
+        var cartToken = localStorage.getItem('bagisto_guest_cart_token');
+        var storedCookie = localStorage.getItem('bagisto_cart_cookie');
+
+        if (storedCookie) formData.append('stored_cookie', storedCookie);
+        if (authToken) {
+            formData.append('auth_token', authToken);
+        } else if (cartToken) {
+            formData.append('cart_token', cartToken);
+        }
+
+        fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (!data || !data.success) {
+                badge.classList.add('hidden');
+                return;
+            }
+            var payload = data.data || data;
+            var cart = (payload && payload.data && payload.data.cart) ? payload.data.cart : (payload.data || payload);
+            var items = Array.isArray(cart.items) ? cart.items : [];
+            var count = 0;
+            for (var i = 0; i < items.length; i++) {
+                count += parseInt(items[i].quantity || 1, 10);
+            }
+            if (count > 0) {
+                badge.textContent = count > 99 ? '99+' : count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        })
+        .catch(function() {
+            badge.classList.add('hidden');
+        });
+    }
+
+    window.naileditUpdateCartBadge = updateCartBadge;
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    } else {
+        updateCartBadge();
+    }
+})();
+</script>
 
 <?php wp_footer(); ?>
 </body>

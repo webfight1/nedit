@@ -6,20 +6,23 @@ module.exports = {
     "./page-*.php",
     "./single-*.php",
     "./template-*.php",
+    "./template-parts/**/*.php",
+    "./assets/js/**/*.js",
   ],
   theme: {
     extend: {
       colors: {
-        primary:  '#671768',
-        secondary:'#f1ca71',
-        third:    '#915694',
+        primary:  '#5c285c',
+        secondary:'#d9c3ad',
+        third:    '#2e133e',
         fourth:' rgba(245, 204, 106, 1)'
       },
       fontFamily: { 
         sans: ['Montserrat', 'system-ui', 'sans-serif'],
-        nailedit: ['NaileditFont', 'system-ui', 'sans-serif'],
+        nailedit: ['Playfair Display', 'serif'],
       },
       borderRadius: {
+        
         '24': '24px',   // -> klass: rounded-24
       },
     },

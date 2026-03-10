@@ -18,7 +18,7 @@ get_header();
     <div class="nailedit-register-wrapper max-w-md mx-auto bg-white/80 rounded-3xl shadow-lg p-6 md:p-8 mt-6">
         <form id="nailedit-register-form" class="space-y-4">
             <div class="nailedit-form-row flex flex-col gap-1">
-                <label for="nailedit-first-name" class="text-sm font-medium text-primary"><?php esc_html_e( 'First name', 'nailedit' ); ?> *</label>
+                <label for="nailedit-first-name" class="text-sm font-medium text-primary"><?php nailedit_t( 'first_name' ); ?> *</label>
                 <input
                     type="text"
                     id="nailedit-first-name"
@@ -28,7 +28,7 @@ get_header();
                 >
             </div>
             <div class="nailedit-form-row flex flex-col gap-1">
-                <label for="nailedit-last-name" class="text-sm font-medium text-primary"><?php esc_html_e( 'Last name', 'nailedit' ); ?> *</label>
+                <label for="nailedit-last-name" class="text-sm font-medium text-primary"><?php nailedit_t( 'last_name' ); ?> *</label>
                 <input
                     type="text"
                     id="nailedit-last-name"
@@ -38,7 +38,7 @@ get_header();
                 >
             </div>
             <div class="nailedit-form-row flex flex-col gap-1">
-                <label for="nailedit-email" class="text-sm font-medium text-primary"><?php esc_html_e( 'Email', 'nailedit' ); ?> *</label>
+                <label for="nailedit-email" class="text-sm font-medium text-primary"><?php nailedit_t( 'email' ); ?> *</label>
                 <input
                     type="email"
                     id="nailedit-email"
@@ -48,7 +48,7 @@ get_header();
                 >
             </div>
             <div class="nailedit-form-row flex flex-col gap-1">
-                <label for="nailedit-password" class="text-sm font-medium text-primary"><?php esc_html_e( 'Password', 'nailedit' ); ?> *</label>
+                <label for="nailedit-password" class="text-sm font-medium text-primary"><?php nailedit_t( 'password' ); ?> *</label>
                 <input
                     type="password"
                     id="nailedit-password"
@@ -58,7 +58,7 @@ get_header();
                 >
             </div>
             <div class="nailedit-form-row flex flex-col gap-1">
-                <label for="nailedit-password-confirm" class="text-sm font-medium text-primary"><?php esc_html_e( 'Confirm password', 'nailedit' ); ?> *</label>
+                <label for="nailedit-password-confirm" class="text-sm font-medium text-primary"><?php nailedit_t( 'confirm_password' ); ?> *</label>
                 <input
                     type="password"
                     id="nailedit-password-confirm"
@@ -73,7 +73,7 @@ get_header();
                     type="submit"
                     class="w-full rounded-full min-h-[51px] px-4 bg-secondary text-primary font-medium hover:bg-fourth transition"
                 >
-                    <?php esc_html_e( 'Register', 'nailedit' ); ?>
+                    <?php nailedit_t( 'register' ); ?>
                 </button>
             </div>
         </form>
@@ -115,17 +115,17 @@ get_header();
             .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data && data.success) {
-                    const msg = (data.message) ? data.message : '<?php echo esc_js( __( 'Customer registered successfully.', 'nailedit' ) ); ?>';
+                    const msg = (data.message) ? data.message : '<?php echo esc_js( nailedit_get_t( 'customer_registered_successfully' ) ); ?>';
                     showMessage(successEl, msg);
                     form.reset();
                 } else {
-                    const msg = (data && data.message) ? data.message : '<?php echo esc_js( __( 'Registration failed.', 'nailedit' ) ); ?>';
+                    const msg = (data && data.message) ? data.message : '<?php echo esc_js( nailedit_get_t( 'registration_failed' ) ); ?>';
                     showMessage(errorEl, msg);
                 }
             })
             .catch(function(err) {
                 console.error('Registration error', err);
-                showMessage(errorEl, '<?php echo esc_js( __( 'Unexpected error during registration.', 'nailedit' ) ); ?>');
+                showMessage(errorEl, '<?php echo esc_js( nailedit_get_t( 'unexpected_registration_error' ) ); ?>');
             });
         });
     });

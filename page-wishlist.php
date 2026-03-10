@@ -65,7 +65,7 @@ if ( isset( $_POST['move_to_cart'] ) && isset( $_POST['wishlist_id'] ) && wp_ver
             $action_message = $data['message'];
             $action_success = true;
         } else {
-            $action_message = isset( $data['message'] ) ? $data['message'] : __( 'Midagi läks valesti!', 'nailedit' );
+            $action_message = isset( $data['message'] ) ? $data['message'] : nailedit_get_t( 'something_went_wrong' );
         }
     } else {
         $action_message = $response->get_error_message();
@@ -128,7 +128,7 @@ if ( isset( $_POST['add_wishlist_to_cart'] ) && isset( $_POST['product_id'] ) &&
             $action_message = $data['message'];
             $action_success = true;
         } else {
-            $action_message = isset( $data['message'] ) ? $data['message'] : __( 'Midagi läks valesti!', 'nailedit' );
+            $action_message = isset( $data['message'] ) ? $data['message'] : nailedit_get_t( 'something_went_wrong' );
         }
     } else {
         error_log( 'Wishlist add to cart - Error: ' . $response->get_error_message() );
@@ -175,9 +175,9 @@ if ( isset( $_POST['delete_all'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'dele
             $action_success = true;
         } elseif ( $status_code === 405 ) {
             // Method not allowed - DELETE /all not supported, show error
-            $action_message = __( 'Kõigi kustutamine ei ole API poolt toetatud. Palun kustuta tooted ükshaaval.', 'nailedit' );
+            $action_message = nailedit_get_t( 'delete_all_not_supported' );
         } else {
-            $action_message = isset( $data['message'] ) ? $data['message'] : __( 'Midagi läks valesti!', 'nailedit' );
+            $action_message = isset( $data['message'] ) ? $data['message'] : nailedit_get_t( 'something_went_wrong' );
         }
     } else {
         $action_message = $response->get_error_message();
@@ -259,7 +259,7 @@ if ( $bagisto_cookie || $bagisto_token ) {
                 $wishlist_items = $data;
             }
         } else {
-            $wishlist_error = sprintf( __( 'Soovinimekirja päring ebaõnnestus (staatus %d). Debug: %s', 'nailedit' ), (int) $status_code, $debug_info );
+            $wishlist_error = sprintf( nailedit_get_t( 'wishlist_request_failed_status' ), (int) $status_code, $debug_info );
         }
     } else {
         $wishlist_error = $response->get_error_message();
@@ -272,8 +272,8 @@ if ( $bagisto_cookie || $bagisto_token ) {
 
 
         <div id="wishlist-auth-check" class="mb-6 hidden text-center text-sm text-red-600">
-            <p><?php esc_html_e( 'Soovinimekirja vaatamiseks pead olema kliendina sisse logitud.', 'nailedit' ); ?></p>
-            <p class="mt-2"><a href="<?php echo esc_url( home_url( '/minu-aadressid/' ) ); ?>" class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition"><?php esc_html_e( 'Logi sisse', 'nailedit' ); ?></a></p>
+            <p><?php nailedit_t( 'wishlist_login_required' ); ?></p>
+            <p class="mt-2"><a href="<?php echo esc_url( nailedit_get_url( 'address' ) ); ?>" class="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition"><?php nailedit_t( 'login' ); ?></a></p>
         </div>
 
         <section id="wishlist-content" class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
@@ -285,13 +285,13 @@ if ( $bagisto_cookie || $bagisto_token ) {
 
             <?php if ( ! empty( $wishlist_items ) ) : ?>
             <div class="flex items-center justify-between gap-3 mb-4">
-                <h2 class="text-lg font-semibold text-slate-900"><?php esc_html_e( 'Minu soovinimekiri', 'nailedit' ); ?></h2>
+                <h2 class="text-lg font-semibold text-slate-900"><?php nailedit_t( 'my_wishlist' ); ?></h2>
                 <form method="POST" class="nailedit-wishlist-form inline-flex items-center gap-2">
                     <?php wp_nonce_field( 'delete_all_wishlist' ); ?>
                     <input type="hidden" name="bagisto_cookie" class="bagisto-cookie-field">
                     <input type="hidden" name="bagisto_token" class="bagisto-token-field">
                     <button type="submit" name="delete_all" class="inline-flex items-center rounded-full border border-red-200 px-4 py-2 text-xs font-medium text-red-700 hover:bg-red-50"
-                        onclick="return confirm('<?php echo esc_js( __( 'Kas oled kindel, et soovid kustutada kõik soovinimekirja tooted?', 'nailedit' ) ); ?>');"><?php esc_html_e( 'Kustuta kõik', 'nailedit' ); ?></button>
+                        onclick="return confirm('<?php echo esc_js( nailedit_get_t( 'confirm_delete_all_wishlist' ) ); ?>');"><?php nailedit_t( 'delete_all' ); ?></button>
                 </form>
             </div>
 
@@ -299,10 +299,10 @@ if ( $bagisto_cookie || $bagisto_token ) {
                 <table class="min-w-full border-separate border-spacing-y-2">
                     <thead>
                         <tr class="text-left text-xs font-medium uppercase tracking-[0.14em] text-slate-500">
-                            <th class="px-2 py-1 md:px-3"><?php esc_html_e( 'Toode', 'nailedit' ); ?></th>
-                            <th class="px-2 py-1 md:px-3"><?php esc_html_e( 'Hind', 'nailedit' ); ?></th>
-                            <th class="px-2 py-1 md:px-3"><?php esc_html_e( 'Lisatud', 'nailedit' ); ?></th>
-                            <th class="px-2 py-1 md:px-3 text-right"><?php esc_html_e( 'Tegevused', 'nailedit' ); ?></th>
+                            <th class="px-2 py-1 md:px-3"><?php nailedit_t( 'product' ); ?></th>
+                            <th class="px-2 py-1 md:px-3"><?php nailedit_t( 'price' ); ?></th>
+                            <th class="px-2 py-1 md:px-3"><?php nailedit_t( 'added' ); ?></th>
+                            <th class="px-2 py-1 md:px-3 text-right"><?php nailedit_t( 'actions' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -384,7 +384,7 @@ if ( $bagisto_cookie || $bagisto_token ) {
                                         <div class="flex flex-col">
                                             <span class="text-sm font-semibold text-slate-900"><?php echo esc_html( $product_name ? $product_name : ( '#' . $product_id ) ); ?></span>
                                             <?php if ( $product_id ) : ?>
-                                                <span class="text-[11px] uppercase tracking-[0.14em] text-slate-400"><?php esc_html_e( 'ID', 'nailedit' ); ?> <?php echo esc_html( $product_id ); ?></span>
+                                                <span class="text-[11px] uppercase tracking-[0.14em] text-slate-400"><?php nailedit_t( 'id' ); ?> <?php echo esc_html( $product_id ); ?></span>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -416,7 +416,7 @@ if ( $bagisto_cookie || $bagisto_token ) {
                                             <input type="hidden" name="bagisto_cookie" class="bagisto-cookie-field">
                                             <input type="hidden" name="bagisto_token" class="bagisto-token-field">
                                             <button type="submit" name="add_wishlist_to_cart" class="inline-flex items-center rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-primary/90 transition">
-                                                <?php esc_html_e( 'Lisa korvi', 'nailedit' ); ?>
+                                                <?php nailedit_t( 'add_to_cart_short' ); ?>
                                             </button>
                                         </form>
                                     </div>
@@ -432,7 +432,7 @@ if ( $bagisto_cookie || $bagisto_token ) {
             </div>
         <?php else : ?>
             <div class="text-sm text-slate-700 space-y-1">
-                <p><?php esc_html_e( 'Sinu soovinimekiri on tühi.', 'nailedit' ); ?></p>
+                <p><?php nailedit_t( 'wishlist_empty' ); ?></p>
             </div>
         <?php endif; ?>
         </section>
@@ -491,13 +491,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (!authToken) {
                 console.error('No auth token - cannot proceed');
-                alert('Palun logi sisse');
+                alert('<?php echo esc_js( nailedit_get_t( 'please_log_in' ) ); ?>');
                 return;
             }
             
             const originalText = button.textContent;
             button.disabled = true;
-            button.textContent = 'Lisan...';
+            button.textContent = '<?php echo esc_js( nailedit_get_t( 'adding' ) ); ?>';
             
             console.log('Making AJAX request to admin-ajax.php');
             
@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Show success message
                     const messageDiv = document.createElement('div');
                     messageDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-                    messageDiv.textContent = data.data.message || 'Toode lisatud ostukorvi!';
+                    messageDiv.textContent = data.data.message || '<?php echo esc_js( nailedit_get_t( 'product_added_to_cart' ) ); ?>';
                     document.body.appendChild(messageDiv);
                     
                     // Remove message after 3 seconds
@@ -550,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.reload();
                     }, 1000);
                 } else {
-                    const errorMsg = data.data || 'Midagi läks valesti';
+                    const errorMsg = data.data || '<?php echo esc_js( nailedit_get_t( 'wishlist_generic_error' ) ); ?>';
                     console.log('ERROR:', errorMsg);
                     
                     // Show error message
@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     messageDiv.className = 'fixed top-4 right-4 bg-orange-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
                     
                     if (errorMsg.includes('not found') || errorMsg.includes('Selected wishlist product not found')) {
-                        messageDiv.textContent = 'Värskendame soovinimekirja...';
+                        messageDiv.textContent = '<?php echo esc_js( nailedit_get_t( 'refreshing_wishlist' ) ); ?>';
                         document.body.appendChild(messageDiv);
                         
                         // Item is already moved or deleted, just reload to show updated wishlist
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             window.location.reload();
                         }, 500);
                     } else {
-                        messageDiv.textContent = 'Viga: ' + errorMsg;
+                        messageDiv.textContent = '<?php echo esc_js( nailedit_get_t( 'error_generic' ) ); ?>' + errorMsg;
                         document.body.appendChild(messageDiv);
                         
                         // Remove message after 3 seconds
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(function(error) {
                 console.error('Error:', error);
-                alert('Viga: ' + error.message);
+                alert('<?php echo esc_js( nailedit_get_t( 'error_generic' ) ); ?>' + error.message);
                 button.disabled = false;
                 button.textContent = originalText;
             });

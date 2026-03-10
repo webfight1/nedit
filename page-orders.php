@@ -18,11 +18,11 @@ get_header();
      
 
         <div id="nailedit-orders-require-login" class="mb-6 hidden text-center text-sm text-red-600">
-            <p><?php esc_html_e( 'Palun logi sisse, et näha oma tellimusi.', 'nailedit' ); ?></p>
+            <p><?php nailedit_t( 'login_to_view_orders' ); ?></p>
         </div>
 
         <section class="bg-white/80 rounded-3xl shadow-lg p-6 md:p-8">
-            <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php esc_html_e( 'Sinu tellimused', 'nailedit' ); ?></h2>
+            <h2 class="text-lg font-semibold text-slate-900 mb-4"><?php nailedit_t( 'your_orders' ); ?></h2>
             <div id="nailedit-orders-container" class="space-y-4"></div>
             <div id="nailedit-orders-error" class="mt-3 text-sm text-red-600"></div>
         </section>
@@ -72,7 +72,7 @@ get_header();
         if (Number.isNaN(parsed.getTime())) {
             return value;
         }
-        return parsed.toLocaleDateString('et-EE', {
+        return parsed.toLocaleDateString('<?php echo esc_js( nailedit_get_current_lang() === 'en' ? 'en-US' : 'et-EE' ); ?>', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -82,7 +82,7 @@ get_header();
     function renderOrders(data) {
         const items = data.data || data || [];
         if (!items || !items.length) {
-            container.innerHTML = '<p class="text-sm text-slate-600"><?php echo esc_js( __( 'Sul ei ole veel ühtegi tellimust.', 'nailedit' ) ); ?></p>';
+            container.innerHTML = '<p class="text-sm text-slate-600"><?php echo esc_js( nailedit_get_t( 'no_orders_yet' ) ); ?></p>';
             return;
         }
 
@@ -107,12 +107,12 @@ get_header();
             }
 
             return '<div class="nailedit-order-item" style="border:1px solid #ddd;padding:10px;margin-bottom:8px;">'
-                + '<strong><?php echo esc_js( __( 'Tellimus ', 'nailedit' ) ); ?>' + number + '</strong><br>'
-                + (createdAt ? '<strong><?php echo esc_js( __( 'Kuupäev: ', 'nailedit' ) ); ?></strong>' + createdAt + '<br>' : '')
-                + (status ? '<strong><?php echo esc_js( __( 'Staatus: ', 'nailedit' ) ); ?></strong>' + status + '<br>' : '')
-                + (total ? '<strong><?php echo esc_js( __( 'Kokku: ', 'nailedit' ) ); ?></strong>' + total + '<br>' : '')
-                + (method ? '<strong><?php echo esc_js( __( 'Maksetüüp: ', 'nailedit' ) ); ?></strong>' + method + '<br>' : '')
-                + (itemSummary ? '<strong><?php echo esc_js( __( 'Tooted: ', 'nailedit' ) ); ?></strong>' + itemSummary : '')
+                + '<strong><?php echo esc_js( nailedit_get_t( 'order' ) ); ?> ' + number + '</strong><br>'
+                + (createdAt ? '<strong><?php echo esc_js( nailedit_get_t( 'date' ) ); ?> </strong>' + createdAt + '<br>' : '')
+                + (status ? '<strong><?php echo esc_js( nailedit_get_t( 'status' ) ); ?> </strong>' + status + '<br>' : '')
+                + (total ? '<strong><?php echo esc_js( nailedit_get_t( 'total' ) ); ?>: </strong>' + total + '<br>' : '')
+                + (method ? '<strong><?php echo esc_js( nailedit_get_t( 'payment_type' ) ); ?> </strong>' + method + '<br>' : '')
+                + (itemSummary ? '<strong><?php echo esc_js( nailedit_get_t( 'products_label' ) ); ?> </strong>' + itemSummary : '')
                 + '</div>';
         }).join('');
     }
@@ -141,7 +141,7 @@ get_header();
             const data = result && result.data ? result.data : {};
 
             if (!ok) {
-                let msg = data.message || result.message || 'Midagi läks valesti tellimuste laadimisel.';
+                let msg = data.message || result.message || '<?php echo esc_js( nailedit_get_t( 'orders_load_failed' ) ); ?>';
                 if (errorEl) errorEl.textContent = msg;
                 return;
             }
@@ -150,7 +150,7 @@ get_header();
         })
         .catch(err => {
             console.error('Orders load error:', err);
-            if (errorEl) errorEl.textContent = 'Midagi läks valesti: ' + err.message;
+            if (errorEl) errorEl.textContent = '<?php echo esc_js( nailedit_get_t( 'orders_generic_error' ) ); ?>' + err.message;
         });
     }
 

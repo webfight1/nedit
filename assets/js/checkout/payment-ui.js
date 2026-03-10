@@ -10,6 +10,7 @@ export function updatePaymentUI(payload, { onSelect } = {}) {
   const methods = normalizePayment(payload);
   container.innerHTML = renderPaymentMethods(methods, State.payment);
 
+  
   container
     .querySelectorAll('input[name="nailedit_payment_method"]')
     .forEach((input) => {

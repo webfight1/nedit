@@ -23,6 +23,7 @@ function nailedit_setup() {
             'user_menu' => __( 'User Menu', 'nailedit' ),
         )
     );
+
 }
 add_action( 'after_setup_theme', 'nailedit_setup' );
 
@@ -79,6 +80,7 @@ function nailedit_assets() {
         );
     }
     
+    
 
     // SCSS compiled CSS (from assets/css/theme.css)
     $theme_css_path = get_template_directory() . '/assets/css/theme.css';
@@ -106,11 +108,17 @@ function nailedit_assets() {
             true
         );
 
+        $current_lang = function_exists('nailedit_get_current_lang') ? nailedit_get_current_lang() : 'et';
+        
         wp_localize_script(
             'nailedit-customer',
             'NaileditSettings',
             array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                'translations' => array(
+                    'no_ratings_yet' => nailedit_translate('no_ratings_yet', $current_lang),
+                    'no_reviews_yet' => nailedit_translate('no_reviews_yet', $current_lang),
+                ),
             )
         );
     }
@@ -251,6 +259,22 @@ function nailedit_register_site_settings() {
                     'placeholder' => 'https://tiktok.com/@...',
                 ),
 
+                // ── Sotsiaalmeedia jagamine ──
+                array(
+                    'key'   => 'field_nailedit_footer_tab_og',
+                    'label' => __( 'Sotsiaalmeedia jagamine', 'nailedit' ),
+                    'type'  => 'tab',
+                ),
+                array(
+                    'key'   => 'field_nailedit_og_image',
+                    'label' => __( 'Vaikimisi jagamise pilt', 'nailedit' ),
+                    'name'  => 'nailedit_og_image',
+                    'type'  => 'image',
+                    'instructions' => __( 'See pilt kuvatakse, kui leht jagatakse Facebookis, Instagramis või muudes sotsiaalvõrgustikes. Soovitatav suurus: 1200x630px. Toote lehtedel kasutatakse automaatselt toote pilti.', 'nailedit' ),
+                    'return_format' => 'url',
+                    'preview_size' => 'medium',
+                ),
+                
                 // ── Juriidika ──
                 array(
                     'key'   => 'field_nailedit_footer_tab_legal',
@@ -331,43 +355,44 @@ function nailedit_enqueue_checkout_assets() {
 		'NaileditCheckoutConfig',
 		array(
 			'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-			'thankYouUrl'  => esc_url_raw( trailingslashit( site_url( '/aitah' ) ) ),
+			'thankYouUrl'  => esc_url_raw( nailedit_get_url( 'thank_you' ) ),
 			'features'     => array(
 				'omniva' => true,
 			),
 			'strings'      => array(
-				'cartEmpty'              => __( 'Sinu ostukorv on tühi.', 'nailedit' ),
-				'cartLoadError'          => __( 'Ostukorvi ei õnnestunud laadida.', 'nailedit' ),
-				'cartRequired'           => __( 'Ostukorv on tühi või seda ei õnnestunud laadida.', 'nailedit' ),
-				'subtotal'               => __( 'Vahesumma', 'nailedit' ),
-				'taxes'                  => __( 'Maksud', 'nailedit' ),
-				'discount'               => __( 'Allahindlus', 'nailedit' ),
-				'grandTotal'             => __( 'Kokku', 'nailedit' ),
-				'shippingTitle'          => __( 'Tarneviisid', 'nailedit' ),
-				'shippingPlaceholder'    => __( 'Tarneviisid ilmuvad siia pärast aadressi täitmist.', 'nailedit' ),
-				'shippingSelectPrompt'   => __( 'Palun vali tarneviis enne tellimuse esitamist.', 'nailedit' ),
-				'shippingLoading'        => __( 'Laen tarneviise...', 'nailedit' ),
-				'shippingSlow'           => __( 'Tarneviiside laadimine võtab liiga kaua aega.', 'nailedit' ),
-				'shippingLoadError'      => __( 'Tarneviise ei õnnestunud laadida.', 'nailedit' ),
-				'shippingNotFound'       => __( 'Tarneviise ei leitud.', 'nailedit' ),
-				'shippingSelectError'    => __( 'Palun vali tarneviis.', 'nailedit' ),
-				'paymentTitle'           => __( 'Makseviis', 'nailedit' ),
-				'paymentPlaceholder'     => __( 'Makseviisid ilmuvad siia pärast tarneviisi valimist. Palun vali makseviis enne tellimuse esitamist.', 'nailedit' ),
-				'paymentLoading'         => __( 'Laen makseviise...', 'nailedit' ),
-				'paymentLoadError'       => __( 'Makseviise ei õnnestunud laadida.', 'nailedit' ),
-				'paymentNotFound'        => __( 'Makseviise ei leitud.', 'nailedit' ),
-				'paymentSelectError'     => __( 'Palun vali makseviis.', 'nailedit' ),
-				'omnivaTitle'            => __( 'Pakiautomaat', 'nailedit' ),
-				'omnivaSearchPlaceholder'=> __( 'Otsi automaati...', 'nailedit' ),
-				'omnivaLoading'          => __( 'Laen automaate...', 'nailedit' ),
-				'omnivaLoadError'        => __( 'Automaate ei õnnestunud laadida.', 'nailedit' ),
-				'savingAddress'          => __( 'Salvestan aadressi...', 'nailedit' ),
-				'savingShipping'         => __( 'Salvestan tarnet...', 'nailedit' ),
-				'savingPayment'          => __( 'Salvestan makset...', 'nailedit' ),
-				'savingOrder'            => __( 'Salvestan tellimust...', 'nailedit' ),
-				'orderSuccess'           => __( 'Tellimus salvestati edukalt.', 'nailedit' ),
-				'genericError'           => __( 'Midagi läks valesti!', 'nailedit' ),
-				'processingPayment'      => __( 'Processing payment…', 'nailedit' ),
+				'cartEmpty'              => nailedit_get_t( 'cart_empty' ),
+				'cartLoadError'          => nailedit_get_t( 'cart_load_error' ),
+				'cartRequired'           => nailedit_get_t( 'cart_required' ),
+				'subtotal'               => nailedit_get_t( 'subtotal' ),
+				'taxes'                  => nailedit_get_t( 'taxes' ),
+				'discount'               => nailedit_get_t( 'discount' ),
+				'grandTotal'             => nailedit_get_t( 'grand_total' ),
+				'shipping'               => nailedit_get_t( 'shipping' ),
+				'shippingTitle'          => nailedit_get_t( 'shipping_methods' ),
+				'shippingPlaceholder'    => nailedit_get_t( 'shipping_placeholder' ),
+				'shippingSelectPrompt'   => nailedit_get_t( 'shipping_select_prompt' ),
+				'shippingLoading'        => nailedit_get_t( 'shipping_loading' ),
+				'shippingSlow'           => nailedit_get_t( 'shipping_slow' ),
+				'shippingLoadError'      => nailedit_get_t( 'shipping_load_error' ),
+				'shippingNotFound'       => nailedit_get_t( 'shipping_not_found' ),
+				'shippingSelectError'    => nailedit_get_t( 'shipping_select_error' ),
+				'paymentTitle'           => nailedit_get_t( 'payment_method' ),
+				'paymentPlaceholder'     => nailedit_get_t( 'payment_placeholder' ),
+				'paymentLoading'         => nailedit_get_t( 'payment_loading' ),
+				'paymentLoadError'       => nailedit_get_t( 'payment_load_error' ),
+				'paymentNotFound'        => nailedit_get_t( 'payment_not_found' ),
+				'paymentSelectError'     => nailedit_get_t( 'payment_select_error' ),
+				'omnivaTitle'            => nailedit_get_t( 'pickup_locker' ),
+				'omnivaSearchPlaceholder'=> nailedit_get_t( 'search_locker_placeholder' ),
+				'omnivaLoading'          => nailedit_get_t( 'loading_lockers' ),
+				'omnivaLoadError'        => nailedit_get_t( 'locker_load_error' ),
+				'savingAddress'          => nailedit_get_t( 'saving_address' ),
+				'savingShipping'         => nailedit_get_t( 'saving_shipping' ),
+				'savingPayment'          => nailedit_get_t( 'saving_payment' ),
+				'savingOrder'            => nailedit_get_t( 'saving_order' ),
+				'orderSuccess'           => nailedit_get_t( 'order_success' ),
+				'genericError'           => nailedit_get_t( 'something_went_wrong' ),
+				'processingPayment'      => nailedit_get_t( 'processing_payment' ),
 			),
 		)
 	);
@@ -386,7 +411,7 @@ function nailedit_checkout_module_type( $tag, $handle, $src ) {
 }
 add_filter( 'script_loader_tag', 'nailedit_checkout_module_type', 10, 3 );
 
-// Custom rewrite rules for /product/{id}/
+// Custom rewrite rules for Bagisto products and categories
 function nailedit_rewrite_rules() {
     add_rewrite_rule( '^product/([0-9]+)/?$', 'index.php?product_id=$matches[1]', 'top' );
     add_rewrite_rule( '^product/([^/]+)/?$', 'index.php?product_sku=$matches[1]', 'top' );
@@ -401,12 +426,6 @@ function nailedit_flush_rewrite_rules() {
 }
 add_action( 'after_switch_theme', 'nailedit_flush_rewrite_rules' );
 
-// Temporary: Force flush rewrite rules once
-if ( ! get_option( 'nailedit_rewrite_flushed_v2' ) ) {
-    flush_rewrite_rules();
-    update_option( 'nailedit_rewrite_flushed_v2', true );
-}
-
 function nailedit_query_vars( $vars ) {
     $vars[] = 'product_id';
     $vars[] = 'product_sku';
@@ -414,6 +433,149 @@ function nailedit_query_vars( $vars ) {
     return $vars;
 }
 add_filter( 'query_vars', 'nailedit_query_vars' );
+
+// Add blog ID to body class for debugging
+add_filter( 'body_class', function( $classes ) {
+    if ( is_multisite() ) {
+        $classes[] = 'blog-id-' . get_current_blog_id();
+    }
+    return $classes;
+} );
+
+/**
+ * Get current language for page templates
+ * Uses multisite blog ID to determine language
+ * 
+ * @return string Language code (et or en)
+ */
+function nailedit_get_current_lang() {
+    if ( is_multisite() ) {
+        $blog_id = get_current_blog_id();
+        if ( $blog_id === 3 ) {
+            return 'en';
+        }
+        if ( $blog_id === 4 ) {
+            return 'ru';
+        }
+        return 'et';
+    }
+    
+    $locale = get_locale();
+    return ( $locale === 'en_US' || $locale === 'en' ) ? 'en' : 'et';
+}
+
+/**
+ * Get translation URL for a specific language based on translation_group custom field
+ * 
+ * @param string $lang_code Language code (et, en, ru)
+ * @return string URL of the translated page or home URL if not found
+ */
+function nailedit_get_translation_url( $lang_code ) {
+    // Site ID to language mapping
+    $sites = array(
+        'et' => 1,
+        'en' => 3,
+        'ru' => 4,
+    );
+    
+    if ( ! isset( $sites[ $lang_code ] ) ) {
+        return home_url( '/' );
+    }
+    
+    $target_blog_id = $sites[ $lang_code ];
+    
+    // If we're already on the target site, return current URL
+    if ( get_current_blog_id() === $target_blog_id ) {
+        return is_singular() || is_page() ? get_permalink() : home_url( '/' );
+    }
+    
+    // Check if this is a category page (dynamic route)
+    $category_slug = get_query_var( 'bagisto_category_slug' );
+    if ( ! empty( $category_slug ) ) {
+        // For category pages, keep the same slug across languages
+        // home_url() automatically includes language prefix for non-main sites
+        switch_to_blog( $target_blog_id );
+        $url = home_url( '/category/' . sanitize_title( $category_slug ) . '/' );
+        restore_current_blog();
+        return $url;
+    }
+    
+    // Check if this is a product page (dynamic route)
+    $product_sku = get_query_var( 'product_sku' );
+    $product_id = get_query_var( 'product_id' );
+    
+    if ( ! empty( $product_sku ) || ! empty( $product_id ) ) {
+        // For product pages, keep the same slug/ID across languages
+        // home_url() automatically includes language prefix for non-main sites
+        switch_to_blog( $target_blog_id );
+        if ( ! empty( $product_sku ) ) {
+            $url = home_url( '/product/' . sanitize_title( $product_sku ) . '/' );
+        } else {
+            $url = home_url( '/product/' . absint( $product_id ) . '/' );
+        }
+        restore_current_blog();
+        return $url;
+    }
+    
+    // Get translation group from current post/page
+    $group = get_post_meta( get_the_ID(), 'translation_group', true );
+    
+    if ( ! $group ) {
+        // No translation group, return home URL of target site
+        switch_to_blog( $target_blog_id );
+        $url = home_url( '/' );
+        restore_current_blog();
+        return $url;
+    }
+    
+    // Switch to target site and find post with same translation_group
+    switch_to_blog( $target_blog_id );
+    
+    $args = array(
+        'post_type'      => 'any',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        'meta_query'     => array(
+            array(
+                'key'   => 'translation_group',
+                'value' => $group,
+            ),
+        ),
+    );
+    
+    $posts = get_posts( $args );
+    $url = $posts ? get_permalink( $posts[0]->ID ) : home_url( '/' );
+    
+    restore_current_blog();
+    
+    return $url;
+}
+
+/**
+ * Translate and echo text for page templates
+ * 
+ * @param string $key Translation key
+ */
+function nailedit_t( $key ) {
+    if ( ! function_exists( 'nailedit_translate' ) ) {
+        echo esc_html( $key );
+        return;
+    }
+    echo esc_html( nailedit_translate( $key, nailedit_get_current_lang() ) );
+}
+
+/**
+ * Translate and return text for page templates
+ * 
+ * @param string $key Translation key
+ * @return string Translated text
+ */
+function nailedit_get_t( $key ) {
+    if ( ! function_exists( 'nailedit_translate' ) ) {
+        return $key;
+    }
+    return nailedit_translate( $key, nailedit_get_current_lang() );
+}
 
 function nailedit_template_redirect() {
     $product_id    = get_query_var( 'product_id' );
@@ -758,11 +920,17 @@ function nailedit_apply_coupon() {
         wp_send_json_error( array( 'message' => __( 'Coupon code is required.', 'nailedit' ) ), 400 );
     }
 
-    if ( ! $auth_token ) {
-        wp_send_json_error( array( 'message' => __( 'Kupongi rakendamiseks palun logi sisse.', 'nailedit' ) ), 401 );
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/cart/coupon';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart/coupon';
     }
-
-    $url = rtrim( $base, '/' ) . '/v1/customer/cart/coupon';
 
     $headers = array(
         'Accept'       => 'application/json',
@@ -806,6 +974,10 @@ function nailedit_apply_coupon() {
         'status' => $status_code,
     );
 
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
+
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
         if ( isset( $data['message'] ) ) {
@@ -832,7 +1004,20 @@ function nailedit_remove_coupon() {
         $base = trailingslashit( get_option( 'las_api_base_url', 'http://localhost:8083/api/' ) );
     }
 
-    $url = rtrim( $base, '/' ) . '/v1/customer/cart/coupon';
+    $auth_token = isset( $_POST['auth_token'] ) ? sanitize_text_field( wp_unslash( $_POST['auth_token'] ) ) : '';
+    $cart_token = isset( $_POST['cart_token'] ) ? sanitize_text_field( wp_unslash( $_POST['cart_token'] ) ) : '';
+
+    if ( $auth_token ) {
+        $url = rtrim( $base, '/' ) . '/v1/customer/cart/coupon';
+    } else {
+        if ( ! $cart_token ) {
+            $cart_token = nailedit_guest_cart_create( $base );
+            if ( is_wp_error( $cart_token ) ) {
+                wp_send_json_error( array( 'message' => $cart_token->get_error_message() ), 500 );
+            }
+        }
+        $url = rtrim( $base, '/' ) . '/v1/guest/cart/coupon';
+    }
 
     $headers = array(
         'Accept' => 'application/json',
@@ -843,7 +1028,11 @@ function nailedit_remove_coupon() {
         $headers['Cookie'] = $stored_cookie;
     }
 
-    $headers['Authorization'] = 'Bearer ' . $auth_token;
+    if ( $auth_token ) {
+        $headers['Authorization'] = 'Bearer ' . $auth_token;
+    } else {
+        $headers['X-Cart-Token'] = $cart_token;
+    }
 
     $args = array(
         'method'  => 'DELETE',
@@ -865,6 +1054,10 @@ function nailedit_remove_coupon() {
         'data'   => $data,
         'status' => $status_code,
     );
+
+    if ( ! $auth_token && $cart_token ) {
+        $payload['cart_token'] = $cart_token;
+    }
 
     if ( $status_code >= 200 && $status_code < 300 ) {
         $payload['success'] = true;
@@ -2244,6 +2437,7 @@ function nailedit_toggle_wishlist() {
         'Accept' => 'application/json',
     );
 
+    
     $stored_cookie = isset( $_POST['stored_cookie'] ) ? sanitize_text_field( wp_unslash( $_POST['stored_cookie'] ) ) : '';
     if ( $stored_cookie ) {
         $headers['Cookie'] = $stored_cookie;
@@ -2290,6 +2484,7 @@ add_action( 'wp_ajax_nailedit_toggle_wishlist', 'nailedit_toggle_wishlist' );
 add_action( 'wp_ajax_nopriv_nailedit_toggle_wishlist', 'nailedit_toggle_wishlist' );
 
 // Load helpers and shortcodes.
+require_once get_template_directory() . '/inc/cache-config.php';
 require_once get_template_directory() . '/inc/helpers.php';
 require_once get_template_directory() . '/inc/shortcodes.php';
 require_once get_template_directory() . '/inc/ajax/checkout.php';
@@ -2404,3 +2599,11 @@ function nailedit_format_price($price, $decimals = 2) {
     
     return $formatted;
 }
+
+// Temporary: Clear cache via URL parameter
+add_action( 'init', function() {
+    if ( isset( $_GET['clear_cache'] ) && current_user_can( 'edit_posts' ) ) {
+        $deleted = nailedit_clear_all_cache();
+        wp_die( 'Cache cleared! Deleted ' . $deleted . ' transients. <a href="' . remove_query_arg( 'clear_cache' ) . '">Go back</a>' );
+    }
+});

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main class="site-main nailedit-front-page py-10 overflow-hidden">
+<main class="site-main nailedit-front-page   overflow-hidden">
 	<div class="max-w-[1200px] mx-auto px-4">
 		<?php
 		if ( have_posts() ) :
@@ -20,7 +20,6 @@ get_header();
 				the_post();
 				the_content();
 
-				echo do_shortcode('[contact_form title="Jäid küsimused?"]');
 
 			endwhile;
 		endif;

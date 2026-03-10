@@ -17,9 +17,9 @@ get_header();
     <div class="max-w-[1200px] mx-auto px-4 text-center">
 
         <section class="bg-white/80 rounded-3xl shadow-lg px-6 py-8 md:px-10 md:py-10 inline-block text-left">
-            <p class="text-sm text-slate-700 mb-2"><?php esc_html_e( 'Tellimuse viide', 'nailedit' ); ?></p>
+            <p class="text-sm text-slate-700 mb-2"><?php nailedit_t( 'order_reference' ); ?></p>
             <p id="nailedit-thankyou-order-id" class="text-2xl font-semibold text-primary mb-4">&mdash;</p>
-            <p class="text-xs text-slate-500"><?php esc_html_e( 'Kinnitusmeil tellimuse andmetega on sulle saadetud (kui see on kohaldatav).', 'nailedit' ); ?></p>
+            <p class="text-xs text-slate-500"><?php nailedit_t( 'confirmation_email_sent' ); ?></p>
             <div id="nailedit-thankyou-details" class="mt-4 text-sm text-slate-600"></div>
         </section>
     </div>
@@ -30,11 +30,11 @@ get_header();
 (function() {
   const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
   const strings = {
-    loading: '<?php echo esc_js( __( 'Loading order...', 'nailedit' ) ); ?>',
-    notFound: '<?php echo esc_js( __( 'Order not found', 'nailedit' ) ); ?>',
-    paymentNotApproved: '<?php echo esc_js( __( 'Payment not approved', 'nailedit' ) ); ?>',
-    processingError: '<?php echo esc_js( __( 'Error processing payment', 'nailedit' ) ); ?>',
-    fallbackInfo: '<?php echo esc_js( __( 'Tellimus on vastu võetud ja kinnituse saadame e-posti teel.', 'nailedit' ) ); ?>',
+    loading: '<?php echo esc_js( nailedit_get_t( 'loading_order' ) ); ?>',
+    notFound: '<?php echo esc_js( nailedit_get_t( 'order_not_found' ) ); ?>',
+    paymentNotApproved: '<?php echo esc_js( nailedit_get_t( 'payment_not_approved' ) ); ?>',
+    processingError: '<?php echo esc_js( nailedit_get_t( 'error_processing_payment' ) ); ?>',
+    fallbackInfo: '<?php echo esc_js( nailedit_get_t( 'order_received_email_info' ) ); ?>',
   };
 
   function clearStorage() {
@@ -61,8 +61,8 @@ get_header();
     const ref = estoData?.reference || estoData?.merchant_reference || strings.notFound;
     const amount = (estoData?.amount != null ? estoData.amount : '') + (estoData?.currency ? ' ' + estoData.currency : '');
     const html = `
-      <div class="font-semibold text-slate-700 mb-1"><?php echo esc_js( __( 'Tellimuse viide', 'nailedit' ) ); ?>: ${ref}</div>
-      <div><?php echo esc_js( __( 'Makstud summa', 'nailedit' ) ); ?>: ${amount || '<?php echo esc_js( __( 'Tundmatu', 'nailedit' ) ); ?>'}</div>
+      <div class="font-semibold text-slate-700 mb-1"><?php echo esc_js( nailedit_get_t( 'order_reference' ) ); ?>: ${ref}</div>
+      <div><?php echo esc_js( nailedit_get_t( 'paid_amount' ) ); ?>: ${amount || '<?php echo esc_js( nailedit_get_t( 'unknown' ) ); ?>'}</div>
       <div class="mt-2 text-slate-500">${strings.fallbackInfo}</div>
     `;
     renderDetails(detailsEl, html);
@@ -97,7 +97,7 @@ get_header();
         }
         if (parsed && parsed.grand_total) {
           const currency = parsed.base_currency_code || parsed.order_currency_code || '';
-          amountLine = `<?php echo esc_js( __( 'Makstud summa', 'nailedit' ) ); ?>: ${parsed.grand_total} ${currency}`;
+          amountLine = `<?php echo esc_js( nailedit_get_t( 'paid_amount' ) ); ?>: ${parsed.grand_total} ${currency}`;
         }
       }
     } catch (e) {}
@@ -136,8 +136,8 @@ get_header();
 
               setOrderId(idEl, orderId);
               renderDetails(detailsEl, `
-                <div class="mb-1 font-semibold text-slate-700 hidden"><?php echo esc_js( __( 'Makse staatus', 'nailedit' ) ); ?>: ${status || '<?php echo esc_js( __( 'Tundmatu', 'nailedit' ) ); ?>'}</div>
-                <div><?php echo esc_js( __( 'Makstud summa', 'nailedit' ) ); ?>: ${amount} ${currency}</div>
+                <div class="mb-1 font-semibold text-slate-700 hidden"><?php echo esc_js( nailedit_get_t( 'payment_status' ) ); ?>: ${status || '<?php echo esc_js( nailedit_get_t( 'unknown' ) ); ?>'}</div>
+                <div><?php echo esc_js( nailedit_get_t( 'paid_amount' ) ); ?>: ${amount} ${currency}</div>
               `);
               localStorage.setItem('nailedit_last_order', JSON.stringify(order));
               clearStorage();

@@ -11,20 +11,28 @@ Requires PHP: 7.4
 Text Domain: nailedit
 */
 
+
 :root {
 
+  
     --white: #fff;
     --black: #000;
-    --primary:  #671768;
-    --secondary:#f1ca71;
-    --third:    #915694;
+
+    --primary:  #5c285c;
+    --secondary:#d9c3ad;
+    --third:    #2e133e;
 }   
 body {
     margin: 0;
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: #67176808;
+    /* background: linear-gradient(to bottom, #240D51, #3B1E4F); */
     color: #222;
+    /* background: linear-gradient(180deg, #F8F4ED 50%, #EFE6D8 100%); */
+    background-image: url('/wp-content/themes/nailedit/assets/images/bg.webp') ;
+background-repeat: no-repeat;
+background-size: cover;
 }
+
 
 a {
     color: var(--primary);
@@ -62,11 +70,59 @@ a:focus {
     margin: 0 0 0.5rem;
 }
 
+.font-nailedit {
+  
+  font-family: "Playfair", serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+
+}
+
+
 .post-meta {
     font-size: 0.9rem;
     color: #666;
 }
 
+.gradient-dark {
+    background: linear-gradient(
+  90deg,
+  #2e133e 0%,
+  #5c285c 50%,
+  #2e133e 100%
+);
+}
+
+
+.gradient-secondary {
+  background: linear-gradient(90deg, #e0b873 0%, #f9d892 50%, #e0b873 100%);
+
+}
+.gradient-sec {
+    background: linear-gradient(
+  90deg,
+   #f2bd6a 0%,
+  #c7904a 100%
+);
+}
+
+.gradient-gold {
+    background: linear-gradient(
+  90deg,
+   #e7d1a1 0%,
+  #c4a46b 100%
+);
+}
+
+footer svg {
+      
+             fill: var(--secondary);
+}
+footer svg:hover {
+     fill: white;
+   
+}
 .nailedit-products {
     margin-top: 3rem;
     padding: 2rem;
@@ -123,8 +179,22 @@ a:focus {
 
 .nailedit-product-thumb img {
     width: 100%;
+    height: autos;
+    object-fit: cover;
+}
+@media screen and (min-width: 1024px) {
+   .nailedit-product-thumb img {
+    width: 100%;
     height: 220px;
     object-fit: cover;
+}
+
+ 
+}
+@media screen and (max-width: 1024px){
+    .vvcont {
+        order:-1;
+    }
 }
 
 .nailedit-product-body {
@@ -161,8 +231,11 @@ a:focus {
 }
 
 /* Product Detail Page */
-.nailedit-product-detail {
-    padding: 3rem 2rem;
+
+@media screen and (min-width: 1024px) {
+    .nailedit-product-detail {
+        padding: 3rem 2rem;
+    }
 }
 
 .nailedit-product-container {
@@ -200,19 +273,58 @@ a:focus {
 }
 
 .nailedit-thumb {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid transparent;
     cursor: pointer;
     transition: border-color 0.2s ease;
 }
 
+
+.nailedit-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .nailedit-thumb:hover,
 .nailedit-thumb.active {
     border-color: var(--primary);
-    border-radius: 15px;
+}
+
+/* Custom scrollbar for thumbnail gallery */
+#nailedit-thumbs {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+#nailedit-thumbs::-webkit-scrollbar {
+    width: 6px;
+}
+
+#nailedit-thumbs::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#nailedit-thumbs::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+#nailedit-thumbs::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Swiper pagination dots styling */
+.nailedit-product-swiper .swiper-pagination-bullet {
+    background: var(--primary) !important;
+    opacity: 0.3;
+    width: 8px;
+    height: 8px;
+}
+
+.nailedit-product-swiper .swiper-pagination-bullet-active {
+    background: var(--primary);
+    opacity: 1;
 }
 
 .nailedit-no-image {
@@ -256,7 +368,7 @@ a:focus {
 .nailedit-add-to-cart-btn {
     display: inline-block;
     padding: 1rem 2rem;
-    background: var(--secondary);
+    
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -354,6 +466,12 @@ input.nailedit-cart-qty-input[type=number] {
     padding: 3rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
+}
+
+@media screen and (max-width: 1024px){
+    .nailedit-products-page {
+        padding-top: 0;
+    }
 }
 
 .nailedit-page-header {
@@ -582,20 +700,35 @@ p {
 .nailedit-icon {
     width: 18px;
     height: 18px;
-   fill: var(--primary) !important;
 
 }
 
+header .nailedit-icon {
+    fill: var(--secondary) !important;
+}
+
+header .nailedit-icon:hover {
+    fill: white !important;
+}
 
 
-.nailedit-icon svg {
- fill: var(--primary);
+header .nailedit-icon svg {
+ fill: var(--secondary);
     
 }
-.nailedit-icon path {
- fill: var(--primary) !important;
+header .nailedit-icon:hover svg {
+ fill: white !important;
     
 }
+header .nailedit-icon path {
+ fill: var(--secondary) !important;
+    
+}
+header .nailedit-icon:hover path {
+ fill: white !important;
+    
+}
+
 
 .fullWidth {
     margin-left: calc(-100vw / 2 + 100% / 2) !important;
@@ -606,26 +739,241 @@ p {
 }
 
 .wp-block-button__link {
-  display: block;              /* block */
-  width: 100%;                 /* w-full */
+    display: flex;              /* block */
+               /* w-full */
+  border-radius: 9999px;       /* rounded-full */
+  align-items: center;         /* content-center (praktikas flexiga) */
+  min-height: 48px;            /* min-h-[48px] */
+  padding-left: 2rem;          /* px-4 */
+  padding-right: 2rem;
+  margin-top: 1rem;         /* mt-1 */
+  max-width: 250px;
+     background: linear-gradient(
+  90deg,
+  #2e133e 0%,
+  #5c285c 50%,
+  #2e133e 100%
+);
+  color: var(--secondary);     /* text-secondary */
+  font-size: 0.875rem;         /* text-sm */
+  text-align: center;          /* text-center */
+  font-weight: 500;            /* font-medium */
+  transition: color 0.2s ease; /* transition */
+justify-content: center;
+
+}
+
+.wp-block-button__link:hover {
+  color: white;  /* hover:bg-secondary */
+}
+.vx-slider .owl-img {
+  display: block;
+  width: 100%;
+  padding-bottom: 20%;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .vx-slider .owl-img {
+        padding-bottom: 50%;
+    }
+    .vx-slider .descWrapper .description.centercenter {
+        display: flex !important; 
+        justify-content: center;
+        align-items: center;
+
+            left: 0 !important;
+    right: 0 !important;
+    top: 0% !important;
+    -webkit-transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
+    position: absolute;
+    display: inline-block;
+    max-width: 100%;
+    height: 100%;
+    }
+     .vx-slider .descWrapper .inner {
+        align-self: center;
+     }
+    .vx-slider  h2 {
+        font-size: 24px !important;
+        line-height: 1.2;
+    }
+}
+   .vx-slider  h2 {
+      
+        line-height: 1.2;
+    }
+ button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+ }
+
+ .menu-item a {
+    color: var(--secondary);
+    transition: color 0.2s ease;
+ }
+  .menu-item a:hover {
+    color: white;
+ }
+
+ .nailedit-mobile-nav .menu-item a {
+    color: #fff;
+    display: block;
+    padding: 8px 0;
+    transition: color 0.2s ease;
+ }
+ .nailedit-mobile-nav .menu-item a:hover {
+    color: var(--secondary);
+ }
+
+/* ── Article typography ── */
+.hentry h1 {
+    font-family: NaileditFont, system-ui, sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.75em;
+    color: var(--primary);
+}
+.hentry h2 {
+    font-family: NaileditFont, system-ui, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: var(--primary);
+}
+.hentry h2:first-child {
+    margin-top: 0;
+}
+.hentry h3 {
+    font-family: NaileditFont, system-ui, sans-serif;
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 1.25em;
+    margin-bottom: 0.4em;
+    color: var(--primary);
+}
+.hentry h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+}
+.hentry p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+}
+.hentry a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+.hentry a:hover {
+    color: var(--secondary);
+}
+.hentry ul {
+    list-style: disc;
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+.hentry ol {
+    list-style: decimal;
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+.hentry li {
+    margin-bottom: 0.35em;
+    line-height: 1.6;
+}
+
+.hentry blockquote {
+    border-left: 4px solid var(--secondary);
+    padding: 0.75em 1.25em;
+    margin: 1.5em 0;
+    background: #f8f9fc;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #475569;
+}
+.hentry table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+.hentry th,
+.hentry td {
+    border: 1px solid #e2e8f0;
+    padding: 0.5em 0.75em;
+    text-align: left;
+}
+.hentry th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+.hentry hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 2em 0;
+}
+.hentry strong {
+    font-weight: 700;
+}
+.hentry em {
+    font-style: italic;
+}
+
+ 
+.hentry .nailedit-categories a {
+  text-decoration: none;
+}
+
+.hentry .nailedit-categories h3 {
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 1.2rem !important;
+}
+
+#menu-user-menu  li a {
+    color: var(--primary);
+    transition: color 0.2s ease;
+}
+
+@media screen and (max-width: 1024px){
+    .proCont {
+        order: -1;
+    }
+}
+
+.button {
+      display: flex;              /* block */
+               /* w-full */
   border-radius: 9999px;       /* rounded-full */
   align-items: center;         /* content-center (praktikas flexiga) */
   min-height: 48px;            /* min-h-[48px] */
   padding-left: 3rem;          /* px-4 */
   padding-right: 3rem;
-  margin-top: 0.25rem;         /* mt-1 */
-  background-color: var(--primary);   /* bg-primary */
-  color: white;     /* text-secondary */
+  margin-top: 1rem;         /* mt-1 */
+  max-width: 250px;
+     background: linear-gradient(
+  90deg,
+  #2e133e 0%,
+  #5c285c 50%,
+  #2e133e 100%
+);
+  color: var(--secondary);     /* text-secondary */
   font-size: 0.875rem;         /* text-sm */
   text-align: center;          /* text-center */
   font-weight: 500;            /* font-medium */
   transition: color 0.2s ease; /* transition */
-}
+justify-content: center;
+margin-bottom: 3rem;
 
-.wp-block-button__link:hover {
-  color: var(--secondary);  /* hover:bg-secondary */
 }
-
- .swiper-slide {
-max-width: 260px
+.button:hover {
+    color: white
 }

@@ -15,9 +15,10 @@ function getLoader() {
 function defaultLabel() {
   const btn = getButton();
   if (!btn) {
-    return config?.strings?.submitDefault || 'Esita tellimus';
+    return config?.strings?.submitDefault || 'Mine maksma';
   }
 
+  
   if (!btn.dataset.defaultLabel) {
     btn.dataset.defaultLabel = btn.textContent || config?.strings?.submitDefault || 'Esita tellimus';
   }
